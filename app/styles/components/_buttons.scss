@@ -80,3 +80,18 @@
     box-shadow: none !important;
   }
 }
+
+.badge-secondary {
+  background-color: $fourth-color;
+  color: $white;
+}
+
+.badge-primary {
+  background-color: $secondary-color!important;
+  color: $white;
+}
+
+.badge-tertiary {
+  background-color: $tertiary-color!important;
+  color: $white;
+}

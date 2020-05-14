@@ -211,6 +211,25 @@ a:hover {
   background-color: #222222 !important;
 }
 
+.shadow-post {
+  transition: .2s ease;
+  &:hover {
+    box-shadow: 0 0 25px 17px #aaa;
+  }
+
+  &::before {
+    position: absolute;
+    content: '';
+    z-index: -1;
+    bottom: 5px;
+    left: 30px;
+    right: 30px;
+    top: 80%;
+    background: #aaa;
+    border-radius: 100px/10px;
+  }
+}
+
 /* icon */
 .icon {
   font-size: 45px;

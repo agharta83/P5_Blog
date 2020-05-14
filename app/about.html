@@ -1,290 +1,236 @@
 <!DOCTYPE html>
-<html lang="zxx">
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
-  <title>Kross | Portfolio Template</title>
+  <title>Audrey César | Portfolio Blog</title>
 
   <!-- mobile responsive meta -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  
-  <!-- ** Plugins Needed for the Project ** -->
-  <!-- Bootstrap -->
-  <link rel="stylesheet" href="plugins/bootstrap/bootstrap.min.css">
-  <!-- slick slider -->
-  <link rel="stylesheet" href="plugins/slick/slick.css">
-  <!-- themefy-icon -->
-  <link rel="stylesheet" href="plugins/themify-icons/themify-icons.css">
 
-  <!-- Main Stylesheet -->
-  <link href="css/style.css" rel="stylesheet">
-  
-  <!--Favicon-->
-  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
-
+  <!-- Place favicon.ico in the root directory -->
+  <!-- build:css styles/vendor.css -->
+  <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" type="text/css" />
+  <link rel="stylesheet" href="/node_modules/slick-carousel/slick/slick.css" type="text/css" />
+  <link rel="stylesheet" href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css" type="text/css" />
+  <!-- endbuild -->
+  <!-- build:css styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild -->
 </head>
 
 <body>
-  
+  <!--[if IE]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
 
-<header class="navigation fixed-top">
-  <nav class="navbar navbar-expand-lg navbar-dark">
-    <a class="navbar-brand font-tertiary h3" href="index.html"><img src="images/logo.png" alt="Myself"></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
-      aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+  <header class="navigation fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <a class="navbar-brand font-tertiary h3" href="index.html"><img class="logo" src="images/logo.svg"
+          alt="Myself"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+        aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-    <div class="collapse navbar-collapse text-center" id="navigation">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="index.html">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="about.html">about</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="blog.html">Blog</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="portfolio.html">Portfolio</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="contact.html">Contact</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-</header>
+      <div class="collapse navbar-collapse text-center" id="navigation">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="index.html">Accueil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">A Propos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="blog.html">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="portfolio.html">Portfolio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact.html">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
 
-<!-- page title -->
-<section class="page-title-alt bg-primary position-relative">
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <h1 class="text-white font-tertiary">About Me</h1>
-      </div>
-    </div>
-  </div>
-  <!-- background shapes -->
-  <img src="images/illustrations/leaf-bg-top.png" alt="illustrations" class="bg-shape-1 w-100">
-  <img src="images/illustrations/dots-group-sm.png" alt="illustrations" class="bg-shape-2">
-  <img src="images/illustrations/leaf-yellow.png" alt="illustrations" class="bg-shape-3">
-  <img src="images/illustrations/leaf-orange.png" alt="illustrations" class="bg-shape-4">
-  <img src="images/illustrations/dots-group-cyan.png" alt="illustrations" class="bg-shape-5">
-  <img src="images/illustrations/leaf-cyan-lg.png" alt="illustrations" class="bg-shape-6">
-</section>
-<!-- /page title -->
-
-<!-- about -->
-<section class="section pt-5">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-8">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-          dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-          commodo consequat.</p>
-        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-          Excepteur sint occaecat cupidatat non proident.</p>
-        <p>Deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-          accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi
-          architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia.</p>
-      </div>
-      <div class="col-md-4 text-center drag-lg-top">
-        <div class="shadow-down mb-4">
-          <img src="images/about/author.jpg" alt="author" class="img-fluid w-100 rounded-lg border-thick border-white">
-        </div>
-        <img src="images/about/signature.png" alt="signature" class="img-fluid">
-        <h4>Johnathan Smith</h4>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- /about -->
-
-<!-- Work Process -->
-<section class="section">
-  <div class="container">
-    <div class="row justify-content-around">
-      <div class="col-lg-12 text-center">
-        <h2 class="section-title">Work Process</h2>
-      </div>
-      <div class="col-lg-3 col-md-4 text-center hover-shadow pt-3">
-        <div class="">
-          <img src="images/icons/plan.png" class="mb-4" alt="icon">
-          <h4 class="mb-4">Research and Plan</h4>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua.</p>
-        </div>
-      </div>
-      <div class="col-lg-3 col-md-4 text-center hover-shadow pt-3">
-        <img src="images/icons/design.png" class="mb-4" alt="icon">
-        <h4 class="mb-4">Design and Develop</h4>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-          dolore magna aliqua.</p>
-      </div>
-      <div class="col-lg-3 col-md-4 text-center hover-shadow pt-3">
-        <img src="images/icons/print.png" class="mb-4" alt="icon">
-        <h4 class="mb-4">Deliver</h4>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-          dolore magna aliqua.</p>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- ./Work Process -->
-
-<!-- team -->
-<section class="section bg-cover" data-background="images/backgrounds/team-bg.png">
-  <div class="container">
-    <div class="row">
-      <div class="col-12 text-center">
-        <h2 class="section-title">My Team</h2>
-      </div>
-      <div class="col-md-4 col-sm-6 mb-4 mb-md-0">
-        <div class="card text-center">
-          <img src="images/team/member-1.png" class="card-img-top">
-          <div class="card-body">
-            <h4 class="card-title">Jack Schenziwe</h4>
-            <p class="text-light font-secondary">Project Manager</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 col-sm-6 mb-4 mb-md-0">
-        <div class="card text-center">
-          <img src="images/team/member-2.png" class="card-img-top">
-          <div class="card-body">
-            <h4 class="card-title">Jack Schenziwe</h4>
-            <p class="text-light font-secondary">Project Manager</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 col-sm-6 mb-4 mb-md-0">
-        <div class="card text-center">
-          <img src="images/team/member-3.png" class="card-img-top">
-          <div class="card-body">
-            <h4 class="card-title">Jack Schenziwe</h4>
-            <p class="text-light font-secondary">Project Manager</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- /team -->
-
-<!-- clients -->
-<section class="section">
-  <div class="container">
-    <div class="row">
-      <div class="col-12 text-center">
-        <h2 class="section-title">My Clients</h2>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12">
-        <div class="client-logo-slider d-flex align-items-center">
-          <a href="#" class="text-center d-block outline-0 p-4"><img class="d-unset img-fluid"
-              src="images/clients-logo/client-logo-1.png" alt="client-logo"></a>
-          <a href="#" class="text-center d-block outline-0 p-4"><img class="d-unset img-fluid"
-              src="images/clients-logo/client-logo-2.png" alt="client-logo"></a>
-          <a href="#" class="text-center d-block outline-0 p-4"><img class="d-unset img-fluid"
-              src="images/clients-logo/client-logo-3.png" alt="client-logo"></a>
-          <a href="#" class="text-center d-block outline-0 p-4"><img class="d-unset img-fluid"
-              src="images/clients-logo/client-logo-4.png" alt="client-logo"></a>
-          <a href="#" class="text-center d-block outline-0 p-4"><img class="d-unset img-fluid"
-              src="images/clients-logo/client-logo-5.png" alt="client-logo"></a>
-          <a href="#" class="text-center d-block outline-0 p-4"><img class="d-unset img-fluid"
-              src="images/clients-logo/client-logo-1.png" alt="client-logo"></a>
-          <a href="#" class="text-center d-block outline-0 p-4"><img class="d-unset img-fluid"
-              src="images/clients-logo/client-logo-2.png" alt="client-logo"></a>
-          <a href="#" class="text-center d-block outline-0 p-4"><img class="d-unset img-fluid"
-              src="images/clients-logo/client-logo-3.png" alt="client-logo"></a>
-          <a href="#" class="text-center d-block outline-0 p-4"><img class="d-unset img-fluid"
-              src="images/clients-logo/client-logo-4.png" alt="client-logo"></a>
-          <a href="#" class="text-center d-block outline-0 p-4"><img class="d-unset img-fluid"
-              src="images/clients-logo/client-logo-5.png" alt="client-logo"></a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- /clients -->
-
-<!-- contact -->
-<section class="section section-on-footer" data-background="images/backgrounds/bg-dots.png">
-  <div class="container">
-    <div class="row">
-      <div class="col-12 text-center">
-        <h2 class="section-title">Contact Info</h2>
-      </div>
-      <div class="col-lg-8 mx-auto">
-        <div class="bg-white rounded text-center p-5 shadow-down">
-          <h4 class="mb-80">Contact Form</h4>
-          <form action="#" class="row">
-            <div class="col-md-6">
-              <input type="text" id="name" name="name" placeholder="Full Name" class="form-control px-0 mb-4">
-            </div>
-            <div class="col-md-6">
-              <input type="email" id="email" name="email" placeholder="Email Address" class="form-control px-0 mb-4">
-            </div>
-            <div class="col-12">
-              <textarea name="message" id="message" class="form-control px-0 mb-4"
-                placeholder="Type Message Here"></textarea>
-            </div>
-            <div class="col-lg-6 col-10 mx-auto">
-              <button class="btn btn-primary w-100">send</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- /contact -->
-
-<!-- footer -->
-<footer class="bg-dark footer-section">
-  <div class="section">
+  <!-- page title -->
+  <section class="page-title-alt bg-primary position-relative">
     <div class="container">
       <div class="row">
-        <div class="col-md-4">
-          <h5 class="text-light">Email</h5>
-          <p class="text-white paragraph-lg font-secondary">steve.fruits@email.com</p>
-        </div>
-        <div class="col-md-4">
-          <h5 class="text-light">Phone</h5>
-          <p class="text-white paragraph-lg font-secondary">+880 2544 658 256</p>
-        </div>
-        <div class="col-md-4">
-          <h5 class="text-light">Address</h5>
-          <p class="text-white paragraph-lg font-secondary">125/A, CA Commercial Area, California, USA</p>
+        <div class="col-12">
+          <h1 class="text-white font-tertiary">A propos de moi</h1>
         </div>
       </div>
     </div>
-  </div>
-  <div class="border-top text-center border-dark py-5">
-    <p class="mb-0 text-light">Copyright ©<script>
-        var CurrentYear = new Date().getFullYear()
-        document.write(CurrentYear)
-      </script> a theme by <a href="https://themefisher.com">themefisher.com</a></p>
-  </div>
-</footer>
-<!-- /footer -->
+    <!-- background shapes -->
+    <img src="images/illustrations/leaf-bg-top.png" alt="illustrations" class="bg-shape-1 w-100">
+    <img src="images/illustrations/dots-group-sm.png" alt="illustrations" class="bg-shape-2">
+    <img src="images/illustrations/leaf-yellow.png" alt="illustrations" class="bg-shape-3">
+    <img src="images/illustrations/leaf-orange.png" alt="illustrations" class="bg-shape-4">
+    <img src="images/illustrations/dots-group-cyan.png" alt="illustrations" class="bg-shape-5">
+    <img src="images/illustrations/leaf-cyan-lg.png" alt="illustrations" class="bg-shape-6">
+  </section>
+  <!-- /page title -->
 
-<!-- jQuery -->
-<script src="plugins/jQuery/jquery.min.js"></script>
-<!-- Bootstrap JS -->
-<script src="plugins/bootstrap/bootstrap.min.js"></script>
-<!-- slick slider -->
-<script src="plugins/slick/slick.min.js"></script>
-<!-- filter -->
-<script src="plugins/shuffle/shuffle.min.js"></script>
+  <!-- about -->
+  <section class="section pt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          <p><span class="p-color-bold">Qui suis je ?</span><br />Moi, c'est Audrey ! J'ai 34 ans et j'habite dans le
+            Var.Pour parler un peu de mon parcours, j'ai été orienté vers un BEP et Bac professionnel Secrétariat
+            Comptabilité mais à l'époque je savais déjà que je voulais travailler dans l'informatique. On m'avait dit
+            que je n'avais pas le niveau et on m'avait découragé à suivre cette voie. Après avoir obtenu le BAC, j'ai
+            commencé à travailler puis j'ai suivi une formation d'aide soignante car j'avais envie d'être utile aux
+            autres. </p>
+          <p><span class="p-color-bold"> Un projet de reconversion.</span><br />Après 9 ans dans le secteur de la santé
+            en tant qu'aide soignante j'ai décidé de me réorienter vers un secteur qui m'a toujours attirée : le
+            développement web. Je me suis mise à réfléchir sur ce que j'aimais faire. J'ai toujours été fasciné par
+            internet. J'ai eu la chance d'avoir été plongé dedans depuis ses débuts. J'ai eu envie de voir ce qu'il y
+            avait sous le capot d'un site internet.Je me suis d'abord formé seule au HTML et CSS, et ça m'a vraiment
+            plu.</p>
+          <p><span class="p-color-bold"> 2018, le début du changement.</span><br />En 2018, je me suis formée au
+            développement web et mobile. Cette formation de 5 mois acquise avec O'Clock, une école spécialisée, m'a
+            permis d'acquérir de bonnes connaissances en développement web et d'être spécialisée React / Redux. Ma
+            curiosité m'a poussé à proposer une application mobile en react native (react native n'étant pas au
+            programme de la formation) lors du projet de fin de formation. Nous étions une équipe de 4 développeurs pour
+            réaliser ce projet.</p>
+          <p><span class="p-color-bold"> Aujourd'hui.</span><br />Afin de compléter ce parcours, je poursuis ma
+            reconversion en préparant en alternance avec l'organisme OpenClassrooms et La Boite Immo, le diplôme de
+            Développeuse d'Applications - et son parcours PHP / Symfony -, enregistré au RNCP niveau II reconnu par
+            l'Etat à bac + 3/4. Ceci afin d'acquérir un profil full stack spécialisé React Symfony.</p>
+        </div>
+        <div class="col-md-4 text-center drag-lg-top">
+          <div class="shadow-down mb-4">
+            <img src="images/moi.jpg" alt="author" class="img-fluid w-100 rounded-lg border-thick border-white">
+          </div>
+          <h4>Audrey César</h4>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- /about -->
 
-<!-- Main Script -->
-<script src="js/script.js"></script>
+  <!-- services -->
+  <section class="section bg-primary position-relative testimonial-bg-shapes">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center">
+          <h2 class="section-title text-white mb-5">Services</h2>
+        </div>
+        <div class="col-lg-10 mx-auto testimonial-slider">
+          <!-- slider-item -->
+          <div class="text-center testimonial-content">
+            <h4 class="uppercase mb-4"><strong>gestion de projet web</strong></h4>
+            <p class="text-white mb-4">Coordination des étapes de réalisation de l'analyse à la mise en
+              ligne.<br />Gestion des resources externes.<br />Choix de technologies adaptées.<br />Réalisation du
+              cahier des charges<br />Formations à l'utilisation de l'application.</p>
+            <i class="fas fa-tasks text-dark h4 rounded-img p-3 bg-gray mb-4"></i>
+
+          </div>
+          <!-- slider-item -->
+          <div class="text-center testimonial-content">
+            <h4 class="uppercase mb-4"><strong>développement</strong></h4>
+            <p class="text-white mb-4">Développment sur mesure.<br />Création ou refonte de site.<br />Système de
+              gestion de contenu (CMS) WordPress.<br />Technologie open-source.<br />Des outils adaptés à votre coeur de
+              métier, applications & solutions personnalisées.</p>
+            <i class="fas fa-code text-dark h4 rounded-img p-3 bg-gray mb-4"></i>
+          </div>
+          <!-- slider-item -->
+          <div class="text-center testimonial-content">
+            <h4 class="uppercase mb-4"><strong>référencement, domaines et hébergement</strong></h4>
+            <p class="text-white mb-4">Développement favorisant le référencement naturel.<br />Conseils et
+              accompagnement SEO.<br />Enregistrement des noms de domaines.<br />Recherche des offres d'hébergement
+              adaptées aux besoins.<br />Gestion et configuration des serveurs.</p>
+            <i class="fas fa-server text-dark h4 rounded-img p-3 bg-gray mb-4"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- bg shapes -->
+    <img src="images/backgrounds/map.png" alt="map" class="img-fluid bg-map">
+    <img src="images/illustrations/dots-group-v.png" alt="bg-shape" class="img-fluid bg-shape-1">
+    <img src="images/illustrations/leaf-orange.png" alt="bg-shape" class="img-fluid bg-shape-2">
+    <img src="images/illustrations/dots-group-sm.png" alt="bg-shape" class="img-fluid bg-shape-3">
+    <img src="images/illustrations/leaf-pink-round.png" alt="bg-shape" class="img-fluid bg-shape-4">
+    <img src="images/illustrations/leaf-cyan.png" alt="bg-shape" class="img-fluid bg-shape-5">
+  </section>
+  <!-- /services -->
+
+  <!-- contact -->
+  <section class="section section-on-footer" data-background="images/backgrounds/bg-dots.png">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center">
+          <h2 class="section-title">Contact</h2>
+        </div>
+        <div class="col-lg-8 mx-auto">
+          <div class="bg-white rounded text-center p-5 shadow-down">
+            <form action="#" class="row">
+              <div class="col-md-6">
+                <input type="text" id="name" name="name" placeholder="Nom" class="form-control px-0 mb-4">
+              </div>
+              <div class="col-md-6">
+                <input type="email" id="email" name="email" placeholder="Adresse Email" class="form-control px-0 mb-4">
+              </div>
+              <div class="col-12">
+                <textarea name="message" id="message" class="form-control px-0 mb-4"
+                  placeholder="Votre message ici"></textarea>
+              </div>
+              <div class="col-lg-6 col-10 mx-auto">
+                <button class="btn btn-primary w-100">Envoyer</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- /contact -->
+
+  <!-- footer -->
+  <footer class="bg-dark footer-section">
+    <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <h5 class="text-light">Email</h5>
+            <p class="text-white paragraph-lg font-secondary">audrey.cesar83@gmail.com</p>
+          </div>
+          <div class="col-md-4">
+            <h5 class="text-light">Telephone</h5>
+            <p class="text-white paragraph-lg font-secondary">06 95 98 51 99</p>
+          </div>
+          <div class="col-md-4">
+            <h5 class="text-light">Adresse</h5>
+            <p class="text-white paragraph-lg font-secondary">Toulon (83), France</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="border-top text-center border-dark py-5">
+      <p class="mb-0 text-light">Copyright ©<script>
+          var CurrentYear = new Date().getFullYear()
+          document.write(CurrentYear)
+        </script> - Audrey César - <a href="#">Administration</a></p>
+    </div>
+  </footer>
+  <!-- /footer -->
+
+  <!-- build:js scripts/vendor.js -->
+  <script type="text/javascript" src="/node_modules/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/node_modules/slick-carousel/slick/slick.min.js"></script>
+  <script type="text/javascript" src="/node_modules/shufflejs/dist/shuffle.min.js"></script>
+  <!-- endbuild -->
+  <!-- build:js scripts/main.js -->
+  <script src="scripts/main.js"></script>
+  <!-- endbuild -->
 
 </body>
+
 </html>

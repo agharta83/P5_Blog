@@ -54,3 +54,12 @@ h5, .h5{
 h6, .h6{
   font-size: 14px;
 }
+
+.p-color-bold {
+  font-weight: bold;
+  color: $tertiary-color;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}

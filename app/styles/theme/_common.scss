@@ -233,6 +233,9 @@ a:hover {
 .slick-dots{
   text-align: center;
   padding-left: 0;
+  position: relative;
+  bottom: 10px;
+  margin-top: 10px;
   li{
     display: inline-block;
     margin: 2px;

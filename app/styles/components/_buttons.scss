@@ -61,3 +61,22 @@
     color: $primary-color;
   }
 }
+
+.btn-secondary {
+  background-color: $tertiary-color;
+  color: $white;
+
+  &:active {
+    background: lighten($color: $tertiary-color, $amount: 10) !important;
+  }
+
+  &:hover {
+    background: lighten($color: $tertiary-color, $amount: 10);
+  }
+
+  &.focus,
+  &.active {
+    background: lighten($color: $tertiary-color, $amount: 10) !important;
+    box-shadow: none !important;
+  }
+}

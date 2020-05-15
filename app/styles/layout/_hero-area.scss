@@ -14,6 +14,8 @@
 .layer {
   position: absolute;
   z-index: 1;
+  -webkit-filter: drop-shadow(5px 5px 5px #222);
+  filter: drop-shadow(5px 5px 5px #222);
 }
 
 #l1 {
@@ -37,7 +39,7 @@
 }
 
 #l5 {
-  top: 100px;
+  top: 200px;
   right: -150px;
 }
 

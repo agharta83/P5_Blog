@@ -67,3 +67,53 @@ h6, .h6{
 .bold {
   font-weight: bold;
 }
+
+.text-first {
+  color: $primary-color;
+
+  &:hover {
+    background-color: lighten($color: $primary-color, $amount: 10)!important;
+    color: $white!important;
+  }
+}
+
+.text-nd {
+  color: $secondary-color;
+
+  &:hover {
+    background-color: lighten($color: $secondary-color, $amount: 10)!important;
+    color: $white!important;
+  }
+}
+
+.text-tertiary {
+  color: $tertiary-color;
+  
+  &:hover {
+    background-color: lighten($color: $tertiary-color, $amount: 10)!important;
+    color: $white!important;
+  }
+}
+
+.text-fourth {
+  color: $fourth-color;
+
+  &:hover {
+    background-color: lighten($color: $fourth-color, $amount: 10)!important;
+    color: $white!important;
+  }
+}
+
+.text-five {
+  color: $five-color;
+
+  &:hover {
+    background-color: lighten($color: $five-color, $amount: 10)!important;
+    color: $white!important;
+  }
+}
+
+.icon-skills {
+  font-size: 2rem;
+}
+

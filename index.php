@@ -1,7 +1,10 @@
 <?php
+// Autoload
+require(__DIR__.'/vendor/autoload.php');
+
 // FrontController
 
-$app = new Application();
+$app = new MyBlog\Application();
 
 // Liste de "require"
 // Liste de routes

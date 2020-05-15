@@ -10,11 +10,10 @@
     ],
     "autoload": {
         "psr-4": {
-          "MealOclock\\": "src/"
+          "MyBlog\\": "src/"
         }
     },
     "require": {
-        "altorouter/altorouter": "^2.0",
-        "symfony/var-dumper": "^5.0"
+        "altorouter/altorouter": "^2.0"
     }
 }

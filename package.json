@@ -6,16 +6,17 @@
   "license": "MIT",
   "description": "Portfolio blog using bootstrap sass jquery",
   "dependencies": {
+    "@icon/themify-icons": "^1.0.1-alpha.3",
     "bootstrap": "^4.3.1",
     "jquery": "^3.4.1",
     "popper.js": "^1.15.0",
     "shufflejs": "^5.2.3",
-    "slick-carousel": "^1.8.1",
-    "themify-icons": "^1.0.0"
+    "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
+    "@fortawesome/fontawesome-free": "^5.13.0",
     "autoprefixer": "^9.5.1",
     "browser-sync": "^2.26.5",
     "chai": "^4.2.0",

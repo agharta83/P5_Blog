@@ -92,6 +92,11 @@ function fonts() {
     .pipe($.if(!isProd, dest('.tmp/fonts'), dest('dist/fonts')));
 };
 
+function icons() {
+  return src('node_modules/@fortawesome/fontawesome-free/webfonts/*')
+  .pipe($.if(!isProd, dest('.tmp/fonts/icons'), dest('dist/fonts/icons')));
+}
+
 function extras() {
   return src([
     'app/*',
@@ -117,6 +122,7 @@ const build = series(
     series(parallel(styles, scripts), html),
     images,
     fonts,
+    icons,
     extras
   ),
   measureSize

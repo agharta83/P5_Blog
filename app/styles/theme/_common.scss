@@ -174,8 +174,21 @@ a:hover {
   z-index: 1;
 }
 
-.rounded-lg{
+.zindex-1PR {
+  z-index: 1;
+  position: relative;
+}
+
+.rounded-lg {
   border-radius: 15px;
+}
+
+.rounded-img {
+  border-radius: 50%;
+}
+
+.text-end {
+  text-align: end;
 }
 
 .overflow-hidden {
@@ -196,6 +209,25 @@ a:hover {
 
 .bg-dark{
   background-color: #222222 !important;
+}
+
+.shadow-post {
+  transition: .2s ease;
+  &:hover {
+    box-shadow: 0 0 25px 17px #aaa;
+  }
+
+  &::before {
+    position: absolute;
+    content: '';
+    z-index: -1;
+    bottom: 5px;
+    left: 30px;
+    right: 30px;
+    top: 80%;
+    background: #aaa;
+    border-radius: 100px/10px;
+  }
 }
 
 /* icon */
@@ -220,6 +252,9 @@ a:hover {
 .slick-dots{
   text-align: center;
   padding-left: 0;
+  position: relative;
+  bottom: 10px;
+  margin-top: 10px;
   li{
     display: inline-block;
     margin: 2px;

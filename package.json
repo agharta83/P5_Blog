@@ -1,0 +1,36 @@
+{
+  "name": "brunch-on-speed",
+  "description": "Skeleton for Brunch",
+  "private": true,
+  "author": "John Doe",
+  "version": "0.1.0",
+  "repository": "",
+  "scripts": {
+    "start": "brunch watch --server",
+    "build": "brunch build --production"
+  },
+  "dependencies": {
+    "bootstrap": "^4",
+    "jquery": "^3",
+    "popper.js": "^1",
+    "scrollmagic": "^2.0.7",
+    "shufflejs": "^5.2.3"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.13.0",
+    "auto-reload-brunch": "^2.7.1",
+    "babel-brunch": "^7.0.1",
+    "babel-eslint": "^8",
+    "babel-preset-env": "^1",
+    "brunch": "^3",
+    "pleeease-brunch": "^3",
+    "prettier": "^1",
+    "sass-brunch": "^2",
+    "uglify-js-brunch": "^2"
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ]
+  }
+}

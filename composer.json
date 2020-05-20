@@ -1,0 +1,20 @@
+{
+    "name": "agharta/my-blog",
+    "description": "Personal blog portfolio",
+    "type": "project",
+    "authors": [
+        {
+            "name": "agharta83",
+            "email": "35310694+agharta83@users.noreply.github.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+          "MyBlog\\": "src/"
+        }
+    },
+    "require": {
+        "altorouter/altorouter": "^2.0",
+        "league/plates": "^3.3"
+    }
+}

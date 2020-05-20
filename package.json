@@ -1,10 +1,10 @@
 {
-  "name": "brunch-on-speed",
-  "description": "Skeleton for Brunch",
-  "private": true,
-  "author": "John Doe",
-  "version": "0.1.0",
-  "repository": "",
+  "name": "theme-portfolio-blog",
+  "version": "1.0.0",
+  "main": "gulpfile.js",
+  "author": "agharta83",
+  "license": "MIT",
+  "description": "Portfolio blog using bootstrap sass jquery",
   "scripts": {
     "start": "brunch watch --server",
     "build": "brunch build --production"

@@ -5,6 +5,7 @@
         "This file is @generated automatically"
     ],
     "content-hash": "98edee169826b08936f238b939042b04",
+    "content-hash": "4c45d0cd119f689e256ca47c26ab07de",
     "packages": [
         {
             "name": "altorouter/altorouter",

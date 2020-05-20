@@ -15,5 +15,4 @@ class CoreController {
         ]);
 
     }
-
 }

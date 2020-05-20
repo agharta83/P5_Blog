@@ -6,9 +6,8 @@ class MainController extends CoreController {
 
     public function home() {
         // Render template
-        $headTitle = 'mon titre test';
-        echo "c'est la home";
-        //echo $this->templates->render('main/home', ['title' => $headTitle]);
+        $headTitle = 'Audrey César | Portfolio Blog';
+        echo $this->templates->render('main/home', ['title' => $headTitle]);
     }
 
     public function about() {
@@ -16,7 +15,7 @@ class MainController extends CoreController {
     }
 
     public function contact() {
-        echo $this->templates->render('main/contact');
+        echo $this->templates->render('main/contact', ['title' => 'contact']);
     }
     
 }

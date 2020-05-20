@@ -1,4 +1,4 @@
-<?php $this->layout('layout', ['title' => $title]); ?>
+<?php $this->layout('home_layout', ['title' => $title]); ?>
 
   <!-- hero area -->
   <?php $this->insert('partials/home/hero'); ?>

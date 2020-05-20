@@ -1,6 +1,6 @@
 <header class="navigation fixed-top">
         <nav class="navbar navbar-expand-lg navbar-dark">
-      <a class="navbar-brand font-tertiary h3" href="index.html"><img class="logo" src="images/logo.svg"
+      <a class="navbar-brand font-tertiary h3" href="index.html"><img class="logo" src="<?=$basePath?>/public/images/logo.svg"
           alt="Myself"></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
         aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">

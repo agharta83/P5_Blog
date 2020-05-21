@@ -1,89 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="description" content="">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-  <title>Audrey César | Portfolio Blog</title>
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <!-- Place favicon.ico in the root directory -->
-  <!-- build:css styles/vendor.css -->
-  <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" type="text/css" />
-  <link rel="stylesheet" href="/node_modules/slick-carousel/slick/slick.css" type="text/css" />
-  <link rel="stylesheet" href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css" type="text/css" />
-  <!-- endbuild -->
-  <!-- build:css styles/main.css -->
-  <link rel="stylesheet" href="styles/main.css">
-  <!-- endbuild -->
-</head>
-
-<body>
-
-
-  <header class="navigation fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark">
-      <a class="navbar-brand font-tertiary h3" href="index.html"><img class="logo" src="images/logo.svg" alt="Myself"></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
-        aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse text-center" id="navigation">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="index.html">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="about.html">about</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="blog.html">Blog</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="portfolio.html">Portfolio</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="contact.html">Contact</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-  </header>
-
-  <!-- page title -->
-  <section class="page-title bg-primary position-relative">
-    <div class="container">
-      <div class="row">
-        <div class="col-12 text-center">
-          <h1 class="text-white font-tertiary">Blogs</h1>
-        </div>
-      </div>
-    </div>
-    <!-- background shapes -->
-    <img src="images/illustrations/page-title.png" alt="illustrations" class="bg-shape-1 w-100">
-    <img src="images/illustrations/leaf-pink-round.png" alt="illustrations" class="bg-shape-2">
-    <img src="images/illustrations/dots-cyan.png" alt="illustrations" class="bg-shape-3">
-    <img src="images/illustrations/leaf-orange.png" alt="illustrations" class="bg-shape-4">
-    <img src="images/illustrations/leaf-yellow.png" alt="illustrations" class="bg-shape-5">
-    <img src="images/illustrations/dots-group-cyan.png" alt="illustrations" class="bg-shape-6">
-    <img src="images/illustrations/leaf-cyan-lg.png" alt="illustrations" class="bg-shape-7">
-  </section>
-  <!-- /page title -->
-
   <!-- post -->
   <section class="section">
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
-          <h3 class="font-tertiary mb-5">What should be the proper purpose of UI and UX design?</h3>
+          <h3 class="font-tertiary mb-5">Post n°<?= $cpt; ?></h3>
           <p class="font-secondary">Published on May 26, 2017 by <span class="text-primary">uixgeek</span
               class="text-primary"> on <span>UX design</span></p>
           <div class="content">
-            <img src="images/blog/post-1.jpg" alt="post-thumb" class="img-fluid rounded float-left mr-5 mb-4">
+            <img src="<?=$basePath?>/public/images/blog/post-1.jpg" alt="post-thumb" class="img-fluid rounded float-left mr-5 mb-4">
             <strong>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
               et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
               ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
@@ -142,7 +66,7 @@
           <h4 class="font-weight-bold mb-3">Commentaires<span class="ml-2 badge badge-dark rounded-circle">03</span></h4>
           <div class="bg-gray p-5 mb-4">
             <div class="media border-bottom py-4">
-              <img src="images/user-1.jpg" class="img-fluid align-self-start rounded-circle mr-3" alt="">
+              <img src="<?=$basePath?>/public/images/user-1.jpg" class="img-fluid align-self-start rounded-circle mr-3" alt="">
               <div class="media-body">
                 <h5 class="mt-0">Carole Marvin.</h5>
                 <p>15 january 2015 At 10:30 pm</p>
@@ -150,7 +74,7 @@
                   definitionem.</p>
                 <a href="#" class="btn btn-transparent btn-sm pl-0">Répondre</a>
                 <div class="media my-5">
-                  <img src="images/user-2.jpg" class="img-fluid align-self-start rounded-circle mr-3" alt="">
+                  <img src="<?=$basePath?>/public/images/user-2.jpg" class="img-fluid align-self-start rounded-circle mr-3" alt="">
                   <div class="media-body">
                     <h5 class="mt-0">Jaquan Rolfson.</h5>
                     <p>15 january 2015 At 10:30 pm</p>
@@ -162,7 +86,7 @@
               </div>
             </div>
             <div class="media py-4">
-              <img src="images/user-3.jpg" class="img-fluid align-self-start rounded-circle mr-3" alt="">
+              <img src="<?=$basePath?>/public/images/user-3.jpg" class="img-fluid align-self-start rounded-circle mr-3" alt="">
               <div class="media-body">
                 <h5 class="mt-0">Bruce Bernier.</h5>
                 <p>15 january 2015 At 10:30 pm</p>
@@ -199,7 +123,7 @@
         </div>
         <div class="col-lg-4 col-sm-6 mb-4 mb-lg-0">
           <article class="card shadow">
-            <img class="rounded card-img-top" src="images/blog/post-3.jpg" alt="post-thumb">
+            <img class="rounded card-img-top" src="<?=$basePath?>/public/images/blog/post-3.jpg" alt="post-thumb">
             <div class="card-body">
               <h4 class="card-title"><a class="text-dark" href="blog-single.html">Amazon increase income 1.5 Million</a>
               </h4>
@@ -212,7 +136,7 @@
         </div>
         <div class="col-lg-4 col-sm-6 mb-4 mb-lg-0">
           <article class="card shadow">
-            <img class="rounded card-img-top" src="images/blog/post-4.jpg" alt="post-thumb">
+            <img class="rounded card-img-top" src="<?=$basePath?>/public/images/blog/post-4.jpg" alt="post-thumb">
             <div class="card-body">
               <h4 class="card-title"><a class="text-dark" href="blog-single.html">Amazon increase income 1.5 Million</a>
               </h4>
@@ -225,7 +149,7 @@
         </div>
         <div class="col-lg-4 col-sm-6 mb-4 mb-lg-0">
           <article class="card shadow">
-            <img class="rounded card-img-top" src="images/blog/post-2.jpg" alt="post-thumb">
+            <img class="rounded card-img-top" src="<?=$basePath?>/public/images/blog/post-2.jpg" alt="post-thumb">
             <div class="card-body">
               <h4 class="card-title"><a class="text-dark" href="blog-single.html">Amazon increase income 1.5 Million</a>
               </h4>
@@ -240,78 +164,3 @@
     </div>
   </section>
   <!-- /posts similaires -->
-
-   <!-- contact -->
-   <section class="section section-on-footer" data-background="images/backgrounds/bg-dots.png">
-    <div class="container">
-      <div class="row">
-        <div class="col-12 text-center">
-          <h2 class="section-title">Contact</h2>
-        </div>
-        <div class="col-lg-8 mx-auto">
-          <div class="bg-white rounded text-center p-5 shadow-down">
-            <form action="#" class="row">
-              <div class="col-md-6">
-                <input type="text" id="name" name="name" placeholder="Nom" class="form-control px-0 mb-4">
-              </div>
-              <div class="col-md-6">
-                <input type="email" id="email" name="email" placeholder="Adresse Email" class="form-control px-0 mb-4">
-              </div>
-              <div class="col-12">
-                <textarea name="message" id="message" class="form-control px-0 mb-4"
-                  placeholder="Votre message ici"></textarea>
-              </div>
-              <div class="col-lg-6 col-10 mx-auto">
-                <button class="btn btn-primary w-100">envoyer</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- /contact -->
-
-  <!-- footer -->
-  <footer class="bg-dark footer-section">
-    <div class="section">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-4">
-            <h5 class="text-light">Email</h5>
-            <p class="text-white paragraph-lg font-secondary">audrey.cesar83@gmail.com</p>
-          </div>
-          <div class="col-md-4">
-            <h5 class="text-light">Telephone</h5>
-            <p class="text-white paragraph-lg font-secondary">06 95 98 51 99</p>
-          </div>
-          <div class="col-md-4">
-            <h5 class="text-light">Adresse</h5>
-            <p class="text-white paragraph-lg font-secondary">Toulon (83), France</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="border-top text-center border-dark py-5">
-      <p class="mb-0 text-light">Copyright ©
-        <script>
-          var CurrentYear = new Date().getFullYear()
-          document.write(CurrentYear)
-        </script> - Audrey César - <a href="#">Administration</a></p>
-    </div>
-  </footer>
-  <!-- /footer -->
-  <!-- build:js scripts/vendor.js -->
-  <script type="text/javascript" src="/node_modules/jquery/dist/jquery.min.js"></script>
-  <script type="text/javascript" src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="/node_modules/slick-carousel/slick/slick.min.js"></script>
-  <script type="text/javascript" src="/node_modules/shufflejs/dist/shuffle.min.js"></script>
-  <!-- endbuild -->
-  <!-- build:js scripts/main.js -->
-  <script src="scripts/main.js"></script>
-  <!-- endbuild -->
-
-</body>
-
-</html>

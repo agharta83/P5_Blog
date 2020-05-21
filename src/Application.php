@@ -42,9 +42,9 @@ class Application {
             $methodName = $data[1];
 
             // Instance du controller
-            $controller = new $controllerName();
+            $controller = new $controllerName($this->router);
             // Execution de la methode
-            $controller->$methodName();
+            $controller->$methodName($match['params']);
 
         }
     }

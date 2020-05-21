@@ -1,4 +1,4 @@
-<?php $this->layout('blog_layout', ['title' => $title]); ?>
+<?php $this->layout('layout', ['title' => $title]); ?>
  
  <!-- page title -->
   <?php $this->insert('partials/hero2', ['title' => $title]); ?>

@@ -1,4 +1,4 @@
-<?php $this->layout('portfolio_layout'); ?>
+<?php $this->layout('layout'); ?>
 
 <!-- page title -->
 <?php $this->insert('partials/hero2'); ?>

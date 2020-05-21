@@ -5,7 +5,7 @@
   <!-- /page title -->
 
   <!-- blog -->
-  <?php $this->insert('partials/blog/blogList'); ?>
+  <?php $this->insert('partials/blog/list'); ?>
   <!-- /blog -->
 
   <!-- contact -->

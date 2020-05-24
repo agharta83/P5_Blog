@@ -1,3 +1,5 @@
+<?php use MyBlog\Models\PostModel; ?>
+
 <section class="section">
     <div class="container">
       <!-- btn tabs shuffle -->
@@ -8,13 +10,13 @@
               <input type="radio" name="shuffle-filter" value="all" checked="checked" />Tout
             </label>
             <label class="btn btn-sm btn-primary">
-              <input type="radio" name="shuffle-filter" value="front" />Front
+              <input type="radio" name="shuffle-filter" value="<?= PostModel::FRONT; ?>" />Front
             </label>
             <label class="btn btn-sm btn-primary">
-              <input type="radio" name="shuffle-filter" value="back" />Back
+              <input type="radio" name="shuffle-filter" value="<?= PostModel::BACK; ?>" />Back
             </label>
             <label class="btn btn-sm btn-primary">
-              <input type="radio" name="shuffle-filter" value="gestion" />Gestion de projet
+              <input type="radio" name="shuffle-filter" value="<?= PostModel::GESTION_DE_PROJET; ?>" />Gestion de projet
             </label>
           </div>
         </div>
@@ -24,9 +26,9 @@
       <!-- blog posts-->
       <div class="row shuffle-wrapper">
 
-        <?php for ($i = 0; $i <= 5; $i++) : ?>
-          <?php $this->insert('partials/blog/list-post', ['cpt' => $i]); ?>
-        <?php endfor; ?>
+        <?php foreach($posts as $post) : ?>
+          <?php $this->insert('partials/blog/list-post', ['post' => $post]); ?>
+        <?php endforeach; ?>
 
       </div>
       <!-- /blog posts-->

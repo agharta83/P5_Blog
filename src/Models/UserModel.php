@@ -1,5 +1,5 @@
 <?php
-
+namespace Myblog\Models;
 class UserModel {
     
     private $id;
@@ -12,6 +12,27 @@ class UserModel {
     private $firstname;
     private $lastname;
     private $avatar;
+
+    public static function getUser($id) {
+        
+        // Construction de la requete
+        $sql = '
+            SELECT * FROM user 
+            WHERE id = :id
+        ';
+
+        // Connexion à la db
+        $conn = \MyBlog\Database::getDb();
+
+        // Execution de la requete
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Return les résultats
+        //var_dump($stmt->fetchObject(self::class));
+        return $stmt->fetchObject(self::class);
+    }
 
     /**
      * Get the value of id
@@ -146,7 +167,7 @@ class UserModel {
      */ 
     public function getFirstname()
     {
-        return $this->firstname;
+        return ucfirst(strtolower($this->firstname));
     }
 
     /**
@@ -166,7 +187,7 @@ class UserModel {
      */ 
     public function getLastname()
     {
-        return $this->lastname;
+        return ucfirst(strtolower($this->lastname));
     }
 
     /**

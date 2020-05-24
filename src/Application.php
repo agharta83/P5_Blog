@@ -19,7 +19,7 @@ class Application {
 
         // BlogController
         $this->router->map('GET', '/blog', ['BlogController', 'list'], 'blog_list');
-        $this->router->map('GET', '/blog/[i:id]', ['BlogController', 'read'], 'blog_read');
+        $this->router->map('GET', '/blog/[:slug]', ['BlogController', 'read'], 'blog_read');
 
         // PortfolioController
         $this->router->map('GET', '/portfolio', ['PortfolioController', 'list'], 'portfolio_list');

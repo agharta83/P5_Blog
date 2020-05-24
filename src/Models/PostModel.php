@@ -1,6 +1,14 @@
 <?php
 
+namespace MyBlog\Models;
+
+use MyBlog\Models\UserModel;
+
 class PostModel {
+
+    CONST FRONT = 'FRONT';
+    CONST BACK = 'BACK';
+    CONST GESTION_DE_PROJET = 'GESTION DE PROJET';
     
     private $id;
     private $title;
@@ -16,6 +24,59 @@ class PostModel {
     private $category;
     private $user_id;
 
+    // Retourne la liste de tous les posts
+    public static function findAll() {
+        
+        // Construction de la requête
+        $sql = '
+            SELECT * FROM post 
+            WHERE published = 1
+        ';
+
+        // Connexion à la db
+        $conn = \MyBlog\Database::getDb();
+
+        // Exécution de la requête
+        $stmt = $conn->query($sql);
+
+        // Return les résultats
+        //var_dump($stmt->fetchAll(\PDO::FETCH_CLASS, self::class));
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, self::class);
+    }
+
+    // Retourne un post à partir de son slug
+    public static function findBySlug($slug) {
+
+        // Construction de la requete
+        $sql = '
+            SELECT * FROM post 
+            WHERE published = 1 
+            AND slug = :slug
+        ';
+
+        // Connexion à la db
+        $conn = \MyBlog\Database::getDb();
+
+        // Execution de la requete
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':slug', $slug, \PDO::PARAM_STR);
+        $stmt->execute();
+
+        // Return les résultats
+        //var_dump($stmt->fetchObject(self::class));
+        return $stmt->fetchObject(self::class);
+
+    }
+
+    public function getPostAuthor() {
+
+        $id = $this->getUser_id();
+
+        $result = UserModel::getUser($id);
+
+        return $result;
+        
+    }
 
     /**
      * Get the value of id
@@ -172,7 +233,7 @@ class PostModel {
      */ 
     public function getPublished_date()
     {
-        return $this->published_date;
+        return date('d-m-Y', strtotime($this->published_date));
     }
 
     /**

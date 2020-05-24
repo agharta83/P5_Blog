@@ -24,6 +24,10 @@ class Application {
         // PortfolioController
         $this->router->map('GET', '/portfolio', ['PortfolioController', 'list'], 'portfolio_list');
         $this->router->map('GET', '/portfolio/[i:id]', ['PortfolioController', 'read'], 'portfolio_read');
+
+        // Administration
+        $this->router->map('GET', '/dashboard', ['AdminController', 'home'], 'dashboard');
+
     }
 
     // Execution du controller et de la méthode correspondante à l'URL demandée

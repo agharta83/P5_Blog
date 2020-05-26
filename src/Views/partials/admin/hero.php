@@ -1,43 +1,37 @@
 <section class="hero-area hero-admin bg-primary" id="parallax">
 
-    <div class="container">
-        <div class="row">
+    <div class="container card-admin">
+        <div class="row d-flex">
 
-            <div class="col-lg-3 m-auto">
-            <h4 class="text-white font-tertiary">Posts publiés</h4>
-                <div class="card shadow-lg card-admin rounded-img">
-                    <div class="card-body card-body-admin text-center">
-                        <p class="font-italic text-muted">15</p>
-                    </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 text-center">
+                <div class="milestone-counter py-3 background-linear1 shadow">
+                    <i class="text-white far fa-newspaper fa-3x py-3"></i>
+                    <span class="text-white h3 stat-count highlight pb-2">12</span>
+                    <div class="text-white h5 milestone-details">Articles publiés</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 text-center">
+                <div class="milestone-counter py-3 background-linear2 shadow">
+                    <i class="text-white fas fa-laptop-code fa-3x py-3"></i>
+                    <span class="text-white h3 stat-count highlight pb-2">100</span>
+                    <div class="text-white h5 milestone-details">Projets en ligne</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 text-center">
+                <div class="milestone-counter py-3 background-linear3 shadow">
+                    <i class="text-white fas fa-comments fa-3x py-3"></i>
+                    <span class="text-white h3 stat-count highlight pb-2">140</span>
+                    <div class=" text-white h5 milestone-details">Commentaires</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 text-center">
+                <div class="milestone-counter py-3 background-linear4 shadow">
+                    <i class="text-white fas fa-user fa-3x py-3"></i>
+                    <span class="text-white h3 stat-count highlight pb-2">500</span>
+                    <div class="text-white h5 milestone-details">Utilisateurs</div>
                 </div>
             </div>
 
-            <div class="col-lg-3 m-auto">
-                <div class="card shadow-lg card-admin">
-                    <div class="card-body p-5">
-                        <h6 class="font-tertiary">Projets publiés</h6>
-                        <p class="font-italic text-muted">26</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 m-auto">
-                <div class="card shadow-lg card-admin">
-                    <div class="card-body p-5">
-                        <h6 class="font-tertiary">Nombre de commentaires</h6>
-                        <p class="font-italic text-muted">6</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 m-auto">
-                <div class="card shadow-lg card-admin">
-                    <div class="card-body p-5">
-                        <h6 class="font-tertiary">Nombre de membres</h6>
-                        <p class="font-italic text-muted">3</p>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
     <div class="layer-bg layer-bg-admin w-100">

@@ -182,17 +182,20 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }); // Shuffle js filter and masonry
 
-  var myShuffle = new _shufflejs["default"](document.querySelector('.shuffle-wrapper'), {
-    itemSelector: '.shuffle-item',
-    buffer: 1
-  });
-  $('input[name="shuffle-filter"]').on('change', function (evt) {
-    var input = evt.currentTarget;
+  if (window.location.pathname == '/opc/P5_Blog/') {
+    var myShuffle = new _shufflejs["default"](document.querySelector('.shuffle-wrapper'), {
+      itemSelector: '.shuffle-item',
+      buffer: 1
+    });
+    $('input[name="shuffle-filter"]').on('change', function (evt) {
+      var input = evt.currentTarget;
 
-    if (input.checked) {
-      myShuffle.filter(input.value);
-    }
-  }); // Sticky elements (pinning)
+      if (input.checked) {
+        myShuffle.filter(input.value);
+      }
+    });
+  } // Sticky elements (pinning)
+
 
   var controller = new _scrollmagic["default"].Controller();
   var pins_elem = $('.pin-elem');
@@ -200,85 +203,33 @@ document.addEventListener('DOMContentLoaded', function () {
     new _scrollmagic["default"].Scene({
       offset: 100
     }).setPin(this).addTo(controller);
-  }); //someFunction();
-});
-});
+  }); // Admin home counter func
 
-require.register("js/someFile.js", function(exports, require, module) {
-"use strict";
+  function count($this) {
+    var current = parseInt($this.html(), 10);
+    current = current + 1;
+    $this.html(++current);
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-
-function someFunction() {
-  console.log('some function');
-}
-
-var _default = someFunction;
-exports["default"] = _default;
-});
-
-require.register("scripts/main.js", function(exports, require, module) {
-"use strict";
-
-(function ($) {
-  'use strict'; // Sticky Menu
-
-  $(window).scroll(function () {
-    if ($('.navigation').offset().top > 100) {
-      $('.navigation').addClass('nav-bg');
+    if (current > $this.data('count')) {
+      $this.html($this.data('count'));
     } else {
-      $('.navigation').removeClass('nav-bg');
+      setTimeout(function () {
+        count($this);
+      }, 50);
     }
-  }); // Background-images
+  }
 
-  $('[data-background]').each(function () {
-    $(this).css({
-      'background-image': 'url(' + $(this).data('background') + ')'
+  if (window.location.pathname == '/opc/P5_Blog/dashboard') {
+    console.log('admin page');
+    $(".stat-count").each(function () {
+      $(this).data('count', parseInt($(this).html(), 10));
+      $(this).html('0');
+      count($(this));
     });
-  }); // background color
+  }
 
-  $('[data-color]').each(function () {
-    $(this).css({
-      'background-color': $(this).data('color')
-    });
-  }); // testimonial-slider
-
-  $('.testimonial-slider').slick({
-    dots: true,
-    infinite: true,
-    speed: 300,
-    slidesToShow: 1,
-    arrows: false,
-    adaptiveHeight: true
-  }); // Shuffle js filter and masonry
-
-  var Shuffle = window.Shuffle;
-  var jQuery = window.jQuery;
-  var myShuffle = new Shuffle(document.querySelector('.shuffle-wrapper'), {
-    itemSelector: '.shuffle-item',
-    buffer: 1
-  });
-  jQuery('input[name="shuffle-filter"]').on('change', function (evt) {
-    var input = evt.currentTarget;
-
-    if (input.checked) {
-      myShuffle.filter(input.value);
-    }
-  }); // Sticky elements (pinning)
-
-  var controller = new ScrollMagic.Controller();
-  var pins_elem = $('.pin-elem');
-  $.each(pins_elem, function (indexInArray, valueOfElement) {
-    new ScrollMagic.Scene({
-      offset: 100
-    }).setPin(this).addIndicators({
-      name: '2 (duration: 0'
-    }).addTo(controller);
-  });
-})(jQuery);
+  ; //someFunction();
+});
 });
 
 require.register("___globals___", function(exports, require, module) {

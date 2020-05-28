@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 count($this)
             }, 50);
         }
-    }
+    };
 
     if (window.location.pathname == '/opc/P5_Blog/dashboard') {
         console.log('admin page');
@@ -80,6 +80,27 @@ document.addEventListener('DOMContentLoaded', () => {
             count($(this));
         });
     };
+
+     // Animate input search length
+    if (window.location.pathname == '/opc/P5_Blog/dashboard/posts') {
+        var searchInput = $(".search-box input");
+	    var inputGroup = $(".search-box .input-group");
+        var boxWidth = inputGroup.width();
+    
+        console.log(searchInput);
+	    searchInput.focus(function(){
+		    inputGroup.animate({
+			    width: "300"
+		    });
+	    }).blur(function(){
+		    inputGroup.animate({
+			    width: boxWidth
+		    });
+	    });
+    };
+
+   
+	
     
 
   //someFunction();

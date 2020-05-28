@@ -24,13 +24,31 @@ class PostModel {
     private $category;
     private $user_id;
 
-    // Retourne la liste de tous les posts
-    public static function findAll() {
+    // Retourne la liste de tous les posts publiés
+    public static function findAllPostsPublished() {
         
         // Construction de la requête
         $sql = '
             SELECT * FROM post 
             WHERE published = 1
+        ';
+
+        // Connexion à la db
+        $conn = \MyBlog\Database::getDb();
+
+        // Exécution de la requête
+        $stmt = $conn->query($sql);
+
+        // Return les résultats
+        //var_dump($stmt->fetchAll(\PDO::FETCH_CLASS, self::class));
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, self::class);
+    }
+
+    // Retourne la liste de tous les posts
+    public static function findAllPosts() {
+        // Construction de la requête
+        $sql = '
+            SELECT * FROM post
         ';
 
         // Connexion à la db
@@ -72,9 +90,9 @@ class PostModel {
 
         $id = $this->getUser_id();
 
-        $result = UserModel::getUser($id);
+        $author = UserModel::getUser($id);
 
-        return $result;
+        return $author->getFirstname() . ' ' . $author->getLastname();
         
     }
 
@@ -151,7 +169,7 @@ class PostModel {
      */ 
     public function getCreated_on()
     {
-        return $this->created_on;
+        return date('d-m-Y', strtotime($this->created_on));
     }
 
     /**
@@ -173,7 +191,12 @@ class PostModel {
      */ 
     public function getLast_update()
     {
-        return $this->last_update;
+        if (isset($this->last_update) && !empty($this->last_update)) {
+            return date('d-m-Y', strtotime($this->last_update));
+        }
+
+        return null;
+        
     }
 
     /**
@@ -233,7 +256,11 @@ class PostModel {
      */ 
     public function getPublished_date()
     {
-        return date('d-m-Y', strtotime($this->published_date));
+        if (isset($this->published_date) && !empty($this->published_date)) {
+            return date('d-m-Y', strtotime($this->published_date));
+        }
+        
+        return null;
     }
 
     /**
@@ -253,7 +280,12 @@ class PostModel {
      */ 
     public function getPublished()
     {
-        return $this->published;
+        if ($this->published) {
+            return 'Publié';
+        } else {
+            return 'Brouillon';
+        }
+        
     }
 
     /**

@@ -219,6 +219,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  ;
+
   if (window.location.pathname == '/opc/P5_Blog/dashboard') {
     console.log('admin page');
     $(".stat-count").each(function () {
@@ -228,8 +230,42 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  ; // Animate input search length
+
+  if (window.location.pathname == '/opc/P5_Blog/dashboard/posts') {
+    var searchInput = $(".search-box input");
+    var inputGroup = $(".search-box .input-group");
+    var boxWidth = inputGroup.width();
+    console.log(searchInput);
+    searchInput.focus(function () {
+      inputGroup.animate({
+        width: "300"
+      });
+    }).blur(function () {
+      inputGroup.animate({
+        width: boxWidth
+      });
+    });
+  }
+
   ; //someFunction();
 });
+});
+
+require.register("js/someFile.js", function(exports, require, module) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+function someFunction() {
+  console.log('some function');
+}
+
+var _default = someFunction;
+exports["default"] = _default;
 });
 
 require.register("___globals___", function(exports, require, module) {

@@ -7,7 +7,7 @@ class BlogController extends CoreController {
     public function list() {
 
         // Récup la liste des posts en db
-        $list = \MyBlog\Models\PostModel::findAll();
+        $list = \MyBlog\Models\PostModel::findAllPostsPublished();
 
         // On affiche le template
         echo $this->templates->render('blog/list', [

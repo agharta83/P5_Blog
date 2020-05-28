@@ -26,6 +26,7 @@
 
   
   <!-- build:js js/app.js -->
+  <script src="https://cdn.tiny.cloud/1/9b58ljpbf0xbtg9vyp4r7s5vdz1damht99erjkg99exvloer/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
   <script src="<?=$basePath?>/public/js/vendor.js"></script>
   <script src="<?=$basePath?>/public/js/app.js"></script>
   <!-- endbuild -->

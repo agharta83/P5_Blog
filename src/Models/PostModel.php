@@ -86,6 +86,7 @@ class PostModel {
 
     }
 
+    // Récupére l'auteur du post et le return de façon formatée
     public function getPostAuthor() {
 
         $id = $this->getUser_id();
@@ -94,6 +95,25 @@ class PostModel {
 
         return $author->getFirstname() . ' ' . $author->getLastname();
         
+    }
+
+    // Récupére le nombre de posts publiés
+    public static function countNbPublishedPost() {
+
+        // Construction de la requête
+        $sql = '
+            SELECT COUNT(*) FROM post
+            WHERE published = 1
+        ';
+
+        // Connexion à la db
+        $conn = \MyBlog\Database::getDb();
+
+        // Exécution de la requête
+        $stmt = $conn->query($sql);
+
+        // Return les résultats
+        return $stmt->fetchColumn();
     }
 
     /**

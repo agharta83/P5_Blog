@@ -8,7 +8,9 @@
 						  <h3 class="text-left tertiary-font"><b>Details </b>des posts </h3>
             </div>
             <div class="col-lg-3 m-auto">
-                <button class="text-dark btn-new-post btn btn-primary w-100 p-1">Nouveau post</button>
+                <button class="text-dark btn-new-post btn btn-primary w-100 p-1">
+                  <a href="<?= $router->generate('new_post'); ?>" class="text-dark">Nouveau post</a>
+                </button>
               </div>
             <div class="col-sm-4 pt-3">
               <div class="search-box">

@@ -222,7 +222,6 @@ document.addEventListener('DOMContentLoaded', function () {
   ;
 
   if (window.location.pathname == '/opc/P5_Blog/dashboard') {
-    console.log('admin page');
     $(".stat-count").each(function () {
       $(this).data('count', parseInt($(this).html(), 10));
       $(this).html('0');
@@ -245,6 +244,29 @@ document.addEventListener('DOMContentLoaded', function () {
       inputGroup.animate({
         width: boxWidth
       });
+    });
+  }
+
+  ;
+
+  if (window.location.pathname == '/opc/P5_Blog/dashboard/posts/new') {
+    tinymce.init({
+      selector: '#new_post_form_chapo',
+      height: '300',
+      plugins: 'a11ychecker advcode casechange formatpainter linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker',
+      toolbar: 'a11ycheck addcomment showcomments casechange checklist code formatpainter pageembed permanentpen table',
+      toolbar_mode: 'floating',
+      tinycomments_mode: 'embedded',
+      tinycomments_author: 'Author name'
+    });
+    tinymce.init({
+      selector: '#new_post_form_content',
+      height: '500',
+      plugins: 'a11ychecker advcode casechange formatpainter linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker',
+      toolbar: 'a11ycheck addcomment showcomments casechange checklist code formatpainter pageembed permanentpen table',
+      toolbar_mode: 'floating',
+      tinycomments_mode: 'embedded',
+      tinycomments_author: 'Author name'
     });
   }
 

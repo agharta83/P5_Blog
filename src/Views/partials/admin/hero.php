@@ -6,7 +6,7 @@
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 text-center">
                 <div class="milestone-counter py-3 background-linear1 shadow">
                     <i class="text-white far fa-newspaper fa-3x py-3"></i>
-                    <span class="text-white h3 stat-count highlight pb-2">12</span>
+                    <span class="text-white h3 stat-count highlight pb-2"><?= $countDatas['posts']; ?></span>
                     <div class="text-white h5 milestone-details">Articles publiés</div>
                 </div>
             </div>

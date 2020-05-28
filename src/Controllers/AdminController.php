@@ -8,8 +8,21 @@ class AdminController extends CoreController {
 
         $headTitle = 'Dashboard';
 
+        // On récupére les datas à afficher (posts, projets, commentaires, users)
+        // TODO afficher aussi des notifs pour les posts en brouillon, et les commentaires à valider
+        $nbPublishedPosts = \MyBlog\Models\PostModel::countNbPublishedPost();
+
+        // On insére les datas dans un tableau
+        $countDatas = [
+            'posts' => $nbPublishedPosts
+        ];
+
+
         // On affiche le template
-        echo $this->templates->render('admin/home', ['title' => $headTitle]);
+        echo $this->templates->render('admin/home', [
+            'title' => $headTitle,
+            'countDatas' => $countDatas
+        ]);
     }
 
     public function list () {
@@ -23,6 +36,15 @@ class AdminController extends CoreController {
         echo $this->templates->render('admin/posts', [
             'title' => $headTitle, 
             'posts' => $posts
+        ]);
+    }
+
+    public function newPost() {
+
+        $headTitle = 'Dashboard / Nouveau post';
+
+        echo $this->templates->render('admin/new_post', [
+            'title' => $headTitle
         ]);
     }
 

@@ -6,9 +6,11 @@ use MyBlog\Models\UserModel;
 
 class PostModel {
 
-    CONST FRONT = 'FRONT';
-    CONST BACK = 'BACK';
-    CONST GESTION_DE_PROJET = 'GESTION DE PROJET';
+    const FRONT = 'FRONT';
+    const BACK = 'BACK';
+    const GESTION_DE_PROJET = 'GESTION DE PROJET';
+    const AUTRE = 'AUTRE';
+
     
     private $id;
     private $title;
@@ -114,6 +116,86 @@ class PostModel {
 
         // Return les résultats
         return $stmt->fetchColumn();
+    }
+
+    // Formate le slug
+    public function setFormatedSlug($string) {
+
+        // Supression des accents
+        $slug = str_replace('è', 'e', $string);
+        $slug = str_replace('é', 'e', $slug);
+        // Remplacement des majuscules
+        $slug = strtolower($slug);
+        // Suppression des caractéres non alphanumérique
+        $slug = preg_replace('#[^A-Z0-9\'\ ]#i', '', $slug);
+        // Supression des espaces multiples
+        $slug = str_replace('  ', ' ', $slug);
+        $slug = str_replace('   ', '_', $slug);
+
+        return $slug;
+
+    }
+
+    // Créé un nouveau post ou le met à jour si il existe déjà
+    public function save() {
+
+        // On crée la requête SQL
+        $sql = "
+            REPLACE INTO post (
+                id,
+                title,
+                chapo,
+                content,
+                number_reviews,
+                created_on,
+                published,
+                published_date,
+                slug,
+                category,
+                user_id
+            )
+            VALUES (
+                :id,
+                :title,
+                :chapo,
+                :content,
+                :number_reviews,
+                :created_on,
+                :published,
+                :published_date,
+                :slug,
+                :category,
+                :user_id
+            )";
+
+        // On récupére le connexion à la BDD
+        $conn = \MyBlog\Database::getDb();
+
+        // On récupére l'ID 
+        if (empty($this->id)) {
+            $this->id = $conn->lastInsertId();
+        }
+
+        // On execute la requete
+        $stmt = $conn->prepare( $sql );
+        $stmt->bindValue( ':title', $this->title );
+        $stmt->bindValue( ':chapo', $this->chapo );
+        $stmt->bindValue( ':content', $this->content );
+        $stmt->bindValue( ':number_reviews', $this->number_reviews );
+        $stmt->bindValue( ':created_on', $this->created_on );
+        $stmt->bindValue( ':published', $this->published );
+        $stmt->bindValue( ':published_date', $this->published_date );
+        $stmt->bindValue( ':slug', $this->slug );
+        $stmt->bindValue( ':category', $this->category );
+        $stmt->bindValue( ':user_id', $this->user_id );
+        $stmt->bindValue( ':id', $this->id);
+        $stmt->execute();
+        print $stmt->errorCode(); die();
+
+        //var_dump($stmt->execute()); die();
+
+        $this->id = $conn->lastInsertId();
+
     }
 
     /**
@@ -335,7 +417,7 @@ class PostModel {
      */ 
     public function setSlug($slug)
     {
-        $this->slug = $slug;
+        $this->slug = $this->setFormatedSlug($slug);
 
         return $this;
     }

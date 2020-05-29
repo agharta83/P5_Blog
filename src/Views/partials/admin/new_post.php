@@ -1,3 +1,7 @@
+<?php
+use MyBlog\Models\PostModel; 
+?>
+
 <section class="hero-area hero-admin-new-post bg-primary" id="parallax">
 
   <div class="container-fluid">
@@ -10,13 +14,9 @@
             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
             Création d'un nouveau post
           </h3>
-
-          <div class="custom-control custom-switch custom-switch-lg align-self-center">
-            <input type="checkbox" class="custom-control-input" id="published">
-            <label class="custom-control-label" for="published">Publié ?</label>
-          </div>
-
         </div>
+
+        <!-- TODO Insérer un icone pour avoir un aperçu de l'article -->
 
         <div class="card-body">
 
@@ -31,25 +31,25 @@
               <div class="col-sm-9">
                 <div id="new_post_form_title">
                   <div class="form-check form-check-inline">
-                    <input type="radio" id="category_0" name="new_post_form[category]" required="required" class="form-check-input" value="Gestion de projet">
+                    <input type="radio" id="category_0" name="category" required="required" class="form-check-input" value="<?= PostModel::GESTION_DE_PROJET; ?>">
                     <label class="form-check-label required">
                       Gestion de projet
                     </label>
                   </div>
                   <div class="form-check form-check-inline">
-                    <input type="radio" id="category_1" name="new_post_form[category]" required="required" class="form-check-input" value="Back">
+                    <input type="radio" id="category_1" name="category" required="required" class="form-check-input" value="<?= PostModel::BACK; ?>">
                     <label class="form-check-label required">
                       Back
                     </label>
                   </div>
                   <div class="form-check form-check-inline">
-                    <input type="radio" id="category_2" name="new_post_form[category]" required="required" class="form-check-input" value="Front">
+                    <input type="radio" id="category_2" name="category" required="required" class="form-check-input" value="<?= PostModel::FRONT; ?>">
                     <label class="form-check-label required">
                       Front
                     </label>
                   </div>
                   <div class="form-check form-check-inline">
-                    <input type="radio" id="category_3" name="new_post_form[category]" required="required" class="form-check-input" value="Autre">
+                    <input type="radio" id="category_3" name="category" required="required" class="form-check-input" value="<?= PostModel::AUTRE; ?>">
                     <label class="form-check-label required">
                       Autre
                     </label>
@@ -59,24 +59,23 @@
             </div>
 
             <div class="form-group row">
-              <label class="col-form-label col-sm-3 form-control-label align-self-center required" for="identite_form_titre">Titre de l'article *</label>
+              <label class="col-form-label col-sm-3 form-control-label align-self-center required" for="new_post_form_titre">Titre de l'article *</label>
               <div class="col-sm-9">
-                <input type="text" id="identite_form_titre" name="new_post_form[titre]" required placeholder="Titre" class="form-control">
+                <input type="text" id="new_post_form_titre" name="titre" required placeholder="Titre" class="form-control">
               </div>
             </div>
 
             <div class="form-group row">
               <label class="col-form-label col-sm-3 form-control-label" for="new_post_form_chapo">Chapo *</label>
               <div class="col-sm-9">
-                <input type="text" id="new_post_form_chapo" name="new_post_form[chapo]" placeholder="Chapo" class="form-control">
+                <input type="text" id="new_post_form_chapo" name="chapo" placeholder="Chapo" class="form-control">
               </div>
             </div>
 
             <div class="form-group row">
               <label class="col-form-label col-sm-3 form-control-label required" for="new_post_form_content">Contenu *</label>
               <div class="col-sm-9">
-                <textarea type="text" id="new_post_form_content" name="new_post_form[content]" required="required" placeholder="Prénom" class="form-control">
-                    Hello world !
+                <textarea type="text" id="new_post_form_content" name="content" required="required" placeholder="Contenu" class="form-control">
                 </textarea>
               </div>
             </div>
@@ -90,7 +89,7 @@
                     <div class="row">
                       <div class="col pr-0">
                         <div class="custom-file">
-                          <input type="file" id="new_post_form_img" name="new_post_form[img][file]" accept="jpg, jpeg" data-original-name="" class="custom-file-input" lang="fr">
+                          <input type="file" id="new_post_form_img" name="img[file]" accept="jpg, jpeg" data-original-name="" class="custom-file-input" lang="fr">
                           <label id="new_post_form_img_file-label" class="custom-file-label" for="customFile" data-label-default="Choisissez un fichier">
                             Choisissez un fichier
                           </label> </div>
@@ -113,6 +112,11 @@
             </div>
 
             <hr class="mt-4">
+
+            <div class="custom-control custom-switch custom-switch-lg">
+            <input type="checkbox" class="custom-control-input" id="published" name="published" value="off">
+            <label class="custom-control-label" for="published">Publié ?</label>
+          </div>
 
             <div class="row mt-5">
               <div class="col-sm-12 d-flex justify-content-around">

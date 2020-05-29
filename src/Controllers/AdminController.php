@@ -39,13 +39,43 @@ class AdminController extends CoreController {
         ]);
     }
 
-    public function newPost() {
+    public function createNewPost() {
 
-        $headTitle = 'Dashboard / Nouveau post';
+        if (!empty($_POST)) {
+            $post = new \MyBlog\Models\PostModel();
 
-        echo $this->templates->render('admin/new_post', [
-            'title' => $headTitle
-        ]);
+            $post->setCategory($_POST['category']);
+            $post->setTitle($_POST['titre']);
+            $post->setChapo($_POST['chapo']);
+            $post->setcontent($_POST['content']);
+            // $post->setImg($_POST['img']); // TODO Faire le traitement pour les images !
+            $post->setCreated_on(date("Y-m-d"));
+            $post->setSlug($_POST['titre']);
+            $post->setNumber_reviews(0);
+            $post->setUser_id('1'); // TODO Faire la requete / méthode pour retrouver l'user id quand la partie authentification sera codée
+
+            if (isset($_POST['published']) && !empty($_POST['published'] && $_POST['published'] == 'on')) {
+                $post->setPublished_date(date("Y-m-d"));
+                $post->setPublished(1);
+            } else if (!isset($_POST['published'])) {
+                $post->setPublished(0);
+            }
+
+            // On enregistre
+            //var_dump($post->save()); die(); // Si renvoie 00000 => c'est ok
+            $post->save();
+
+            // On redirige
+            $this->redirect('admin_blog_list');
+
+        } else {
+            $headTitle = 'Dashboard / Nouveau post';
+
+            echo $this->templates->render('admin/new_post', [
+                'title' => $headTitle
+            ]);
+        }
+
     }
 
 }

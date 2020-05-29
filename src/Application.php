@@ -28,7 +28,7 @@ class Application {
         // Administration
         $this->router->map('GET', '/dashboard', ['AdminController', 'home'], 'dashboard');
         $this->router->map('GET', '/dashboard/posts', ['AdminController', 'list'], 'admin_blog_list');
-        $this->router->map('GET', '/dashboard/posts/new', ['AdminController', 'newPost'], 'new_post');
+        $this->router->map('GET|POST', '/dashboard/posts/new', ['AdminController', 'createNewPost'], 'new_post');
 
     }
 

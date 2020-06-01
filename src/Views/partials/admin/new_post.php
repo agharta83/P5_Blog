@@ -1,5 +1,6 @@
 <?php
-use MyBlog\Models\PostModel; 
+
+use MyBlog\Models\PostModel;
 ?>
 
 <section class="hero-area hero-admin-new-post bg-primary" id="parallax">
@@ -81,42 +82,27 @@ use MyBlog\Models\PostModel;
             </div>
 
             <div class="form-group row">
-              <label class="col-form-label col-sm-3 col-form-legend">Image du post</label>
+              <label class="col-form-label col-sm-3 col-form-legend"><i class="fas fa-image pr-2"></i>Image à la une</label>
+
               <div class="col-sm-4">
-                <div class="document">
-
-                  <div class="document-file ">
-                    <div class="row">
-                      <div class="col pr-0">
-                        <div class="custom-file">
-                          <input type="file" id="new_post_form_img" name="img[file]" accept="jpg, jpeg" data-original-name="" class="custom-file-input" lang="fr">
-                          <label id="new_post_form_img_file-label" class="custom-file-label" for="customFile" data-label-default="Choisissez un fichier">
-                            Choisissez un fichier
-                          </label> </div>
-                      </div>
-                      <div class="col-auto pl-0">
-                        <button id="new_post_form_img_file-action-delete" class="btn btn-outline-danger ml-2" style="display: none; height: calc(2.25rem + 2px);" title="Supprimer le fichier actuel" data-file-input-id="new_post_form_img_file">
-                          <i class="fa fa-remove" aria-hidden="true"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div id="new_post_form_img_file-help">
-                    <small class="text-muted">
-                      Taille du fichier limitée à 488 Ko.
-                    </small>
-                  </div>
+                <div class="custom-file">
+                  <input type="file" name="files[]" accept="image/*" multiple class="custom-file-input form-control" id="customFile">
+                  <label class="custom-file-label" for="customFile">Choisir une image</label>
                 </div>
               </div>
+
+              <div class="col-sm-5 wrapper-preview text-center">
+                
+              </div>
+
             </div>
 
             <hr class="mt-4">
 
             <div class="custom-control custom-switch custom-switch-lg">
-            <input type="checkbox" class="custom-control-input" id="published" name="published" value="off">
-            <label class="custom-control-label" for="published">Publié ?</label>
-          </div>
+              <input type="checkbox" class="custom-control-input" id="published" name="published" value="off">
+              <label class="custom-control-label" for="published">Publié ?</label>
+            </div>
 
             <div class="row mt-5">
               <div class="col-sm-12 d-flex justify-content-around">

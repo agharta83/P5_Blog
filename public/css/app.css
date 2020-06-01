@@ -12321,5 +12321,12 @@ li.page-item.active .page-link {
   .custom-switch.custom-switch-lg .custom-control-input:checked ~ .custom-control-label::after {
     transform: translateX(1rem); }
 
+.wrapper-preview img {
+  border: 2px solid #41228e; }
+
+.btn-small {
+  font-size: 1rem;
+  padding: 0.375rem 0.75rem; }
+
 
 /*# sourceMappingURL=app.css.map*/

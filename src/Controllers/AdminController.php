@@ -39,6 +39,7 @@ class AdminController extends CoreController {
         ]);
     }
 
+    // Création d'un post
     public function createNewPost() {
 
         if (!empty($_POST)) {
@@ -48,7 +49,12 @@ class AdminController extends CoreController {
             $post->setTitle($_POST['titre']);
             $post->setChapo($_POST['chapo']);
             $post->setcontent($_POST['content']);
-            // $post->setImg($_POST['img']); // TODO Faire le traitement pour les images !
+
+            if(isset($_POST['img']) && !empty($_POST['img'])) {
+                
+            }
+
+            $post->setImg($_POST['img']);
             $post->setCreated_on(date("Y-m-d"));
             $post->setSlug($_POST['titre']);
             $post->setNumber_reviews(0);

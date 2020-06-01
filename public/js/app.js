@@ -267,6 +267,24 @@ document.addEventListener('DOMContentLoaded', function () {
       toolbar_mode: 'floating',
       tinycomments_mode: 'embedded',
       tinycomments_author: 'Author name'
+    }); // Read url IMG on form input and preview img
+
+    $('input[type="file"]').change(function (e) {
+      var preview = document.querySelector('.wrapper-preview');
+      preview.innerHTML = '';
+      var file = document.querySelector('input[type=file]').files[0];
+
+      if (/\.(jpe?g|png|gif)$/i.test(file.name)) {
+        var reader = new FileReader();
+        reader.addEventListener("load", function () {
+          var image = new Image();
+          image.height = 200;
+          image.title = file.name;
+          image.src = this.result;
+          preview.appendChild(image);
+        }, false);
+        reader.readAsDataURL(file);
+      }
     });
   }
 

@@ -2,6 +2,8 @@
 
 namespace MyBlog\Controllers;
 
+use MyBlog\Services\Uploader;
+
 class CoreController {
     
     public function __construct($router) {
@@ -9,7 +11,7 @@ class CoreController {
         // Test connection DB
         //$connexion = \MyBlog\Database::getDb();
 
-        // On enregistre le router dans le controlelr
+        // On enregistre le router dans le controller
         $this->router = $router;
 
         // Instance de Plates pour gérer les templates

@@ -118,8 +118,8 @@ class PostModel {
         return $stmt->fetchColumn();
     }
 
-    // Formate le slug
-    public function setFormatedSlug($string) {
+    // Formate le slug // TODO les ' / " ne se supprime pas !
+    private function setFormatedSlug($string) {
 
         // Supression des accents
         $slug = str_replace('è', 'e', $string);
@@ -129,9 +129,10 @@ class PostModel {
         // Suppression des caractéres non alphanumérique
         $slug = preg_replace('#[^A-Z0-9\'\ ]#i', '', $slug);
         // Supression des espaces multiples
-        $slug = str_replace('  ', ' ', $slug);
+        $slug = str_replace(' ', '_', $slug);
+        $slug = str_replace('  ', '_', $slug);
         $slug = str_replace('   ', '_', $slug);
-
+        var_dump($slug);
         return $slug;
 
     }
@@ -190,7 +191,6 @@ class PostModel {
         $stmt->bindValue( ':user_id', $this->user_id );
         $stmt->bindValue( ':id', $this->id);
         $stmt->execute();
-        print $stmt->errorCode(); die();
 
         //var_dump($stmt->execute()); die();
 

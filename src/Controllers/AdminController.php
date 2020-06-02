@@ -2,6 +2,8 @@
 
 namespace MyBlog\Controllers;
 
+use MyBlog\Services\Uploader;
+
 class AdminController extends CoreController {
 
     public function home() {
@@ -50,13 +52,29 @@ class AdminController extends CoreController {
             $post->setChapo($_POST['chapo']);
             $post->setcontent($_POST['content']);
 
-            if(isset($_POST['img']) && !empty($_POST['img'])) {
-                
+            // On check $_FILES
+            try {
+                if (!$_FILES) {
+                    throw new \UnexpectedValueException('Un problème est survenu pendant le téléchargement. Veuillez réessayer.');
+                }
+            } catch (\Exception $e) {
+                echo $e->getMessage();
+                exit();
             }
 
-            $post->setImg($_POST['img']);
+            // On upload
+            $uploader = new Uploader(); // TODO le fichier ne s'enregistre pas dans /uploads
+            $uploadResult = $uploader->upload($_FILES['files']);
+
+            
+            if ($uploadResult !== TRUE) {
+                echo 'Impossible d\'enregistrer l\'image.';
+            }
+            
+
+            $post->setImg($_FILES['files']['name'][0]);
             $post->setCreated_on(date("Y-m-d"));
-            $post->setSlug($_POST['titre']);
+            $post->setSlug($_POST['titre']); // TODO les ' / " ne se supprime pas, revoir la regexp
             $post->setNumber_reviews(0);
             $post->setUser_id('1'); // TODO Faire la requete / méthode pour retrouver l'user id quand la partie authentification sera codée
 
@@ -66,6 +84,8 @@ class AdminController extends CoreController {
             } else if (!isset($_POST['published'])) {
                 $post->setPublished(0);
             }
+
+            var_dump($post); die();
 
             // On enregistre
             //var_dump($post->save()); die(); // Si renvoie 00000 => c'est ok

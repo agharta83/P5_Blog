@@ -278,13 +278,16 @@ document.addEventListener('DOMContentLoaded', function () {
         var reader = new FileReader();
         reader.addEventListener("load", function () {
           var image = new Image();
-          image.height = 200;
+          image.width = 400;
           image.title = file.name;
           image.src = this.result;
           preview.appendChild(image);
         }, false);
         reader.readAsDataURL(file);
       }
+
+      var label = document.querySelector('.custom-file-label');
+      label.innerText = file.name;
     });
   }
 

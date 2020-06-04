@@ -2,6 +2,7 @@
 
 namespace MyBlog\Controllers;
 
+use MyBlog\Models\PostModel;
 use MyBlog\Services\Uploader;
 
 class AdminController extends CoreController {
@@ -12,7 +13,7 @@ class AdminController extends CoreController {
 
         // On récupére les datas à afficher (posts, projets, commentaires, users)
         // TODO afficher aussi des notifs pour les posts en brouillon, et les commentaires à valider
-        $nbPublishedPosts = \MyBlog\Models\PostModel::countNbPublishedPost();
+        $nbPublishedPosts = PostModel::countNbPublishedPost();
 
         // On insére les datas dans un tableau
         $countDatas = [
@@ -30,7 +31,7 @@ class AdminController extends CoreController {
     public function list () {
 
         // Récup la liste des posts en db
-        $posts = \MyBlog\Models\PostModel::findAllPosts();
+        $posts = PostModel::findAllPosts();
 
         $headTitle = 'Dashboard / Posts';
 
@@ -45,7 +46,7 @@ class AdminController extends CoreController {
     public function createNewPost() {
 
         if (!empty($_POST)) {
-            $post = new \MyBlog\Models\PostModel();
+            $post = new PostModel();
 
             $post->setCategory($_POST['category']);
             $post->setTitle($_POST['titre']);
@@ -63,7 +64,7 @@ class AdminController extends CoreController {
             }
 
             // On upload
-            $uploader = new Uploader(); // TODO le fichier ne s'enregistre pas dans /uploads
+            $uploader = new Uploader();
             $uploadResult = $uploader->upload($_FILES['files']);
 
             
@@ -74,7 +75,7 @@ class AdminController extends CoreController {
 
             $post->setImg($_FILES['files']['name'][0]);
             $post->setCreated_on(date("Y-m-d"));
-            $post->setSlug($_POST['titre']); // TODO les ' / " ne se supprime pas, revoir la regexp
+            $post->setSlug($_POST['titre']);
             $post->setNumber_reviews(0);
             $post->setUser_id('1'); // TODO Faire la requete / méthode pour retrouver l'user id quand la partie authentification sera codée
 
@@ -85,10 +86,7 @@ class AdminController extends CoreController {
                 $post->setPublished(0);
             }
 
-            var_dump($post); die();
-
             // On enregistre
-            //var_dump($post->save()); die(); // Si renvoie 00000 => c'est ok
             $post->save();
 
             // On redirige

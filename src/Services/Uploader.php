@@ -3,7 +3,7 @@ namespace MyBlog\Services;
 
 class Uploader {
 
-    const UPLOAD_DIR = __DIR__ . '/public/images/uploads' /* Absolute Path */;
+    const UPLOAD_DIR = '/public/images/uploads'; /* Absolute Path */
     const UPLOAD_DIR_ACCESS_MODE = 0777;
     const UPLOAD_MAX_FILE_SIZE = 10485760;
     const UPLOAD_ALLOWED_MIME_TYPES = [
@@ -12,11 +12,13 @@ class Uploader {
         'image/gif',
     ];
 
+    private $basePath;
+
     /**
      *
      */
     public function __construct() {
-
+        $this->basePath = $_SERVER['DOCUMENT_ROOT'] . $_SERVER['BASE_URI'];
     }
 
     // Upload files list
@@ -77,7 +79,7 @@ class Uploader {
 
                 // Upload path.
                 $uploadDirPath = rtrim(self::UPLOAD_DIR, '/');
-                $uploadPath = $uploadDirPath . '/' . $name;
+                $uploadPath = $this->basePath . $uploadDirPath . '/' . $name;
 
                 // Upload directory.
                 $this->createDirectory($uploadDirPath);

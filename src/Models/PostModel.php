@@ -118,22 +118,20 @@ class PostModel {
         return $stmt->fetchColumn();
     }
 
-    // Formate le slug // TODO les ' / " ne se supprime pas !
-    private function setFormatedSlug($string) {
+    private function slugify($string, $delimiter) {
 
-        // Supression des accents
-        $slug = str_replace('è', 'e', $string);
-        $slug = str_replace('é', 'e', $slug);
-        // Remplacement des majuscules
-        $slug = strtolower($slug);
-        // Suppression des caractéres non alphanumérique
-        $slug = preg_replace('#[^A-Z0-9\'\ ]#i', '', $slug);
-        // Supression des espaces multiples
-        $slug = str_replace(' ', '_', $slug);
-        $slug = str_replace('  ', '_', $slug);
-        $slug = str_replace('   ', '_', $slug);
-        var_dump($slug);
-        return $slug;
+        $oldLocale = setlocale(LC_ALL, '0');
+        setlocale(LC_ALL, 'en_US.UTF-8');
+        $clean = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+        $clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
+        $clean = strtolower($clean);
+        $clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
+        $clean = trim($clean, $delimiter);
+        setlocale(LC_ALL, $oldLocale);
+
+        var_dump($clean);die();
+
+        return $clean;
 
     }
 
@@ -151,6 +149,7 @@ class PostModel {
                 created_on,
                 published,
                 published_date,
+                img,
                 slug,
                 category,
                 user_id
@@ -164,6 +163,7 @@ class PostModel {
                 :created_on,
                 :published,
                 :published_date,
+                :img,
                 :slug,
                 :category,
                 :user_id
@@ -186,6 +186,7 @@ class PostModel {
         $stmt->bindValue( ':created_on', $this->created_on );
         $stmt->bindValue( ':published', $this->published );
         $stmt->bindValue( ':published_date', $this->published_date );
+        $stmt->bindValue( ':img', $this->img );
         $stmt->bindValue( ':slug', $this->slug );
         $stmt->bindValue( ':category', $this->category );
         $stmt->bindValue( ':user_id', $this->user_id );
@@ -417,7 +418,7 @@ class PostModel {
      */ 
     public function setSlug($slug)
     {
-        $this->slug = $this->setFormatedSlug($slug);
+        $this->slug = $this->slugify($slug, '_');
 
         return $this;
     }

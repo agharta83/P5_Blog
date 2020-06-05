@@ -145,6 +145,7 @@ class PostModel {
                 content,
                 number_reviews,
                 created_on,
+                last_update,
                 published,
                 published_date,
                 img,
@@ -159,6 +160,7 @@ class PostModel {
                 :content,
                 :number_reviews,
                 :created_on,
+                :last_update,
                 :published,
                 :published_date,
                 :img,
@@ -182,6 +184,7 @@ class PostModel {
         $stmt->bindValue( ':content', $this->content );
         $stmt->bindValue( ':number_reviews', $this->number_reviews );
         $stmt->bindValue( ':created_on', $this->created_on );
+        $stmt->bindValue( ':last_update', $this->last_update);
         $stmt->bindValue( ':published', $this->published );
         $stmt->bindValue( ':published_date', $this->published_date );
         $stmt->bindValue( ':img', $this->img );

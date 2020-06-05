@@ -102,4 +102,29 @@ class AdminController extends CoreController {
 
     }
 
+    public function read($params) {
+
+        // Slug du post à afficher
+        $slug = $params['slug'];
+
+        // Récup du post
+        $post = PostModel::findBySlug($slug);
+
+        // On affiche le template
+        echo $this->templates->render('blog/read', ['post' => $post]);
+    }
+
+    public function delete($params) {
+        
+        // Id du post à supprimer
+        $id = $params['id'];
+
+        // On supprime le post
+        $post = PostModel::find($id);
+        $post->delete();
+
+        // On redirige
+        $this->redirect('admin_blog_list');
+    }
+
 }

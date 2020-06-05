@@ -129,8 +129,6 @@ class PostModel {
         $clean = trim($clean, $delimiter);
         setlocale(LC_ALL, $oldLocale);
 
-        var_dump($clean);die();
-
         return $clean;
 
     }
@@ -197,6 +195,46 @@ class PostModel {
 
         $this->id = $conn->lastInsertId();
 
+    }
+
+    // Retourne le post à partir de son ID
+    public static function find($id) {
+
+        // On construit la requete
+        $sql = 'SELECT * FROM post WHERE id = :id';
+
+        // Connexion à la BDD
+        $conn = \MyBlog\Database::getDb();
+
+        // On execute la requete
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Retourne les résultats
+        return $stmt->fetchObject(static::class);
+
+    }
+
+    // Suppression d'un post
+    public function delete() {
+
+        // On construit la requête
+        $sql = 'DELETE FROM post WHERE id = :id';
+
+        // Connexion à la BDD
+        $conn = \MyBlog\Database::getDb();
+
+        // On execute la requête
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':id', $this->id, \PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    // Retourne un bool
+    public function isPublished() {
+        
+        return $this->published;
     }
 
     /**

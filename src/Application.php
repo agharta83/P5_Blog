@@ -32,6 +32,7 @@ class Application {
 
         // Connexion
         $this->router->map('GET|POST', '/login', ['UserController', 'login'], 'login');
+        $this->router->map('GET', '/logout', ['UserController', 'logout'], 'logout');
 
     }
 

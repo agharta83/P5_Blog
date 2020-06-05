@@ -1,4 +1,15 @@
-<?php $this->layout('layout', ['title' => $title]); ?>
+<?php
+// Page d'accueil avec gestion des erreurs selon si le formulaire de connexion a retourné des erreurs ou non
+if (!empty($errors)) {
+  $this->layout('layout', [
+    'title' => $title,
+    'errors' => $errors,
+    'fields' => $fields
+  ]);
+} else {
+  $this->layout('layout', ['title' => $title]);
+} 
+ ?>
 
   <!-- hero area -->
   <?php $this->insert('partials/home/hero'); ?>

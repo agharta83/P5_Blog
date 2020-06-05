@@ -2,14 +2,11 @@
 
 namespace MyBlog\Controllers;
 
-use MyBlog\Services\Uploader;
+use MyBlog\Models\UserModel;
 
 class CoreController {
     
     public function __construct($router) {
-
-        // Test connection DB
-        //$connexion = \MyBlog\Database::getDb();
 
         // On enregistre le router dans le controller
         $this->router = $router;
@@ -20,7 +17,8 @@ class CoreController {
         // Données globales
         $this->templates->addData([
             'basePath' => $_SERVER['BASE_URI'],
-            'router' => $this->router
+            'router' => $this->router,
+            'user' => UserModel::getUserConnected()
         ]);
 
     }

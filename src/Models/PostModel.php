@@ -6,9 +6,11 @@ use MyBlog\Models\UserModel;
 
 class PostModel {
 
-    CONST FRONT = 'FRONT';
-    CONST BACK = 'BACK';
-    CONST GESTION_DE_PROJET = 'GESTION DE PROJET';
+    const FRONT = 'FRONT';
+    const BACK = 'BACK';
+    const GESTION_DE_PROJET = 'GESTION DE PROJET';
+    const AUTRE = 'AUTRE';
+
     
     private $id;
     private $title;
@@ -24,13 +26,31 @@ class PostModel {
     private $category;
     private $user_id;
 
-    // Retourne la liste de tous les posts
-    public static function findAll() {
+    // Retourne la liste de tous les posts publiés
+    public static function findAllPostsPublished() {
         
         // Construction de la requête
         $sql = '
             SELECT * FROM post 
             WHERE published = 1
+        ';
+
+        // Connexion à la db
+        $conn = \MyBlog\Database::getDb();
+
+        // Exécution de la requête
+        $stmt = $conn->query($sql);
+
+        // Return les résultats
+        //var_dump($stmt->fetchAll(\PDO::FETCH_CLASS, self::class));
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, self::class);
+    }
+
+    // Retourne la liste de tous les posts
+    public static function findAllPosts() {
+        // Construction de la requête
+        $sql = '
+            SELECT * FROM post
         ';
 
         // Connexion à la db
@@ -68,14 +88,115 @@ class PostModel {
 
     }
 
+    // Récupére l'auteur du post et le return de façon formatée
     public function getPostAuthor() {
 
         $id = $this->getUser_id();
 
-        $result = UserModel::getUser($id);
+        $author = UserModel::getUser($id);
 
-        return $result;
+        return $author->getFirstname() . ' ' . $author->getLastname();
         
+    }
+
+    // Récupére le nombre de posts publiés
+    public static function countNbPublishedPost() {
+
+        // Construction de la requête
+        $sql = '
+            SELECT COUNT(*) FROM post
+            WHERE published = 1
+        ';
+
+        // Connexion à la db
+        $conn = \MyBlog\Database::getDb();
+
+        // Exécution de la requête
+        $stmt = $conn->query($sql);
+
+        // Return les résultats
+        return $stmt->fetchColumn();
+    }
+
+    private function slugify($string, $delimiter) {
+
+        $oldLocale = setlocale(LC_ALL, '0');
+        setlocale(LC_ALL, 'en_US.UTF-8');
+        $clean = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+        $clean = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $clean);
+        $clean = strtolower($clean);
+        $clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
+        $clean = trim($clean, $delimiter);
+        setlocale(LC_ALL, $oldLocale);
+
+        var_dump($clean);die();
+
+        return $clean;
+
+    }
+
+    // Créé un nouveau post ou le met à jour si il existe déjà
+    public function save() {
+
+        // On crée la requête SQL
+        $sql = "
+            REPLACE INTO post (
+                id,
+                title,
+                chapo,
+                content,
+                number_reviews,
+                created_on,
+                published,
+                published_date,
+                img,
+                slug,
+                category,
+                user_id
+            )
+            VALUES (
+                :id,
+                :title,
+                :chapo,
+                :content,
+                :number_reviews,
+                :created_on,
+                :published,
+                :published_date,
+                :img,
+                :slug,
+                :category,
+                :user_id
+            )";
+
+        // On récupére le connexion à la BDD
+        $conn = \MyBlog\Database::getDb();
+
+        // On récupére l'ID 
+        if (empty($this->id)) {
+            $this->id = $conn->lastInsertId();
+        }
+
+        // On execute la requete
+        $stmt = $conn->prepare( $sql );
+        $stmt->bindValue( ':title', $this->title );
+        $stmt->bindValue( ':chapo', $this->chapo );
+        $stmt->bindValue( ':content', $this->content );
+        $stmt->bindValue( ':number_reviews', $this->number_reviews );
+        $stmt->bindValue( ':created_on', $this->created_on );
+        $stmt->bindValue( ':published', $this->published );
+        $stmt->bindValue( ':published_date', $this->published_date );
+        $stmt->bindValue( ':img', $this->img );
+        $stmt->bindValue( ':slug', $this->slug );
+        $stmt->bindValue( ':category', $this->category );
+        $stmt->bindValue( ':user_id', $this->user_id );
+        $stmt->bindValue( ':id', $this->id);
+        $stmt->execute();
+
+        //var_dump($stmt->execute()); die();
+
+        $this->id = $conn->lastInsertId();
+
     }
 
     /**
@@ -151,7 +272,7 @@ class PostModel {
      */ 
     public function getCreated_on()
     {
-        return $this->created_on;
+        return date('d-m-Y', strtotime($this->created_on));
     }
 
     /**
@@ -173,7 +294,12 @@ class PostModel {
      */ 
     public function getLast_update()
     {
-        return $this->last_update;
+        if (isset($this->last_update) && !empty($this->last_update)) {
+            return date('d-m-Y', strtotime($this->last_update));
+        }
+
+        return null;
+        
     }
 
     /**
@@ -233,7 +359,11 @@ class PostModel {
      */ 
     public function getPublished_date()
     {
-        return date('d-m-Y', strtotime($this->published_date));
+        if (isset($this->published_date) && !empty($this->published_date)) {
+            return date('d-m-Y', strtotime($this->published_date));
+        }
+        
+        return null;
     }
 
     /**
@@ -253,7 +383,12 @@ class PostModel {
      */ 
     public function getPublished()
     {
-        return $this->published;
+        if ($this->published) {
+            return 'Publié';
+        } else {
+            return 'Brouillon';
+        }
+        
     }
 
     /**
@@ -283,7 +418,7 @@ class PostModel {
      */ 
     public function setSlug($slug)
     {
-        $this->slug = $slug;
+        $this->slug = $this->slugify($slug, '_');
 
         return $this;
     }

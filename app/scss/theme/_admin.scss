@@ -1,0 +1,222 @@
+.hero-admin {
+    height: 100vh;
+}
+
+.card-admin {
+    position: relative;
+    z-index: 5;
+    max-height: 75vh;
+    transform: translateY(50%);
+}
+
+.table-container {
+    position: relative;
+    z-index: 5;
+    border-radius: 15px;
+    transform: translateY(-15%);
+}
+
+.milestone-counter {
+    display: flex;
+    flex-direction: column;
+    border-radius: 15%;
+}
+
+.background-linear1 {
+    background-image: linear-gradient(to right top, #2bfdff, #4ef7ff, #67f0fe, #7ceafb, #8de3f6);
+}
+
+.background-linear2 {
+    background-image: linear-gradient(to right top, #ff9e2b, #fdac21, #f9bb17, #f3c910, #ebd812);
+}
+
+.background-linear3 {
+    background-image: linear-gradient(to right top, #f54ea2, #f668bc, #f57fd3, #f394e8, #f1a9fb);
+}
+
+.background-linear4 {
+    background-image: linear-gradient(to right top, #41228e, #5534a4, #6946bb, #7e59d2, #926ce9);
+}
+
+.table-wrapper {
+    background: #fff;
+}
+
+.search-box {
+    position: relative;
+    float: right;
+}
+.search-box .input-group {
+    min-width: 200px;
+    position: absolute;
+    right: 0;
+}
+.search-box .input-group-addon, .search-box input {
+    border-color: #ddd;
+    border-radius: 0;
+}
+.search-box .input-group-addon {
+    border: none;
+    border: none;
+    background: transparent;
+    position: absolute;
+    z-index: 9;
+}
+.search-box input {
+    height: 34px;
+    padding-left: 28px;		
+    box-shadow: none !important;
+    border-width: 0 0 1px 0;
+}
+
+.search-box i {
+    color: #a0a5b1;
+    font-size: 19px;
+    position: relative;
+    top: 2px;
+    left: -10px;
+}
+
+.table-hover tbody tr:hover {
+    background-color: lighten($color: $primary-color, $amount: 50);
+}
+
+.tertiary-font {
+    font-family: $tertiary-font;
+}
+
+.table thead th, .table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+table.table tr th, table.table tr td {
+    border-color: #e9e9e9;
+}
+
+table.table td:last-child {
+    width: 130px;
+}
+
+table.table td a {
+    color: #a0a5b1;
+    display: inline-block;
+    margin: 0 5px;
+}
+
+table.table td a.view {
+    color: #03A9F4;
+}
+
+table.table td a.edit {
+    color: #FFC107;
+}
+
+table.table td a.delete {
+    color: #E34724;
+}
+
+table.table td i {
+    font-size: 1.2rem;;
+}
+
+.pagination {
+    float: right;
+    margin: 0 0 5px;
+}
+
+.pagination li a {
+    border: none;
+    font-size: 13px;
+    min-width: 30px;
+    min-height: 30px;
+	padding: 0 10px;
+    color: #999;
+    margin: 0 2px;
+    line-height: 30px;
+    border-radius: 30px !important;
+    text-align: center;
+}
+
+.pagination li a:hover {
+    color: #666;
+
+}
+
+li.page-item.active .page-link {
+    background-color: lighten($color: $primary-color, $amount: 50);
+}
+
+.pagination li i {
+    font-size: 16px;
+    padding-top: 6px
+}
+
+.hint-text {
+    float: left;
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.btn-new-post {
+    background-color: lighten($color: $primary-color, $amount: 30)!important;
+    font-family: $primary-font;
+}
+
+.btn-new-post:hover {
+    background-color: lighten($color: $primary-color, $amount: 10)!important;
+    transition: all 0.5s;
+}
+
+.hero-admin-new-post {
+    padding : 200px 0 200px;
+}
+
+.card-post {
+    position: relative;
+    z-index: 5;
+    margin: auto;
+}
+
+.custom-switch.custom-switch-lg {
+    padding-bottom: 1rem;
+    padding-left: 2.25rem;
+  
+    & .custom-control-label {
+        padding-left: .75rem;
+        padding-top: 0.50rem;
+  
+        &::before {
+            border-radius: 1rem;
+            height: 1.5rem;
+            width: 2.5rem;
+        }
+  
+        &::after {
+            border-radius: .65rem;
+            height: calc(1.5rem - 4px);
+            width: calc(1.5rem - 4px);
+        }
+    }
+
+    .custom-control-input:checked + .custom-control-label::before {
+        background-color: $primary-color;
+    }
+      
+    .custom-control-input:checked ~ .custom-control-label::after{
+        transform: translateX(1rem);
+    }
+
+}
+
+.wrapper-preview img {
+    border: 2px solid $primary-color;
+}
+
+.btn-small {
+    font-size: 1rem;
+    padding: 0.375rem 0.75rem;
+}
+
+
+

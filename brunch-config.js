@@ -1,16 +1,25 @@
 exports.files = {
   javascripts: {
     joinTo: {
-      'js/app.js': /^(app)/,
-      'js/vendor.js': /^node_modules/,
+      'js/app.js': /^app/,
+        'js/vendor.js': /^node_modules/
     },
   },
   stylesheets: { 
     joinTo: {
-      'css/app.css' : /^(app)/,
-      'css/vendor.css' : /^node_modules/,
+       'css/app.css': /^app/,
+       'css/vendor.css': /^node_modules/
     },
   },
+};
+
+exports.paths = {
+  watched : ['app']
+};
+
+exports.watcher = {
+  usePolling : true,
+  awaitWriteFinish: true
 };
 
 exports.plugins = {

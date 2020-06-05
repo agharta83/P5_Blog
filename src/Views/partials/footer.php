@@ -23,6 +23,6 @@
         <script>
           var CurrentYear = new Date().getFullYear()
           document.write(CurrentYear)
-        </script> - Audrey César - <a href="#">Administration</a></p>
+        </script> - Audrey César - <a href="<?= $router->generate('dashboard'); ?>">Administration</a></p>
     </div>
   </footer>

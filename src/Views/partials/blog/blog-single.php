@@ -6,7 +6,7 @@
           <h3 class="font-tertiary mb-5"><?= $post->getTitle(); ?></h3>
           <p class="font-secondary">Publié le <?= $post->getPublished_date(); ?> par 
           <span class="text-primary">
-            <?= $post->getPostAuthor()->getFirstname() .' '. $post->getPostAuthor()->getLastname(); ?>
+            <?= $post->getPostAuthor(); ?>
           </span>
           <div class="content">
             <img src="<?=$basePath . $post->getImg(); ?>" alt="post-thumb" class="img-fluid rounded float-left mr-5 mb-4">

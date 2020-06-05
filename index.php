@@ -1,13 +1,14 @@
 <?php
+
+error_reporting(E_ALL);
+
 // Autoload
 require(__DIR__.'/vendor/autoload.php');
 
 // FrontController
-
 $app = new MyBlog\Application();
 
-// Liste de "require"
-// Liste de routes
+// Initialisation des routes
 $app->initRoutes();
 
 // Matching des routes

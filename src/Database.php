@@ -27,15 +27,13 @@ class Database {
                 self::$pdo = new \PDO(
                     'mysql:host='.$config['DBHOST'].';dbname='.$config['DBNAME'].';charset=utf8', // Chaine de connexion
                     $config['DBUSER'], // Nom de l'utilisateur
-                    $config['DBPASSWORD'] // Mot de passe de l'utilisateur
+                    $config['DBPASSWORD'], // Mot de passe de l'utilisateur
+                    array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_WARNING) // Affiche les erreurs SQL à l'écran
                 );
             }
-            catch(\Exception $error) {
+            catch(\Exception $exception) {
 
-                // Il y a une erreur de connexion, on affiche un message d'erreur
-                echo "Erreur de connexion à la BDD";
-                var_dump($error);
-                exit();
+                die('Erreur de connexion...' . $exception->getMessage());
             }
         }
 

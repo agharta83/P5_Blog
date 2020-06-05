@@ -30,6 +30,9 @@ class Application {
         $this->router->map('GET', '/dashboard/posts', ['AdminController', 'list'], 'admin_blog_list');
         $this->router->map('GET|POST', '/dashboard/posts/new', ['AdminController', 'createNewPost'], 'new_post');
 
+        // Connexion
+        $this->router->map('GET|POST', '/login', ['UserController', 'login'], 'login');
+
     }
 
     // Execution du controller et de la méthode correspondante à l'URL demandée

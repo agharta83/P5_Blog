@@ -29,6 +29,10 @@ class Application {
         $this->router->map('GET', '/dashboard', ['AdminController', 'home'], 'dashboard');
         $this->router->map('GET', '/dashboard/posts', ['AdminController', 'list'], 'admin_blog_list');
         $this->router->map('GET|POST', '/dashboard/posts/new', ['AdminController', 'createNewPost'], 'new_post');
+        $this->router->map('GET|POST', '/dashboard/posts/preview', ['AdminController', 'preview'], 'preview_post'); // TODO A faire
+        $this->router->map('GET', '/dashboard/posts/read/[:slug]', ['AdminController', 'read'], 'read_post');
+        $this->router->map('GET', '/dashboard/posts/[i:id]/delete', ['AdminController', 'delete'], 'delete_post');
+        $this->router->map('GET|POST', '/dashboard/posts/update/[i:id]', ['AdminController', 'update'], 'update_post');
 
     }
 

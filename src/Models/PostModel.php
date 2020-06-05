@@ -129,8 +129,6 @@ class PostModel {
         $clean = trim($clean, $delimiter);
         setlocale(LC_ALL, $oldLocale);
 
-        var_dump($clean);die();
-
         return $clean;
 
     }
@@ -147,6 +145,7 @@ class PostModel {
                 content,
                 number_reviews,
                 created_on,
+                last_update,
                 published,
                 published_date,
                 img,
@@ -161,6 +160,7 @@ class PostModel {
                 :content,
                 :number_reviews,
                 :created_on,
+                :last_update,
                 :published,
                 :published_date,
                 :img,
@@ -184,6 +184,7 @@ class PostModel {
         $stmt->bindValue( ':content', $this->content );
         $stmt->bindValue( ':number_reviews', $this->number_reviews );
         $stmt->bindValue( ':created_on', $this->created_on );
+        $stmt->bindValue( ':last_update', $this->last_update);
         $stmt->bindValue( ':published', $this->published );
         $stmt->bindValue( ':published_date', $this->published_date );
         $stmt->bindValue( ':img', $this->img );
@@ -197,6 +198,46 @@ class PostModel {
 
         $this->id = $conn->lastInsertId();
 
+    }
+
+    // Retourne le post à partir de son ID
+    public static function find($id) {
+
+        // On construit la requete
+        $sql = 'SELECT * FROM post WHERE id = :id';
+
+        // Connexion à la BDD
+        $conn = \MyBlog\Database::getDb();
+
+        // On execute la requete
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Retourne les résultats
+        return $stmt->fetchObject(static::class);
+
+    }
+
+    // Suppression d'un post
+    public function delete() {
+
+        // On construit la requête
+        $sql = 'DELETE FROM post WHERE id = :id';
+
+        // Connexion à la BDD
+        $conn = \MyBlog\Database::getDb();
+
+        // On execute la requête
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':id', $this->id, \PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    // Retourne un bool
+    public function isPublished() {
+        
+        return $this->published;
     }
 
     /**

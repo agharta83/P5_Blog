@@ -102,4 +102,104 @@ class AdminController extends CoreController {
 
     }
 
+    public function read($params) {
+
+        // Slug du post à afficher
+        $slug = $params['slug'];
+
+        // Récup du post
+        $post = PostModel::findBySlug($slug);
+
+        // On affiche le template
+        echo $this->templates->render('blog/read', ['post' => $post]);
+    }
+
+    public function delete($params) {
+        
+        // Id du post à supprimer
+        $id = $params['id'];
+
+        // On supprime le post
+        $post = PostModel::find($id);
+        $post->delete();
+
+        // On redirige
+        $this->redirect('admin_blog_list');
+    }
+
+    public function update($params) {
+
+        // Id du post à éditer
+        $id = $params['id'];
+
+        // On récupére le post
+        $post = PostModel::find($id);
+
+        if (!empty($_POST)) {
+            
+            $post->setCategory($_POST['category']);
+            $post->setTitle($_POST['titre']);
+            $post->setChapo($_POST['chapo']);
+            $post->setcontent($_POST['content']);
+
+            // On check $_FILES
+            try {
+                if (!$_FILES) {
+                    throw new \UnexpectedValueException('Un problème est survenu pendant le téléchargement. Veuillez réessayer.');
+                }
+            } catch (\Exception $e) {
+                echo $e->getMessage();
+                exit();
+            }
+
+            // On upload
+            if (!$_FILES || $_FILES['files']['name'][0] !== $post->getImg()) {
+                $uploader = new Uploader();
+                $uploadResult = $uploader->upload($_FILES['files']);
+    
+                
+                if ($uploadResult !== TRUE) {
+                    echo 'Impossible d\'enregistrer l\'image.';
+                }
+
+                // On ne modifie l'img que si elle est différente
+                $post->setImg($_FILES['files']['name'][0]);
+            }
+               
+            $post->setSlug($_POST['titre']);
+
+            // On incrémente les reviews
+            $nbReviews = $post->getNumber_reviews();
+            $post->setNumber_reviews($nbReviews + 1);
+
+            $post->setUser_id('1'); // TODO Faire la requete / méthode pour retrouver l'user id quand la partie authentification sera codée
+
+            if (isset($_POST['published']) && !empty($_POST['published'] && $_POST['published'] == 'on')) {
+                $post->setPublished_date(date("Y-m-d"));
+                $post->setPublished(1);
+            } else if (!isset($_POST['published'])) {
+                $post->setPublished(0);
+            }
+            
+            $post->setLast_update((date("Y-m-d")));
+
+            // On enregistre
+            $post->save();
+
+            // On redirige
+            $this->redirect('admin_blog_list');
+        } else {
+        
+            // On redirige
+            $headTitle = 'Dashboard / Edition de post';
+
+            echo $this->templates->render('admin/update_post', [
+                'title' => $headTitle,
+                'post' =>$post
+            ]);
+        }
+        
+        
+    }
+
 }

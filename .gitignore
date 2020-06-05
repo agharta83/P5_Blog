@@ -32,3 +32,4 @@ Thumbs.db
 /app/images/moi.jpg
 src/config.ini
 /vendor/
+public/images/

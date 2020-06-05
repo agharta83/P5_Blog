@@ -15,6 +15,7 @@ use MyBlog\Models\PostModel;
             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
             Création d'un nouveau post
           </h3>
+          <h3><a href="<?= $router->generate('preview_post'); ?>" class="view" title="Voir" data-toggle="tooltip"><i class="far fa-eye"></i></a></h3>
         </div>
 
         <!-- TODO Insérer un icone pour avoir un aperçu de l'article -->

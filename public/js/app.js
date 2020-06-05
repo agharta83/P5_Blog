@@ -235,7 +235,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var searchInput = $(".search-box input");
     var inputGroup = $(".search-box .input-group");
     var boxWidth = inputGroup.width();
-    console.log(searchInput);
     searchInput.focus(function () {
       inputGroup.animate({
         width: "300"
@@ -249,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   ;
 
-  if (window.location.pathname == '/opc/P5_Blog/dashboard/posts/new') {
+  if (window.location.pathname == '/opc/P5_Blog/dashboard/posts/new' || window.location.href.indexOf("update") > -1) {
     tinymce.init({
       selector: '#new_post_form_chapo',
       height: '300',

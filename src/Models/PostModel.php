@@ -2,7 +2,7 @@
 
 namespace MyBlog\Models;
 
-use MyBlog\Models\UserModel;
+use MyBlog\Managers\UserManager;
 
 class PostModel {
 
@@ -11,114 +11,106 @@ class PostModel {
     const GESTION_DE_PROJET = 'GESTION DE PROJET';
     const AUTRE = 'AUTRE';
 
-    
+    /**
+     * $id
+     *
+     * @var int
+     */
     private $id;
+
+    /**
+     * $title
+     *
+     * @var string
+     */
     private $title;
+
+    /**
+     * $chapo
+     *
+     * @var string
+     */
     private $chapo;
+
+    /**
+     * $content
+     *
+     * @var string
+     */
     private $content;
+
+    /**
+     * $created_on
+     *
+     * @var Datetime
+     */
     private $created_on;
+
+    /**
+     * $last_update
+     *
+     * @var Datetime
+     */
     private $last_update;
+
+    /**
+     * $img
+     *
+     * @var string
+     */
     private $img;
+
+    /**
+     * $number_reviews
+     *
+     * @var int
+     */
     private $number_reviews;
+
+    /**
+     * $published_date
+     *
+     * @var Datetime
+     */
     private $published_date;
+
+    /**
+     * $published
+     *
+     * @var bool
+     */
     private $published;
+
+    /**
+     * $slug
+     *
+     * @var string
+     */
     private $slug;
+
+    /**
+     * $category
+     *
+     * @var enum
+     */
     private $category;
+
+    /**
+     * $user_id
+     *
+     * @var int
+     */
     private $user_id;
 
-    // Retourne la liste de tous les posts publiés
-    public static function findAllPostsPublished() {
-        
-        // Construction de la requête
-        $sql = '
-            SELECT * FROM post 
-            WHERE published = 1
-        ';
-
-        // Connexion à la db
-        $conn = \MyBlog\Database::getDb();
-
-        // Exécution de la requête
-        $stmt = $conn->query($sql);
-
-        // Return les résultats
-        //var_dump($stmt->fetchAll(\PDO::FETCH_CLASS, self::class));
-        return $stmt->fetchAll(\PDO::FETCH_CLASS, self::class);
-    }
-
-    // Retourne la liste de tous les posts
-    public static function findAllPosts() {
-        // Construction de la requête
-        $sql = '
-            SELECT * FROM post
-        ';
-
-        // Connexion à la db
-        $conn = \MyBlog\Database::getDb();
-
-        // Exécution de la requête
-        $stmt = $conn->query($sql);
-
-        // Return les résultats
-        //var_dump($stmt->fetchAll(\PDO::FETCH_CLASS, self::class));
-        return $stmt->fetchAll(\PDO::FETCH_CLASS, self::class);
-    }
-
-    // Retourne un post à partir de son slug
-    public static function findBySlug($slug) {
-
-        // Construction de la requete
-        $sql = '
-            SELECT * FROM post 
-            WHERE published = 1 
-            AND slug = :slug
-        ';
-
-        // Connexion à la db
-        $conn = \MyBlog\Database::getDb();
-
-        // Execution de la requete
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue(':slug', $slug, \PDO::PARAM_STR);
-        $stmt->execute();
-
-        // Return les résultats
-        //var_dump($stmt->fetchObject(self::class));
-        return $stmt->fetchObject(self::class);
-
-    }
-
-    // Récupére l'auteur du post et le return de façon formatée
-    public function getPostAuthor() {
-
-        $id = $this->getUser_id();
-
-        $author = UserModel::getUser($id);
-
-        return $author->getFirstname() . ' ' . $author->getLastname();
-        
-    }
-
-    // Récupére le nombre de posts publiés
-    public static function countNbPublishedPost() {
-
-        // Construction de la requête
-        $sql = '
-            SELECT COUNT(*) FROM post
-            WHERE published = 1
-        ';
-
-        // Connexion à la db
-        $conn = \MyBlog\Database::getDb();
-
-        // Exécution de la requête
-        $stmt = $conn->query($sql);
-
-        // Return les résultats
-        return $stmt->fetchColumn();
-    }
-
-    private function slugify($string, $delimiter) {
+    /**
+     * Formated slug for URL
+     *
+     * @param string $string
+     * @param string $delimiter
+     * @return void
+     */
+    private function slugify($string, $delimiter)
+    {
 
         $oldLocale = setlocale(LC_ALL, '0');
         setlocale(LC_ALL, 'en_US.UTF-8');
@@ -130,114 +122,33 @@ class PostModel {
         setlocale(LC_ALL, $oldLocale);
 
         return $clean;
-
     }
 
-    // Créé un nouveau post ou le met à jour si il existe déjà
-    public function save() {
-
-        // On crée la requête SQL
-        $sql = "
-            REPLACE INTO post (
-                id,
-                title,
-                chapo,
-                content,
-                number_reviews,
-                created_on,
-                last_update,
-                published,
-                published_date,
-                img,
-                slug,
-                category,
-                user_id
-            )
-            VALUES (
-                :id,
-                :title,
-                :chapo,
-                :content,
-                :number_reviews,
-                :created_on,
-                :last_update,
-                :published,
-                :published_date,
-                :img,
-                :slug,
-                :category,
-                :user_id
-            )";
-
-        // On récupére le connexion à la BDD
-        $conn = \MyBlog\Database::getDb();
-
-        // On récupére l'ID 
-        if (empty($this->id)) {
-            $this->id = $conn->lastInsertId();
-        }
-
-        // On execute la requete
-        $stmt = $conn->prepare( $sql );
-        $stmt->bindValue( ':title', $this->title );
-        $stmt->bindValue( ':chapo', $this->chapo );
-        $stmt->bindValue( ':content', $this->content );
-        $stmt->bindValue( ':number_reviews', $this->number_reviews );
-        $stmt->bindValue( ':created_on', $this->created_on );
-        $stmt->bindValue( ':last_update', $this->last_update);
-        $stmt->bindValue( ':published', $this->published );
-        $stmt->bindValue( ':published_date', $this->published_date );
-        $stmt->bindValue( ':img', $this->img );
-        $stmt->bindValue( ':slug', $this->slug );
-        $stmt->bindValue( ':category', $this->category );
-        $stmt->bindValue( ':user_id', $this->user_id );
-        $stmt->bindValue( ':id', $this->id);
-        $stmt->execute();
-
-        //var_dump($stmt->execute()); die();
-
-        $this->id = $conn->lastInsertId();
-
-    }
-
-    // Retourne le post à partir de son ID
-    public static function find($id) {
-
-        // On construit la requete
-        $sql = 'SELECT * FROM post WHERE id = :id';
-
-        // Connexion à la BDD
-        $conn = \MyBlog\Database::getDb();
-
-        // On execute la requete
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
-        $stmt->execute();
-
-        // Retourne les résultats
-        return $stmt->fetchObject(static::class);
-
-    }
-
-    // Suppression d'un post
-    public function delete() {
-
-        // On construit la requête
-        $sql = 'DELETE FROM post WHERE id = :id';
-
-        // Connexion à la BDD
-        $conn = \MyBlog\Database::getDb();
-
-        // On execute la requête
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue(':id', $this->id, \PDO::PARAM_INT);
-        $stmt->execute();
-    }
-
-    // Retourne un bool
+    /**
+     * Published or not ?
+     *
+     * @return boolean
+     */
     public function isPublished() {
         
         return $this->published;
+    }
+
+    /**
+     * Récupére l'auteur du post et le retourne de façon formattée
+     *
+     * @return string
+     */
+    public function getPostAuthor()
+    {
+
+        $id = $this->getUser_id();
+
+        $author = new UserManager();
+
+        $author = $author->getUser($id);
+
+        return $author->getFirstname() . ' ' . $author->getLastname();
     }
 
     /**
@@ -246,6 +157,18 @@ class PostModel {
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     * 
+     * @return self
+     */ 
+    public function setId($id)
+    {
+        $this->id = $id;
+        
+        return $this;
     }
 
     /**

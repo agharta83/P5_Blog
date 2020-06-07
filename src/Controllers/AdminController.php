@@ -2,10 +2,76 @@
 
 namespace MyBlog\Controllers;
 
-use MyBlog\Models\PostModel;
+use MyBlog\Managers\PostManager;
+use MyBlog\Managers\UserManager;
 use MyBlog\Services\Uploader;
 
 class AdminController extends CoreController {
+
+    private $postManager;
+    private $userManager;
+
+    public function __construct($router) 
+    {
+        parent::__construct($router);
+
+        $this->postManager = new PostManager();
+        $this->userManager = new UserManager();
+    }
+
+    /**
+     * Connexion à l'administration
+     *
+     * @return Object|Array UserModel|Errors
+     */
+    public function login() {
+
+        $errors = [];
+
+        if (!empty($_POST)) {
+            // On identifie l'utilisateur grâce à son login
+            $login = $_POST['login'];
+            $user = $this->userManager->findByLogin($login);
+
+            if (!$user) {
+                $errors[] = "Utilisateur inconnu";
+            } else {
+                // On teste le mot de passe
+                $hash = $user->getPassword();
+                //$isValid = password_verify($_POST['password'], $hash); TODO A changer lorsque l'inscription aura été faite car le MDP n'est pas hash en bdd
+                $isValid = $_POST['password'] == $hash ? true : false;
+
+                if (!$isValid) {
+                    $errors[] = "Mot de passe incorrect";
+                } else {
+                    // On identifie l'utilisateur
+                    $user = $this->userManager->login($user);
+
+                    // On redirige l'utilisateur
+                    if (count($errors) === 0) $this->redirect('dashboard');
+                }
+            }
+
+            $headTitle = 'Audrey César | Portfolio Blog';
+
+            echo $this->templates->render('main/home', [
+                'title' => $headTitle,
+                'errors' => $errors,
+                'fields' => $_POST
+            ]);
+        }
+
+    }
+
+    // Detruit la session et déconnecte l'utilisateur
+    public function logout() {
+        unset($_SESSION['user']);
+        $_SESSION = [];
+
+        session_destroy();
+
+        $this->redirect('home');
+    }
 
     public function home() {
 
@@ -13,7 +79,7 @@ class AdminController extends CoreController {
 
         // On récupére les datas à afficher (posts, projets, commentaires, users)
         // TODO afficher aussi des notifs pour les posts en brouillon, et les commentaires à valider
-        $nbPublishedPosts = PostModel::countNbPublishedPost();
+        $nbPublishedPosts = $this->postManager->countNbPublishedPost();
 
         // On insére les datas dans un tableau
         $countDatas = [
@@ -31,7 +97,7 @@ class AdminController extends CoreController {
     public function list () {
 
         // Récup la liste des posts en db
-        $posts = PostModel::findAllPosts();
+        $posts = $this->postManager->findAllPosts();
 
         $headTitle = 'Dashboard / Posts';
 

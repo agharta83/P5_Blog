@@ -12,21 +12,27 @@ class Application {
     // Différentes URL de l'app dans Altorouter
     public function initRoutes() {
         
+        /** Public  */
         // MainController
         $this->router->map('GET', '/', ['MainController', 'home'], 'home');
         $this->router->map('GET', '/about', ['MainController', 'about'], 'about');
         $this->router->map('GET', '/contact', ['MainController', 'contact'], 'contact');
-
-        // BlogController
-        $this->router->map('GET', '/blog', ['BlogController', 'list'], 'blog_list');
-        $this->router->map('GET', '/blog/[:slug]', ['BlogController', 'read'], 'blog_read');
-
-        // PortfolioController
+        // Blog
+        $this->router->map('GET', '/blog', ['MainController', 'list'], 'blog_list');
+        $this->router->map('GET', '/blog/[:slug]', ['MainController', 'read'], 'blog_read');
+        // Portfolio
         $this->router->map('GET', '/portfolio', ['PortfolioController', 'list'], 'portfolio_list');
         $this->router->map('GET', '/portfolio/[i:id]', ['PortfolioController', 'read'], 'portfolio_read');
 
-        // Administration
+
+
+        /** Administration */
+        // Connexion
+        $this->router->map('GET|POST', '/login', ['AdminController', 'login'], 'login');
+        $this->router->map('GET', '/logout', ['AdminController', 'logout'], 'logout');
+        // Dashboard
         $this->router->map('GET', '/dashboard', ['AdminController', 'home'], 'dashboard');
+        // Gestion des posts
         $this->router->map('GET', '/dashboard/posts', ['AdminController', 'list'], 'admin_blog_list');
         $this->router->map('GET|POST', '/dashboard/posts/new', ['AdminController', 'createNewPost'], 'new_post');
         $this->router->map('GET|POST', '/dashboard/posts/preview', ['AdminController', 'preview'], 'preview_post'); // TODO A faire
@@ -34,9 +40,7 @@ class Application {
         $this->router->map('GET', '/dashboard/posts/[i:id]/delete', ['AdminController', 'delete'], 'delete_post');
         $this->router->map('GET|POST', '/dashboard/posts/update/[i:id]', ['AdminController', 'update'], 'update_post');
 
-        // Connexion
-        $this->router->map('GET|POST', '/login', ['UserController', 'login'], 'login');
-        $this->router->map('GET', '/logout', ['UserController', 'logout'], 'logout');
+        
 
     }
 

@@ -1,6 +1,9 @@
 <?php
 namespace Myblog\Models;
 class UserModel {
+
+    const ADMIN = 'ADMIN';
+    const USER = 'USER';
     
     private $id;
     private $login;
@@ -33,6 +36,51 @@ class UserModel {
         //var_dump($stmt->fetchObject(self::class));
         return $stmt->fetchObject(self::class);
     }
+
+    // Retourne l'utilisateur associé au login
+    public static function findByLogin($login) {
+        
+        $sql = 'SELECT * FROM user WHERE login LIKE :login';
+
+        $conn = \MyBlog\Database::getDb();
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':login', $login, \PDO::PARAM_STR);
+        $stmt->execute();
+
+        return $stmt->fetchObject(self::class);
+    }
+
+    // Enregistre les infos de l'user en session
+    public static function login($user) {
+        $_SESSION['user'] = [
+            'id' => $user->getId(),
+            'email' => $user->getEmail(),
+            'login' => $user->getLogin(),
+            'firsname' => $user->getFirstname(),
+            'lastname' => $user->getLastname(),
+            'avatar' => $user->getAvatar(),
+            'is_admin' => (bool) $user->isAdmin()
+        ];
+    }
+
+    public function isAdmin() {
+        //var_dump($this->getUser_role() == self::ADMIN ? true : false); die();
+        $this->getUser_role() == self::ADMIN ? true : false;
+    }
+
+    // Retourne les infos de l'user connecté / enregistré en session
+    public static function getUserConnected() {
+        if(!empty($_SESSION['user'])) {
+            return $_SESSION['user'];
+        }
+
+        return false;
+    }
+
+    
+
+
 
     /**
      * Get the value of id

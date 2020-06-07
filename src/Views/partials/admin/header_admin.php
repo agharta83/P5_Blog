@@ -26,6 +26,11 @@
           <li class="nav-item">
             <a class="nav-link" href="">Utilisateurs</a>
           </li>
+          <?php if ($user): ?>
+            <li class="nav-item">
+              <a class="nav-link" href="<?= $router->generate('logout') ?>">Déconnexion</a>
+            </li>
+          <?php endif; ?>
         </ul>
       </div>
     </nav>

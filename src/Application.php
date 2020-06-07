@@ -34,6 +34,10 @@ class Application {
         $this->router->map('GET', '/dashboard/posts/[i:id]/delete', ['AdminController', 'delete'], 'delete_post');
         $this->router->map('GET|POST', '/dashboard/posts/update/[i:id]', ['AdminController', 'update'], 'update_post');
 
+        // Connexion
+        $this->router->map('GET|POST', '/login', ['UserController', 'login'], 'login');
+        $this->router->map('GET', '/logout', ['UserController', 'logout'], 'logout');
+
     }
 
     // Execution du controller et de la méthode correspondante à l'URL demandée

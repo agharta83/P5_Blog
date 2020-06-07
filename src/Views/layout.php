@@ -25,7 +25,14 @@
     <?= $this->section('content'); ?>
 
   <!-- footer -->
-  <?= $this->insert('partials/footer'); ?>
+  <?php if (!empty($errors)) {
+    $this->insert('partials/footer', [
+      'errors' => $errors,
+      'fields' => $fields
+    ]);
+  } else {
+    $this->insert('partials/footer');
+  } ?>
   <!-- /footer -->
   
   <!-- build:js js/app.js -->

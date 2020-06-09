@@ -63,7 +63,11 @@ class AdminController extends CoreController {
 
     }
 
-    // Detruit la session et déconnecte l'utilisateur
+    /**
+     * Permet de se déconnecter et donc détruire la session
+     *
+     * @return void
+     */
     public function logout() {
         unset($_SESSION['user']);
         $_SESSION = [];
@@ -73,6 +77,12 @@ class AdminController extends CoreController {
         $this->redirect('home');
     }
 
+    /**
+     * Permet d'accéder à la page d'accueil de l'administration et récupére les infos à afficher :
+     * - le nb de post publiés
+     *
+     * @return void
+     */
     public function home() {
 
         $headTitle = 'Dashboard';
@@ -94,6 +104,11 @@ class AdminController extends CoreController {
         ]);
     }
 
+    /**
+     * Permet d'afficher la liste de tous les posts dans l'administration
+     *
+     * @return void
+     */
     public function list () {
 
         // Récup la liste des posts en db
@@ -108,57 +123,28 @@ class AdminController extends CoreController {
         ]);
     }
 
-    // Création d'un post
+    /**
+     * Permet de créer un post
+     *
+     * @return void
+     */
     public function createNewPost() {
 
+        // Le formulaire de création du post a été soumis
         if (!empty($_POST)) {
-            $post = new PostModel();
+            $post = new PostManager();
 
-            $post->setCategory($_POST['category']);
-            $post->setTitle($_POST['titre']);
-            $post->setChapo($_POST['chapo']);
-            $post->setcontent($_POST['content']);
+            // On check $_FILES et on upload l'image
+            $this->upload($_FILES);
 
-            // On check $_FILES
-            try {
-                if (!$_FILES) {
-                    throw new \UnexpectedValueException('Un problème est survenu pendant le téléchargement. Veuillez réessayer.');
-                }
-            } catch (\Exception $e) {
-                echo $e->getMessage();
-                exit();
-            }
-
-            // On upload
-            $uploader = new Uploader();
-            $uploadResult = $uploader->upload($_FILES['files']);
-
-            
-            if ($uploadResult !== TRUE) {
-                echo 'Impossible d\'enregistrer l\'image.';
-            }
-            
-
-            $post->setImg($_FILES['files']['name'][0]);
-            $post->setCreated_on(date("Y-m-d"));
-            $post->setSlug($_POST['titre']);
-            $post->setNumber_reviews(0);
-            $post->setUser_id('1'); // TODO Faire la requete / méthode pour retrouver l'user id quand la partie authentification sera codée
-
-            if (isset($_POST['published']) && !empty($_POST['published'] && $_POST['published'] == 'on')) {
-                $post->setPublished_date(date("Y-m-d"));
-                $post->setPublished(1);
-            } else if (!isset($_POST['published'])) {
-                $post->setPublished(0);
-            }
-
-            // On enregistre
-            $post->save();
+            $post->addPost($_POST, $_FILES);
 
             // On redirige
             $this->redirect('admin_blog_list');
+            
 
         } else {
+            // On affiche la page de création d'un nouveau post
             $headTitle = 'Dashboard / Nouveau post';
 
             echo $this->templates->render('admin/new_post', [
@@ -264,8 +250,46 @@ class AdminController extends CoreController {
                 'post' =>$post
             ]);
         }
+         
+    }
+
+    /**
+     * Permet d'upload l'image
+     *
+     * @param Globals $files
+     * @return void
+     */
+    private function upload($files)
+    {
+        $this->checkFiles($files);
+
+        // On upload
+        $uploader = new Uploader();
+        $uploadResult = $uploader->upload($files['files']);
+
         
-        
+        if ($uploadResult !== TRUE) {
+            echo 'Impossible d\'enregistrer l\'image.';
+        }
+
+    }
+
+    /**
+     * Permet de vérifier si il y a un fichier à upload
+     *
+     * @return Exception
+     */
+    private function checkFiles($files)
+    {
+        // On check $_FILES
+        try {
+            if (!$files) {
+                throw new \UnexpectedValueException('Un problème est survenu pendant le téléchargement. Veuillez réessayer.');
+            }
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            exit();
+        }
     }
 
 }

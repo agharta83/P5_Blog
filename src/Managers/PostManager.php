@@ -17,15 +17,15 @@ class PostManager extends Database
     {
         $post = new PostModel();
 
-        $post->setId($row['id']);
+        $post->setId($row['id'] ?? null);
         $post->setTitle($row['title']);
         $post->setChapo($row['chapo']);
         $post->setContent($row['content']);
-        $post->setCreated_on($row['created_on']);
-        $post->setLast_update($row['last_update']);
-        $post->setImg($row['img']);
-        $post->setNumber_reviews($row['number_reviews']);
-        $post->setPublished_date($row['published_date']);
+        $post->setCreated_on($row['created_on'] ?? null);
+        $post->setLast_update($row['last_update'] ?? null);
+        $post->setImg($row['img'] ?? null);
+        $post->setNumber_reviews($row['number_reviews'] ?? 0);
+        $post->setPublished_date($row['published_date'] ?? null);
         $post->setPublished($row['published']);
         $post->setSlug($row['slug']);
         $post->setCategory($row['category']);
@@ -143,10 +143,33 @@ class PostManager extends Database
         return $result->fetchColumn();
     }
 
-    // Créé un nouveau post ou le met à jour si il existe déjà
-    public function save() // TODO à modifier
+    public function addPost($post, $files)
     {
+        // On gère les datas qui ne sont pas dans le formulaire mais initialisé à chaque création d'un post
+        $post['img'] = $files['files']['name'][0];
+        $post['slug'] = $post['title'];
+        $post['number_reviews'] = 0;
+        $post['user_id'] = 1; // TODO Faire la requete / méthode pour retrouver l'user id quand la partie authentification sera codée
 
+        // Si le post est publié immédiatement aprés sa création, on met à jour sa date de publication et son statut
+        if (isset($post['published']) && !empty($post['published'] && $post['published'] == 'on')) {
+            $post['published_date'] = date("Y-m-d");
+            $post['published'] = 1;
+        } else if (!isset($post['published'])) {
+            $post['published'] = 0;
+        }
+        
+        // On construit l'objet Post
+        $newPost = $this->buildObject($post);
+
+        // On l'insére en BDD
+        $this->save($newPost);
+        
+    }
+
+    // Créé un nouveau post ou le met à jour si il existe déjà
+    private function save($post)
+    {
         // On crée la requête SQL
         $sql = "
                 REPLACE INTO post (
@@ -180,68 +203,55 @@ class PostManager extends Database
                     :user_id
                 )";
 
-        // On récupére le connexion à la BDD
-        $conn = \MyBlog\Database::getConnexion();
-
-        // On récupére l'ID 
-        if (empty($this->id)) {
-            $this->id = $conn->lastInsertId();
-        }
-
-        // On execute la requete
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue(':title', $this->title);
-        $stmt->bindValue(':chapo', $this->chapo);
-        $stmt->bindValue(':content', $this->content);
-        $stmt->bindValue(':number_reviews', $this->number_reviews);
-        $stmt->bindValue(':created_on', $this->created_on);
-        $stmt->bindValue(':last_update', $this->last_update);
-        $stmt->bindValue(':published', $this->published);
-        $stmt->bindValue(':published_date', $this->published_date);
-        $stmt->bindValue(':img', $this->img);
-        $stmt->bindValue(':slug', $this->slug);
-        $stmt->bindValue(':category', $this->category);
-        $stmt->bindValue(':user_id', $this->user_id);
-        $stmt->bindValue(':id', $this->id);
-        $stmt->execute();
-
-        //var_dump($stmt->execute()); die();
-
-        $this->id = $conn->lastInsertId();
+        // Traitemennt de la requete
+        $parameters = [
+            ':title' => $post->getTitle(),
+            ':chapo' => $post->getChapo(),
+            ':content' => $post->getContent(),
+            ':number_reviews' => $post->getNumber_reviews(),
+            ':created_on' => date('Y-m-d'),
+            ':last_update' => $post->getLast_update(),
+            ':published' =>$post->getPublished(),
+            ':published_date' => $post->getPublished_date(),
+            ':img' => $post->getImg(),
+            ':slug' => $post->getSlug(),
+            ':category' => $post->getCategory(),
+            ':user_id' => $post->getUser_id(),
+            ':id' => $post->getId()
+        ];
+        
+        
+        $this->createQuery($sql, $parameters);
     }
 
     // Retourne le post à partir de son ID
-    public static function find($id) // TODO à refacto
+    public function find($id) // TODO à refacto
     {
 
         // On construit la requete
         $sql = 'SELECT * FROM post WHERE id = :id';
 
-        // Connexion à la BDD
-        $conn = \MyBlog\Database::getConnexion();
+        // Traitement de la requête
+        $parameters = [':id' => $id];
+        $result = $this->createQuery($sql, $parameters);
 
-        // On execute la requete
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
-        $stmt->execute();
+        $post = $result->fetch();
 
-        // Retourne les résultats
-        return $stmt->fetchObject(static::class);
+        $result->closeCursor();
+
+        return $this->buildObject($post);
     }
 
     // Suppression d'un post
-    public function delete() // TODO A refacto
+    private function delete() // TODO A refacto
     {
 
         // On construit la requête
         $sql = 'DELETE FROM post WHERE id = :id';
 
-        // Connexion à la BDD
-        $conn = \MyBlog\Database::getConnexion();
+        // Traitement de la requête
+        $parameters = [':id' => $this->id];
+        $this->createQuery($sql, $parameters);
 
-        // On execute la requête
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue(':id', $this->id, \PDO::PARAM_INT);
-        $stmt->execute();
     }
 }

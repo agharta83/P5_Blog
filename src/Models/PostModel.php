@@ -151,6 +151,19 @@ class PostModel {
         return $author->getFirstname() . ' ' . $author->getLastname();
     }
 
+     /**
+     * Retourne la valeur de published pour l'afficher correctement
+     */ 
+    public function getPublishedName()
+    {
+        if ($this->published) {
+            return 'Publié';
+        } else {
+            return 'Brouillon';
+        }
+        
+    }
+
     /**
      * Get the value of id
      */ 
@@ -347,11 +360,7 @@ class PostModel {
      */ 
     public function getPublished()
     {
-        if ($this->published) {
-            return 'Publié';
-        } else {
-            return 'Brouillon';
-        }
+        return $this->published;
         
     }
 

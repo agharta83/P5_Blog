@@ -10,6 +10,11 @@ class MainController extends CoreController {
     private $postManager;
     //private $commentManager; TODO Manager à faire
 
+    /**
+     * Constructeur : permet d'initialiser des attributs
+     * 
+     * @param object $router
+     */
     public function __construct($router)
     {
         // Execution du controller parent
@@ -73,6 +78,7 @@ class MainController extends CoreController {
      * @return view
      */
     public function read($params) {
+        
         // Slug du post à afficher
         $slug = $params['slug'];
 

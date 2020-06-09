@@ -70,7 +70,7 @@ class PostManager extends Database
     /**
      * Retourne la liste de tous les posts
      *
-     * @return object PostModel
+     * @return array PostModel
      */
     public function findAllPosts()
     {
@@ -99,7 +99,7 @@ class PostManager extends Database
      * Retourne un post à partit de son slug
      *
      * @param string $slug
-     * @return object PostModel
+     * @return PostModel
      */
     public function findBySlug($slug)
     {
@@ -143,6 +143,13 @@ class PostManager extends Database
         return $result->fetchColumn();
     }
 
+    /**
+     * Permet d'hydrater l'objet PostModel et l'insere en BDD en appelant la méthode save() 
+     *
+     * @param array $post
+     * @param array $files
+     * @return void
+     */
     public function addPost($post, $files)
     {
         // On gère les datas qui ne sont pas dans le formulaire mais initialisé à chaque création d'un post
@@ -167,7 +174,12 @@ class PostManager extends Database
         
     }
 
-    // Créé un nouveau post ou le met à jour si il existe déjà
+    /**
+     * Ajoute un nouveau post un BDD ou le modifie si il existe déjà
+     *
+     * @param ModelPost $post
+     * @return void
+     */
     private function save($post)
     {
         // On crée la requête SQL
@@ -224,8 +236,13 @@ class PostManager extends Database
         $this->createQuery($sql, $parameters);
     }
 
-    // Retourne le post à partir de son ID
-    public function find($id) // TODO à refacto
+    /**
+     * Retourne un post à partir de son Id
+     *
+     * @param int $id
+     * @return ModelPost
+     */
+    public function find($id)
     {
 
         // On construit la requete
@@ -242,15 +259,19 @@ class PostManager extends Database
         return $this->buildObject($post);
     }
 
-    // Suppression d'un post
-    private function delete() // TODO A refacto
+    /**
+     * Supprime un post en BDD
+     *
+     * @return void
+     */
+    public function delete($id)
     {
 
         // On construit la requête
         $sql = 'DELETE FROM post WHERE id = :id';
 
         // Traitement de la requête
-        $parameters = [':id' => $this->id];
+        $parameters = [':id' => $id];
         $this->createQuery($sql, $parameters);
 
     }

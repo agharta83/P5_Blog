@@ -11,6 +11,11 @@ class AdminController extends CoreController {
     private $postManager;
     private $userManager;
 
+    /**
+     * Constructeur : Permet d'initialiser les attributs
+     *
+     * @param object $router
+     */
     public function __construct($router) 
     {
         parent::__construct($router);
@@ -80,6 +85,11 @@ class AdminController extends CoreController {
     /**
      * Permet d'accéder à la page d'accueil de l'administration et récupére les infos à afficher :
      * - le nb de post publiés
+     * TODO le nb de projets en ligne
+     * TODO le nb de commentaires
+     * TODO le nb d'utilisateur
+     * TODO le nb post en attente de publication
+     * TODO Notif : Comments en attente de validation, post le plus lus, post le plus commenté
      *
      * @return void
      */
@@ -88,14 +98,12 @@ class AdminController extends CoreController {
         $headTitle = 'Dashboard';
 
         // On récupére les datas à afficher (posts, projets, commentaires, users)
-        // TODO afficher aussi des notifs pour les posts en brouillon, et les commentaires à valider
         $nbPublishedPosts = $this->postManager->countNbPublishedPost();
 
         // On insére les datas dans un tableau
         $countDatas = [
             'posts' => $nbPublishedPosts
         ];
-
 
         // On affiche le template
         echo $this->templates->render('admin/home', [
@@ -132,12 +140,11 @@ class AdminController extends CoreController {
 
         // Le formulaire de création du post a été soumis
         if (!empty($_POST)) {
-            $post = new PostManager();
 
             // On check $_FILES et on upload l'image
             $this->upload($_FILES);
 
-            $post->addPost($_POST, $_FILES);
+            $this->postManager->addPost($_POST, $_FILES);
 
             // On redirige
             $this->redirect('admin_blog_list');
@@ -154,26 +161,38 @@ class AdminController extends CoreController {
 
     }
 
+    /**
+     * Permet d'afficher la page d'un post dans la partie administration
+     * TODO implémenter un preview
+     *
+     * @param [type] $params
+     * @return void
+     */
     public function read($params) {
 
         // Slug du post à afficher
         $slug = $params['slug'];
 
         // Récup du post
-        $post = PostModel::findBySlug($slug);
+        $post = $this->postManager->findBySlug($slug);
 
         // On affiche le template
         echo $this->templates->render('blog/read', ['post' => $post]);
     }
 
+    /**
+     * Supprime un post à partir de son Id
+     *
+     * @param array $params
+     * @return void
+     */
     public function delete($params) {
         
         // Id du post à supprimer
         $id = $params['id'];
 
-        // On supprime le post
-        $post = PostModel::find($id);
-        $post->delete();
+        // On récup et supprime le post
+        $this->postManager->delete($id);
 
         // On redirige
         $this->redirect('admin_blog_list');

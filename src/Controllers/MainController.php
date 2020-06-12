@@ -61,9 +61,9 @@ class MainController extends CoreController {
      * @return view
      */
     public function blogRead($params) {
-        
+
         // Slug du post à afficher
-        $slug = $params['slug'];
+        $slug = $params['slug'] ?? $params;
 
         // Récup du post
         $post = $this->postManager->findBySlug($slug);
@@ -100,6 +100,27 @@ class MainController extends CoreController {
         $projectId = $params['id'];
 
         echo $this->templates->render('portfolio/read', ['id' => $projectId]);
+    }
+
+    public function addComment() {
+
+        if (!empty($_POST)) {
+            // On récup l'id du post
+            $postId = $_POST['post_id'];
+
+            // On va check si l'utilisateur existe 
+            // et on le créé en BDD si besoin
+            $user = $this->userManager->addUser($_POST);
+
+            // On insére le commentaire en BDD
+            $this->commentManager->addComment($_POST, $user);
+
+            // On récup le slug du post
+            $postSlug = $this->postManager->findById($postId)->getSlug();
+
+            $this->blogRead($postSlug);
+
+        }
     }
     
 }

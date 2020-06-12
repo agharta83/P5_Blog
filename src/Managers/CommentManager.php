@@ -107,4 +107,46 @@ class CommentManager extends Database
 
         return false;
     }
+
+    public function addComment($post, $user)
+    {
+        // Initialisation
+        $post['created_on'] = date('Y-m-d H:i:s');
+        $post['is_valid'] = 0;
+        $post['user_id'] = $user->getId();
+
+        $comment = $this->buildObject($post);
+
+        $sql = '
+            INSERT INTO comment (
+                id,
+                created_on,
+                is_valid,
+                content,
+                respond_to,
+                post_id,
+                user_id
+            ) VALUES (
+                :id,
+                :created_on,
+                :is_valid,
+                :content,
+                :respond_to,
+                :post_id,
+                :user_id
+            )
+        ';
+
+        $parameters = [
+            ':id' => $comment->getId(),
+            ':created_on' => $comment->getCreated_on(),
+            ':is_valid' => $comment->getIs_valid(),
+            ':content' => $comment->getContent(),
+            ':respond_to' => $comment->getRespond_to(),
+            ':post_id' => $comment->getPost_id(),
+            ':user_id' => $comment->getUser_id()
+        ];
+
+        $this->createQuery($sql, $parameters);
+    }
 }

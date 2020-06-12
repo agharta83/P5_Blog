@@ -19,7 +19,6 @@ class UserModel {
 
 
     public function isAdmin() {
-        //var_dump($this->getUser_role() == self::ADMIN ? true : false); die();
         $this->getUser_role() == self::ADMIN ? true : false;
     }
 

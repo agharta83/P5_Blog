@@ -59,14 +59,15 @@
             ?>
           </div>
           <h4 class="font-weight-bold mb-3 border-bottom pb-3">Laisser un commentaire</h4>
-          <form action="#" class="row">
+          <form action="<?= $router->generate("add_comment"); ?>" method="post" class="row">
             <div class="col-md-6">
-              <input type="text" class="form-control mb-3" placeholder="Prénom" name="fname" id="fname">
-              <input type="text" class="form-control mb-3" placeholder="Nom" name="lname" id="lname">
-              <input type="text" class="form-control mb-3" placeholder="Email *" name="mail" id="mail">
+              <input type="hidden" value="<?= $post->getId(); ?>" id="post_id" name="post_id">
+              <input type="text" class="form-control mb-3" placeholder="Prénom" name="firstname" id="firstname">
+              <input type="text" class="form-control mb-3" placeholder="Nom" name="lastname" id="lastname">
+              <input type="text" class="form-control mb-3" placeholder="Email *" name="email" id="email">
             </div>
             <div class="col-md-6">
-              <textarea name="comment" id="comment" placeholder="Message" class="form-control mb-4"></textarea>
+              <textarea name="content" id="content" placeholder="Message" class="form-control mb-4"></textarea>
               <button type="submit" class="btn btn-primary w-100">Envoyer</button>
             </div>
           </form>

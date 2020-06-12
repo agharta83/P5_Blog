@@ -4,9 +4,12 @@ namespace MyBlog\Managers;
 
 use MyBlog\Models\PostModel;
 
+/**
+ * Permet de manager PostModel 
+ * en relation avec le controller
+ */
 class PostManager extends Database
 {
-
     /**
      * Convertit chaque champ de la table en propriété de l'objet PostModel
      *
@@ -42,14 +45,12 @@ class PostManager extends Database
      */
     public function findAllPostsPublished()
     {
-
         // Construction de la requête
         $sql = '
                 SELECT * FROM post 
                 WHERE published = 1
             ';
 
-        
         // Traitement de la requête
         $result = $this->createQuery($sql);
 
@@ -103,7 +104,6 @@ class PostManager extends Database
      */
     public function findBySlug($slug)
     {
-
         // Construction de la requete
         $sql = '
                 SELECT * FROM post 
@@ -129,7 +129,6 @@ class PostManager extends Database
      */
     public function countNbPublishedPost()
     {
-
         // Construction de la requête
         $sql = '
                 SELECT COUNT(*) FROM post
@@ -231,7 +230,6 @@ class PostManager extends Database
             ':user_id' => $post->getUser_id(),
             ':id' => $post->getId()
         ];
-        
         
         $this->createQuery($sql, $parameters);
     }

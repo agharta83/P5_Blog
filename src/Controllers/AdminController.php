@@ -2,34 +2,21 @@
 
 namespace MyBlog\Controllers;
 
-use MyBlog\Managers\PostManager;
-use MyBlog\Managers\UserManager;
 use MyBlog\Services\Uploader;
 
-class AdminController extends CoreController {
-
-    private $postManager;
-    private $userManager;
-
-    /**
-     * Constructeur : Permet d'initialiser les attributs
-     *
-     * @param object $router
-     */
-    public function __construct($router) 
-    {
-        parent::__construct($router);
-
-        $this->postManager = new PostManager();
-        $this->userManager = new UserManager();
-    }
+/**
+ * Controller pour l'administration
+ */
+class AdminController extends CoreController
+{
 
     /**
      * Connexion à l'administration
      *
      * @return Object|Array UserModel|Errors
      */
-    public function login() {
+    public function login()
+    {
 
         $errors = [];
 
@@ -65,7 +52,6 @@ class AdminController extends CoreController {
                 'fields' => $_POST
             ]);
         }
-
     }
 
     /**
@@ -73,7 +59,8 @@ class AdminController extends CoreController {
      *
      * @return void
      */
-    public function logout() {
+    public function logout()
+    {
         unset($_SESSION['user']);
         $_SESSION = [];
 
@@ -93,7 +80,8 @@ class AdminController extends CoreController {
      *
      * @return void
      */
-    public function home() {
+    public function home()
+    {
 
         $headTitle = 'Dashboard';
 
@@ -117,7 +105,8 @@ class AdminController extends CoreController {
      *
      * @return void
      */
-    public function list () {
+    public function list()
+    {
 
         // Récup la liste des posts en db
         $posts = $this->postManager->findAllPosts();
@@ -126,7 +115,7 @@ class AdminController extends CoreController {
 
         // On affiche le template
         echo $this->templates->render('admin/posts', [
-            'title' => $headTitle, 
+            'title' => $headTitle,
             'posts' => $posts
         ]);
     }
@@ -136,7 +125,8 @@ class AdminController extends CoreController {
      *
      * @return void
      */
-    public function createNewPost() {
+    public function createNewPost()
+    {
 
         // Le formulaire de création du post a été soumis
         if (!empty($_POST)) {
@@ -148,8 +138,6 @@ class AdminController extends CoreController {
 
             // On redirige
             $this->redirect('admin_blog_list');
-            
-
         } else {
             // On affiche la page de création d'un nouveau post
             $headTitle = 'Dashboard / Nouveau post';
@@ -158,17 +146,17 @@ class AdminController extends CoreController {
                 'title' => $headTitle
             ]);
         }
-
     }
 
     /**
      * Permet d'afficher la page d'un post dans la partie administration
      * TODO implémenter un preview
      *
-     * @param [type] $params
+     * @param mixed $params
      * @return void
      */
-    public function read($params) {
+    public function read($params)
+    {
 
         // Slug du post à afficher
         $slug = $params['slug'];
@@ -183,11 +171,12 @@ class AdminController extends CoreController {
     /**
      * Supprime un post à partir de son Id
      *
-     * @param array $params
+     * @param mixed $params
      * @return void
      */
-    public function delete($params) {
-        
+    public function delete($params)
+    {
+
         // Id du post à supprimer
         $id = $params['id'];
 
@@ -198,16 +187,23 @@ class AdminController extends CoreController {
         $this->redirect('admin_blog_list');
     }
 
-    public function update($params) {
+    /**
+     * Met à jour un post en BDD
+     *
+     * @param mixed $params
+     * @return void
+     */
+    public function update($params)
+    {
 
         // Id du post à éditer
         $id = $params['id'];
 
         // On récupére le post
-        $post = PostModel::find($id);
+        $post = $this->postManager->find($id);
 
         if (!empty($_POST)) {
-            
+            // TODO Faire la même chose que pour addPost
             $post->setCategory($_POST['category']);
             $post->setTitle($_POST['titre']);
             $post->setChapo($_POST['chapo']);
@@ -227,8 +223,8 @@ class AdminController extends CoreController {
             if (!$_FILES || $_FILES['files']['name'][0] !== $post->getImg()) {
                 $uploader = new Uploader();
                 $uploadResult = $uploader->upload($_FILES['files']);
-    
-                
+
+
                 if ($uploadResult !== TRUE) {
                     echo 'Impossible d\'enregistrer l\'image.';
                 }
@@ -236,7 +232,7 @@ class AdminController extends CoreController {
                 // On ne modifie l'img que si elle est différente
                 $post->setImg($_FILES['files']['name'][0]);
             }
-               
+
             $post->setSlug($_POST['titre']);
 
             // On incrémente les reviews
@@ -251,7 +247,7 @@ class AdminController extends CoreController {
             } else if (!isset($_POST['published'])) {
                 $post->setPublished(0);
             }
-            
+
             $post->setLast_update((date("Y-m-d")));
 
             // On enregistre
@@ -260,16 +256,15 @@ class AdminController extends CoreController {
             // On redirige
             $this->redirect('admin_blog_list');
         } else {
-        
+
             // On redirige
             $headTitle = 'Dashboard / Edition de post';
 
             echo $this->templates->render('admin/update_post', [
                 'title' => $headTitle,
-                'post' =>$post
+                'post' => $post
             ]);
         }
-         
     }
 
     /**
@@ -286,11 +281,10 @@ class AdminController extends CoreController {
         $uploader = new Uploader();
         $uploadResult = $uploader->upload($files['files']);
 
-        
+
         if ($uploadResult !== TRUE) {
             echo 'Impossible d\'enregistrer l\'image.';
         }
-
     }
 
     /**
@@ -310,5 +304,4 @@ class AdminController extends CoreController {
             exit();
         }
     }
-
 }

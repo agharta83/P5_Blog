@@ -5,17 +5,28 @@ namespace MyBlog\Managers;
 use \PDO;
 use \Exception;
 
+/**
+ * Connexion à la database
+ */
 abstract class Database {
 
     private $connexion;
 
-    // Retourne les informations de connexion
+    /**
+     * Retourne les infos du fichier config pour la connexion
+     *
+     * @return void
+     */
     private function getConfig() {
 
         return parse_ini_file(__DIR__ . '/config.ini');
     }
 
-    // Connexion BDD
+    /**
+     * Récupére la connexion à la database
+     *
+     * @return void
+     */
     private function getConnexion() {
 
         // Si il n'y a pas de connexion
@@ -44,6 +55,11 @@ abstract class Database {
         return $this->connexion;
     }
 
+    /**
+     * Vérifie si une connexion existe
+     *
+     * @return object
+     */
     private function checkConnexion() {
 
         if($this->connexion === null) {
@@ -53,6 +69,13 @@ abstract class Database {
         return $this->connexion;
     }
 
+    /**
+     * Création de la requete
+     *
+     * @param string $sql
+     * @param mixed $parameters
+     * @return object
+     */
     protected function createQuery($sql, $parameters = null) {
 
         if ($parameters) {

@@ -4,6 +4,10 @@ namespace MyBlog\Managers;
 
 use Myblog\Models\UserModel;
 
+/**
+ * Permet de manager UserModel
+ * en faisant le lien avec le controller
+ */
 class UserManager extends Database {
 
     /**

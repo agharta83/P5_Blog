@@ -2,27 +2,10 @@
 
 namespace MyBlog\Controllers;
 
-use MyBlog\Managers\PostManager; 
-use Myblog\Managers\CommentManager;
-
+/**
+ * Controller pour les pages publiques
+ */
 class MainController extends CoreController {
-
-    private $postManager;
-    //private $commentManager; TODO Manager à faire
-
-    /**
-     * Constructeur : permet d'initialiser des attributs
-     * 
-     * @param object $router
-     */
-    public function __construct($router)
-    {
-        // Execution du controller parent
-        parent::__construct($router);
-
-        $this->postManager = new PostManager();
-        //$this->commentManager = new CommentManager(); TODO A implémenter
-    }
 
     /**
      * Retourne la page d'accueil
@@ -58,7 +41,7 @@ class MainController extends CoreController {
      *
      * @return view
      */
-    public function list() {
+    public function blogList() {
 
         // Récup la liste des posts en db
         $posts = $this->postManager->findAllPostsPublished();
@@ -74,10 +57,10 @@ class MainController extends CoreController {
     /**
      * Affiche la page d'un article
      *
-     * @param [string] $params
+     * @param mixed $params
      * @return view
      */
-    public function read($params) {
+    public function blogRead($params) {
         
         // Slug du post à afficher
         $slug = $params['slug'];
@@ -87,6 +70,28 @@ class MainController extends CoreController {
 
         // On affiche le template
         echo $this->templates->render('blog/read', ['post' => $post]);
+    }
+
+    /**
+     * Affiche la liste des projets
+     *
+     * @return void
+     */
+    public function projectList() {
+        echo $this->templates->render('portfolio/list', ['title' => 'Portfolio']);
+    }
+
+    /**
+     * Affiche la page d'un projet
+     *
+     * @param mixed $params
+     * @return void
+     */
+    public function projectRead($params) {
+        // Id du projet
+        $projectId = $params['id'];
+
+        echo $this->templates->render('portfolio/read', ['id' => $projectId]);
     }
     
 }

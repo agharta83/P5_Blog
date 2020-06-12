@@ -2,6 +2,9 @@
 
 namespace MyBlog;
 
+/**
+ * Routing
+ */
 class Application {
 
     public function __construct() {
@@ -18,13 +21,11 @@ class Application {
         $this->router->map('GET', '/about', ['MainController', 'about'], 'about');
         $this->router->map('GET', '/contact', ['MainController', 'contact'], 'contact');
         // Blog
-        $this->router->map('GET', '/blog', ['MainController', 'list'], 'blog_list');
-        $this->router->map('GET', '/blog/[:slug]', ['MainController', 'read'], 'blog_read');
+        $this->router->map('GET', '/blog', ['MainController', 'blogList'], 'blog_list');
+        $this->router->map('GET', '/blog/[:slug]', ['MainController', 'blogRead'], 'blog_read');
         // Portfolio
-        $this->router->map('GET', '/portfolio', ['PortfolioController', 'list'], 'portfolio_list');
-        $this->router->map('GET', '/portfolio/[i:id]', ['PortfolioController', 'read'], 'portfolio_read');
-
-
+        $this->router->map('GET', '/portfolio', ['MainController', 'projectList'], 'portfolio_list');
+        $this->router->map('GET', '/portfolio/[i:id]', ['MainController', 'projectRead'], 'portfolio_read');
 
         /** Administration */
         // Connexion

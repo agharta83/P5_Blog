@@ -16,53 +16,7 @@ class UserModel {
     private $lastname;
     private $avatar;
 
-    public static function getUser($id) {
-        
-        // Construction de la requete
-        $sql = '
-            SELECT * FROM user 
-            WHERE id = :id
-        ';
 
-        // Connexion à la db
-        $conn = \MyBlog\Database::getDb();
-
-        // Execution de la requete
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
-        $stmt->execute();
-
-        // Return les résultats
-        //var_dump($stmt->fetchObject(self::class));
-        return $stmt->fetchObject(self::class);
-    }
-
-    // Retourne l'utilisateur associé au login
-    public static function findByLogin($login) {
-        
-        $sql = 'SELECT * FROM user WHERE login LIKE :login';
-
-        $conn = \MyBlog\Database::getDb();
-
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue(':login', $login, \PDO::PARAM_STR);
-        $stmt->execute();
-
-        return $stmt->fetchObject(self::class);
-    }
-
-    // Enregistre les infos de l'user en session
-    public static function login($user) {
-        $_SESSION['user'] = [
-            'id' => $user->getId(),
-            'email' => $user->getEmail(),
-            'login' => $user->getLogin(),
-            'firsname' => $user->getFirstname(),
-            'lastname' => $user->getLastname(),
-            'avatar' => $user->getAvatar(),
-            'is_admin' => (bool) $user->isAdmin()
-        ];
-    }
 
     public function isAdmin() {
         //var_dump($this->getUser_role() == self::ADMIN ? true : false); die();
@@ -78,16 +32,24 @@ class UserModel {
         return false;
     }
 
-    
-
-
-
     /**
      * Get the value of id
      */ 
     public function getId()
     {
         return $this->id;
+    }
+
+        /**
+     * Set the value of id
+     * 
+     * @return self
+     */ 
+    public function setId($id)
+    {
+        $this->id = $id;
+        
+        return $this;
     }
 
     /**

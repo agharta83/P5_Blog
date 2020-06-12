@@ -26,7 +26,7 @@ use MyBlog\Models\PostModel;
             <small>* Les champs dotés d'une astérisque sont obligatoires.</small>
           </p>
 
-          <form name="new_post_form" method="post" data-api-url="" enctype="multipart/form-data">
+          <form method="post" data-api-url="" enctype="multipart/form-data">
 
             <div class="form-group row">
               <label class="col-sm-3 col-form-legend required">Catégories *</label>
@@ -63,7 +63,7 @@ use MyBlog\Models\PostModel;
             <div class="form-group row">
               <label class="col-form-label col-sm-3 form-control-label align-self-center required" for="new_post_form_titre">Titre de l'article *</label>
               <div class="col-sm-9">
-                <input type="text" id="new_post_form_titre" name="titre" required placeholder="Titre" class="form-control">
+                <input type="text" id="new_post_form_titre" name="title" required placeholder="Titre" class="form-control">
               </div>
             </div>
 
@@ -108,7 +108,7 @@ use MyBlog\Models\PostModel;
             <div class="row mt-5">
               <div class="col-sm-12 d-flex justify-content-around">
                 <a href="<?= $router->generate('admin_blog_list'); ?>" class="btn btn-secondary">Retour</a>
-                <button type="submit" id="new_post_form_submit" name="new_post_form[submit]" class="btn-primary btn">Enregistrer</button>
+                <button type="submit"class="btn-primary btn">Enregistrer</button>
               </div>
             </div>
 

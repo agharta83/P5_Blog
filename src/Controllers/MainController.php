@@ -67,9 +67,17 @@ class MainController extends CoreController {
 
         // Récup du post
         $post = $this->postManager->findBySlug($slug);
+        // Recup des commentaires
+        $comments = $this->commentManager->findValidCommentsForPost($post->getId());
+
+        $nbComments = $this->commentManager->countNbCommentsForPost($post->getId());
 
         // On affiche le template
-        echo $this->templates->render('blog/read', ['post' => $post]);
+        echo $this->templates->render('blog/read', [
+            'post' => $post,
+            'comments' => $comments,
+            'nbComments' => $nbComments
+        ]);
     }
 
     /**

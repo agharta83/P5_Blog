@@ -1,5 +1,10 @@
 <?php
 
+namespace Myblog\Models;
+
+use MyBlog\Managers\CommentManager;
+use MyBlog\Managers\UserManager;
+
 class CommentModel {
     
     private $id;
@@ -10,12 +15,39 @@ class CommentModel {
     private $post_id;
     private $user_id;
 
+    public function getCommentAuthor()
+    {
+        $id = $this->getUser_id();
+
+        $author = new UserManager();
+
+        $author = $author->getUser($id);
+
+        return $author->getFirstname() . ' ' . $author->getLastname();
+    }
+
+    public function getFormatedDate()
+    {
+        setlocale(LC_TIME, ['fr', 'fra', 'fr_FR']);
+        $date = strftime('%A %d %B %G %H:%M', strtotime($this->created_on));
+        
+        return $date;
+    }
+
     /**
      * Get the value of id
      */ 
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**

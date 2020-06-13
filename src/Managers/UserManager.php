@@ -2,13 +2,14 @@
 
 namespace MyBlog\Managers;
 
-use Myblog\Models\UserModel;
+use MyBlog\Models\UserModel;
 
 /**
  * Permet de manager UserModel
  * en faisant le lien avec le controller
  */
-class UserManager extends Database {
+class UserManager extends Database
+{
 
     /**
      * Convertit chaque champ de la table en propriété de l'objet UserModel
@@ -18,6 +19,7 @@ class UserManager extends Database {
      */
     private function buildObject($row)
     {
+
         $user = new UserModel();
 
         $user->setId($row['id'] ?? null);
@@ -32,8 +34,7 @@ class UserManager extends Database {
         $user->setAvatar($row['avatar'] ?? null);
 
         return $user;
-
-    }    
+    }
 
     /**
      * Retourne un utilisateur en fonction de son Id
@@ -41,8 +42,9 @@ class UserManager extends Database {
      * @param int $id
      * @return Object UserModel
      */
-    public function getUser($id) {
-        
+    public function getUser($id)
+    {
+
         // Construction de la requete
         $sql = '
             SELECT * FROM user 
@@ -61,8 +63,9 @@ class UserManager extends Database {
     }
 
     // Retourne l'utilisateur associé au login
-    public function findByLogin($login) {
-        
+    public function findByLogin($login)
+    {
+
         $sql = 'SELECT * FROM user WHERE login LIKE :login';
 
         // Traitement de la requête
@@ -74,16 +77,16 @@ class UserManager extends Database {
         $result->closeCursor();
 
         return $this->buildObject($user);
-
     }
 
     // Enregistre les infos de l'user en session
-    public static function login($user) {
+    public function saveUserInSession($user)
+    {
         $_SESSION['user'] = [
             'id' => $user->getId(),
             'email' => $user->getEmail(),
             'login' => $user->getLogin(),
-            'firsname' => $user->getFirstname(),
+            'firstname' => $user->getFirstname(),
             'lastname' => $user->getLastname(),
             'avatar' => $user->getAvatar(),
             'is_admin' => (bool) $user->isAdmin()
@@ -97,7 +100,6 @@ class UserManager extends Database {
         }
 
         return false;
-        
     }
 
     public function findUserByEmail($email)
@@ -117,10 +119,9 @@ class UserManager extends Database {
         }
 
         return false;
-
     }
 
-    
+
     public function addUser($post)
     {
         // On récup les infos de l'utilisateur pour les enregistrer en bdd
@@ -181,13 +182,37 @@ class UserManager extends Database {
             ];
             $idUser = $this->createQuery($sql, $parameters);
 
-            return $user = $this->getUser($idUser);
-                
-        } else {
-            // Il est déjà présent, on returne l'user
-            return $userObject;
+            $userObject = $this->getUser($idUser);
         }
-  
+
+        // On enregistre l'user en session
+        $this->saveUserInSession($userObject);
+
+        // Il est déjà présent, on returne l'user
+        return $userObject;
     }
-    
+
+    // Retourne les infos de l'user connecté / enregistré en session
+    public function getUserConnected()
+    {
+        if (!empty($_SESSION['user'])) {
+            return $this->getUser($_SESSION['user']['id']);
+        }
+
+        return false;
+    }
+
+    public function countNbUsers()
+    {
+        // Construction de la requête
+        $sql = '
+             SELECT COUNT(*) FROM user
+        ';
+
+        // Traitement de la requête
+        $result = $this->createQuery($sql);
+
+        // Return les résultats
+        return $result->fetchColumn();
+    }
 }

@@ -16,19 +16,8 @@ class UserModel {
     private $lastname;
     private $avatar;
 
-
-
     public function isAdmin() {
-        $this->getUser_role() == self::ADMIN ? true : false;
-    }
-
-    // Retourne les infos de l'user connecté / enregistré en session
-    public static function getUserConnected() {
-        if(!empty($_SESSION['user'])) {
-            return $_SESSION['user'];
-        }
-
-        return false;
+        return $this->getUser_role() == self::ADMIN ? true : false;
     }
 
     /**

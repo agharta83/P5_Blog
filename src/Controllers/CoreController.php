@@ -31,11 +31,14 @@ abstract class CoreController {
         $this->commentManager = new CommentManager();
         $this->userManager = new UserManager();
 
+        // On enregistre les informations de l'utilisateur connecté
+        $this->currentUser = $this->userManager->getUserConnected();
+
         // Données globales
         $this->templates->addData([
             'basePath' => $_SERVER['BASE_URI'],
             'router' => $this->router,
-            'user' => UserModel::getUserConnected(),
+            'user' => $this->currentUser,
             'userManager' => $this->userManager,
             'postManager' => $this->postManager,
             'commentManager' => $this->commentManager

@@ -27,11 +27,11 @@ class Application {
         // Portfolio
         $this->router->map('GET', '/portfolio', ['MainController', 'projectList'], 'portfolio_list');
         $this->router->map('GET', '/portfolio/[i:id]', ['MainController', 'projectRead'], 'portfolio_read');
+        // Connexion
+        $this->router->map('GET|POST', '/login', ['MainController', 'login'], 'login');
+        $this->router->map('GET', '/logout', ['MainController', 'logout'], 'logout');
 
         /** Administration */
-        // Connexion
-        $this->router->map('GET|POST', '/login', ['AdminController', 'login'], 'login');
-        $this->router->map('GET', '/logout', ['AdminController', 'logout'], 'logout');
         // Dashboard
         $this->router->map('GET', '/dashboard', ['AdminController', 'home'], 'dashboard');
         // Gestion des posts
@@ -41,6 +41,8 @@ class Application {
         $this->router->map('GET', '/dashboard/posts/read/[:slug]', ['AdminController', 'read'], 'read_post');
         $this->router->map('GET', '/dashboard/posts/[i:id]/delete', ['AdminController', 'delete'], 'delete_post');
         $this->router->map('GET|POST', '/dashboard/posts/update/[i:id]', ['AdminController', 'update'], 'update_post');
+        // Gestion des commentaires
+        $this->router->map('GET', '/dashboard/comments', ['AdminController', 'listComments'], 'comments_list');
 
         
 

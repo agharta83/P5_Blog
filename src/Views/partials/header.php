@@ -24,7 +24,10 @@
           <li class="nav-item">
             <a class="nav-link" href="<?= $router->generate('contact') ?>">Contact</a>
           </li>
-          <?php if ($user): ?>
+          <?php if ($user->isAdmin()) : ?>
+            <li class="nav-item">
+              <a class="nav-link" href="<?= $router->generate('dashboard') ?>">Dashboard</a>
+            </li>
             <li class="nav-item">
               <a class="nav-link" href="<?= $router->generate('logout') ?>">Déconnexion</a>
             </li>

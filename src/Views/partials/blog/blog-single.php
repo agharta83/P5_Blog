@@ -1,3 +1,4 @@
+
   <!-- post -->
   <section class="section">
     <div class="container">
@@ -31,11 +32,17 @@
             foreach ($comments as $comment) :
               $id1 = "#respondTo" . $comment->getId();
               $id2 = "respondTo" . $comment->getId();
+              $author_id = $comment->getUser_id();
+              $isAdmin = $userManager->getUser($author_id)->isAdmin();
             ?>
               <div class="media py-4">
                 <img src="<?= $basePath ?>/public/images/user-1.jpg" class="img-fluid align-self-start rounded-circle mr-3" alt="">
                 <div class="media-body">
-                  <h5 class="mt-0"><?= $comment->getCommentAuthor(); ?></h5>
+                  <?php if ($isAdmin) : ?>
+                    <h5 class="mt-0 p-color-bold"><?= $comment->getCommentAuthor(); ?></h5>
+                  <?php else : ?>
+                    <h5 class="mt-0"><?= $comment->getCommentAuthor(); ?></h5>
+                  <?php endif; ?>
                   <p><?= ucfirst($comment->getFormatedDate()); ?></p>
                   <p><?= $comment->getContent(); ?></p>
                   <a href="<?= $id1; ?>" class="btn btn-transparent btn-sm pl-0" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="<?= $id1; ?>">Répondre</a>
@@ -44,9 +51,9 @@
                       <div class="col-md-6">
                         <input type="hidden" value="<?= $post->getId(); ?>" id="post_id" name="post_id">
                         <input type="hidden" value="<?= $comment->getId(); ?>" id="respond_to1" name="respond_to">
-                        <input type="text" class="form-control mb-3" placeholder="Prénom" name="firstname" id="firstname">
-                        <input type="text" class="form-control mb-3" placeholder="Nom" name="lastname" id="lastname">
-                        <input type="text" class="form-control mb-3" placeholder="Email *" name="email" id="email">
+                        <input type="text" class="form-control mb-3" placeholder="Prénom" name="firstname" id="firstname" value="<?= $_SESSION['user']['firstname'] ?? ''; ?>">
+                        <input type="text" class="form-control mb-3" placeholder="Nom" name="lastname" id="lastname" value="<?= $_SESSION['user']['lastname'] ?? ''; ?>">
+                        <input type="text" class="form-control mb-3" placeholder="Email *" name="email" id="email" value="<?= $_SESSION['user']['email'] ?? ''; ?>">
                       </div>
                       <div class="col-md-6">
                         <textarea name="content" id="content" placeholder="Message" class="form-control mb-4"></textarea>
@@ -59,11 +66,17 @@
                   if ($respond_to = $commentManager->thisCommentHasAnswer($comment->getId())) :
                     $id3 = "#respondTo" . $respond_to->getId();
                     $id4 = "respondTo" . $respond_to->getId();
+                    $author_id = $respond_to->getUser_id();
+                    $isAdmin = $userManager->getUser($author_id)->isAdmin();
                   ?>
                     <div class="media my-5">
                       <img src="<?= $basePath ?>/public/images/user-2.jpg" class="img-fluid align-self-start rounded-circle mr-3" alt="">
                       <div class="media-body">
+                      <?php if ($isAdmin) : ?>
+                        <h5 class="mt-0 p-color-bold"><?= $respond_to->getCommentAuthor(); ?></h5>
+                      <?php else : ?>
                         <h5 class="mt-0"><?= $respond_to->getCommentAuthor(); ?></h5>
+                      <?php endif; ?>
                         <p><?= ucfirst($respond_to->getFormatedDate()); ?></p>
                         <p><?= $respond_to->getContent(); ?></p>
                         <a href="<?= $id3; ?>" class="btn btn-transparent btn-sm pl-0" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="<?= $id3; ?>">Répondre</a>
@@ -74,9 +87,9 @@
                         <div class="col-md-6">
                           <input type="hidden" value="<?= $post->getId(); ?>" id="post_id" name="post_id">
                           <input type="hidden" value="<?= $comment->getId(); ?>" id="respond_to2" name="respond_to">
-                          <input type="text" class="form-control mb-3" placeholder="Prénom" name="firstname" id="firstname">
-                          <input type="text" class="form-control mb-3" placeholder="Nom" name="lastname" id="lastname">
-                          <input type="text" class="form-control mb-3" placeholder="Email *" name="email" id="email">
+                          <input type="text" class="form-control mb-3" placeholder="Prénom" name="firstname" id="firstname" value="<?= $_SESSION['user']['firstname'] ?? ''; ?>">
+                          <input type="text" class="form-control mb-3" placeholder="Nom" name="lastname" id="lastname" value="<?= $_SESSION['user']['lastname'] ?? ''; ?>">
+                          <input type="text" class="form-control mb-3" placeholder="Email *" name="email" id="email" value="<?= $_SESSION['user']['email'] ?? ''; ?>">
                         </div>
                         <div class="col-md-6">
                           <textarea name="content" id="content" placeholder="Message" class="form-control mb-4"></textarea>
@@ -96,9 +109,9 @@
           <form action="<?= $router->generate("add_comment"); ?>" method="post" class="row">
             <div class="col-md-6">
               <input type="hidden" value="<?= $post->getId(); ?>" id="post_id" name="post_id">
-              <input type="text" class="form-control mb-3" placeholder="Prénom" name="firstname" id="firstname">
-              <input type="text" class="form-control mb-3" placeholder="Nom" name="lastname" id="lastname">
-              <input type="text" class="form-control mb-3" placeholder="Email *" name="email" id="email">
+              <input type="text" class="form-control mb-3" placeholder="Prénom" name="firstname" id="firstname" value="<?= $_SESSION['user']['firstname'] ?? ''; ?>">
+              <input type="text" class="form-control mb-3" placeholder="Nom" name="lastname" id="lastname" value="<?= $_SESSION['user']['lastname'] ?? ''; ?>">
+              <input type="text" class="form-control mb-3" placeholder="Email *" name="email" id="email" value="<?= $_SESSION['user']['email'] ?? ''; ?>">
             </div>
             <div class="col-md-6">
               <textarea name="content" id="content" placeholder="Message" class="form-control mb-4"></textarea>

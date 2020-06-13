@@ -25,7 +25,6 @@ class CommentManager extends Database
         $comment->setUser_id($row['user_id']);
 
         return $comment;
-
     }
 
     public function findValidCommentsForPost($postId)
@@ -45,9 +44,9 @@ class CommentManager extends Database
         $comments = [];
 
         // On parcourt le tableau de résultat et on génére l'objet PostModel
-        foreach($result as $row) {
+        foreach ($result as $row) {
             $commentId = $row['id'];
-            $comments [$commentId] = $this->buildObject($row);
+            $comments[$commentId] = $this->buildObject($row);
         }
 
         $result->closeCursor();
@@ -72,7 +71,7 @@ class CommentManager extends Database
         return $result->fetchColumn();
     }
 
-    public function findCommentWhereHasRespond($commentId)
+    public function findCommentWhoHasAnswer($commentId)
     {
         // Construction de la requête
         $sql = '
@@ -94,14 +93,12 @@ class CommentManager extends Database
         }
 
         return false;
-
-        
     }
 
     // Le commentaire à une réponse
     public function thisCommentHasAnswer($commentId)
     {
-        if ($respondTo = $this->findCommentWhereHasRespond($commentId)) {
+        if ($respondTo = $this->findCommentWhoHasAnswer($commentId)) {
             return $respondTo;
         }
 
@@ -148,5 +145,75 @@ class CommentManager extends Database
         ];
 
         $this->createQuery($sql, $parameters);
+    }
+
+    public function countNbCommentsValidate()
+    {
+        // Construction de la requête
+        $sql = '
+               SELECT COUNT(*) FROM comment
+               WHERE is_valid = 1
+           ';
+
+        // Traitement de la requête
+        $result = $this->createQuery($sql);
+
+        // Return les résultats
+        return $result->fetchColumn();
+    }
+
+    public function countNbCommentsToValidate()
+    {
+        // Construction de la requête
+        $sql = '
+               SELECT COUNT(*) FROM comment
+               WHERE is_valid = 0
+           ';
+
+        // Traitement de la requête
+        $result = $this->createQuery($sql);
+
+        // Return les résultats
+        return $result->fetchColumn();
+    }
+
+    public function findAllComments()
+    {
+        // Construction de la requête
+        $sql = '
+            SELECT * FROM comment
+        ';
+
+        // Traitement de la requête
+        $result = $this->createQuery($sql);
+
+        $comments = [];
+
+        // On parcourt le tableau de résultat et on génére l'objet PostModel
+        foreach ($result as $row) {
+            $commentId = $row['id'];
+            $comments[$commentId] = $this->buildObject($row);
+        }
+
+        $result->closeCursor();
+
+        return $comments;
+    }
+
+    /**
+     * Récupére l'auteur du commentaire et le retourne de façon formattée
+     *
+     * @return string
+     */
+    public function getCommentAuthor()
+    {
+
+        $id = $this->userManager->getUser_id();
+
+        $author = new UserManager();
+
+        $author = $author->getUser($id);
+
+        return $author->getFirstname() . ' ' . $author->getLastname();
     }
 }

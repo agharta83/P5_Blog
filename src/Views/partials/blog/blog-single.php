@@ -29,6 +29,8 @@
           <div class="bg-gray p-5 mb-4">
             <?php
             foreach ($comments as $comment) :
+              $id1 = "#respondTo" . $comment->getId();
+              $id2 = "respondTo" . $comment->getId();
             ?>
               <div class="media py-4">
                 <img src="<?= $basePath ?>/public/images/user-1.jpg" class="img-fluid align-self-start rounded-circle mr-3" alt="">
@@ -36,19 +38,51 @@
                   <h5 class="mt-0"><?= $comment->getCommentAuthor(); ?></h5>
                   <p><?= ucfirst($comment->getFormatedDate()); ?></p>
                   <p><?= $comment->getContent(); ?></p>
-                  <a href="#" class="btn btn-transparent btn-sm pl-0">Répondre</a>
+                  <a href="<?= $id1; ?>" class="btn btn-transparent btn-sm pl-0" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="<?= $id1; ?>">Répondre</a>
+                  <div class="collapse" id="<?= $id2; ?>">
+                    <form action="<?= $router->generate("add_comment"); ?>" method="post" class="row">
+                      <div class="col-md-6">
+                        <input type="hidden" value="<?= $post->getId(); ?>" id="post_id" name="post_id">
+                        <input type="hidden" value="<?= $comment->getId(); ?>" id="respond_to1" name="respond_to">
+                        <input type="text" class="form-control mb-3" placeholder="Prénom" name="firstname" id="firstname">
+                        <input type="text" class="form-control mb-3" placeholder="Nom" name="lastname" id="lastname">
+                        <input type="text" class="form-control mb-3" placeholder="Email *" name="email" id="email">
+                      </div>
+                      <div class="col-md-6">
+                        <textarea name="content" id="content" placeholder="Message" class="form-control mb-4"></textarea>
+                        <button type="submit" class="btn btn-primary w-100">Envoyer</button>
+                      </div>
+                    </form>
+                  </div>
                   <!-- Respond to -->
                   <?php
                   if ($respond_to = $commentManager->thisCommentHasAnswer($comment->getId())) :
+                    $id3 = "#respondTo" . $respond_to->getId();
+                    $id4 = "respondTo" . $respond_to->getId();
                   ?>
                     <div class="media my-5">
                       <img src="<?= $basePath ?>/public/images/user-2.jpg" class="img-fluid align-self-start rounded-circle mr-3" alt="">
                       <div class="media-body">
                         <h5 class="mt-0"><?= $respond_to->getCommentAuthor(); ?></h5>
-                        <p><?= ucfirst($comment->getFormatedDate()); ?></p>
+                        <p><?= ucfirst($respond_to->getFormatedDate()); ?></p>
                         <p><?= $respond_to->getContent(); ?></p>
-                        <a href="#" class="btn btn-transparent btn-sm pl-0">Répondre</a>
+                        <a href="<?= $id3; ?>" class="btn btn-transparent btn-sm pl-0" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="<?= $id3; ?>">Répondre</a>
                       </div>
+                    </div>
+                    <div class="collapse" id="<?= $id4; ?>">
+                      <form action="<?= $router->generate("add_comment"); ?>" method="post" class="row">
+                        <div class="col-md-6">
+                          <input type="hidden" value="<?= $post->getId(); ?>" id="post_id" name="post_id">
+                          <input type="hidden" value="<?= $comment->getId(); ?>" id="respond_to2" name="respond_to">
+                          <input type="text" class="form-control mb-3" placeholder="Prénom" name="firstname" id="firstname">
+                          <input type="text" class="form-control mb-3" placeholder="Nom" name="lastname" id="lastname">
+                          <input type="text" class="form-control mb-3" placeholder="Email *" name="email" id="email">
+                        </div>
+                        <div class="col-md-6">
+                          <textarea name="content" id="content" placeholder="Message" class="form-control mb-4"></textarea>
+                          <button type="submit" class="btn btn-primary w-100">Envoyer</button>
+                        </div>
+                      </form>
                     </div>
                   <?php endif; ?>
                   <!-- /Respond to -->

@@ -9,8 +9,8 @@ $content1 = 'content' . $comment->getId();
     <td><?= $comment->getIs_valid(); ?></td>
     <td><?= $comment->getCommentAuthor(); ?></td>
     <td>
-        <a href="" class="edit" title="Valider" data-toggle="tooltip"><i class="fas fa-check"></i></a>
-        <a href="" class="delete" title="Supprimer" data-toggle="tooltip"><i class="fas fa-trash-alt"></i></a>
+        <a href="<?= $router->generate('valid_comment', ['id' => $comment->getId()]); ?>" class="edit" title="Valider" data-toggle="tooltip"><i class="fas fa-check"></i></a>
+        <a href="<?= $router->generate('delete_comment', ['id' => $comment->getId()]); ?>" class="delete" title="Supprimer" data-toggle="tooltip"><i class="fas fa-trash-alt"></i></a>
     </td>
 </tr>
 

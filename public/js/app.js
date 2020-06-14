@@ -182,7 +182,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }); // Shuffle js filter and masonry
 
-  if (window.location.pathname == '/opc/P5_Blog/') {
+  if (window.location.pathname == '/opc/P5_Blog/blog') {
+    console.log('ici');
     var myShuffle = new _shufflejs["default"](document.querySelector('.shuffle-wrapper'), {
       itemSelector: '.shuffle-item',
       buffer: 1

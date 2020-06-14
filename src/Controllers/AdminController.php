@@ -277,4 +277,30 @@ class AdminController extends CoreController
             'comments' => $comments
         ]);
     }
+
+    public function deleteComment($params)
+    {
+
+    // Id du commentaire à supprimer
+    $id = $params['id'];
+
+    // On récup et supprime le commentaire
+    $this->commentManager->delete($id);
+
+    // On redirige
+    $this->redirect('comments_list');
+
+    }
+
+    public function validComment($params)
+    {
+            // Id du commentaire à supprimer
+    $id = $params['id'];
+
+    // On récup et supprime le commentaire
+    $this->commentManager->valid($id);
+
+    // On redirige
+    $this->redirect('comments_list');
+    }
 }

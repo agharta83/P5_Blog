@@ -216,4 +216,26 @@ class CommentManager extends Database
 
         return $author->getFirstname() . ' ' . $author->getLastname();
     }
+
+    public function delete($id)
+    {
+
+        // On construit la requête
+        $sql = 'DELETE FROM comment WHERE id = :id';
+
+        // Traitement de la requête
+        $parameters = [':id' => $id];
+        $this->createQuery($sql, $parameters);
+
+    }
+
+    public function valid($id)
+    {
+        // On construit la requête
+        $sql = 'UPDATE comment SET is_valid = 1 WHERE id = :id';
+
+        // Traitement de la requête
+        $parameters = [':id' => $id];
+        $this->createQuery($sql, $parameters);
+    }
 }

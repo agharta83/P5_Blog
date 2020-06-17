@@ -122,6 +122,26 @@ class PostManager extends Database
         return $this->buildObject($post);
     }
 
+    public function findById($id)
+    {
+        // Construction de la requete
+        $sql = '
+                SELECT * FROM post 
+                WHERE published = 1 
+                AND id = :id
+            ';
+
+        // Traitement de la requête
+        $parameters = [':id' => $id];
+        $result = $this->createQuery($sql, $parameters);
+
+        $post = $result->fetch();
+
+        $result->closeCursor();
+
+        return $this->buildObject($post);
+    }
+
     /**
      * Retourne le nombre de posts publiés
      *

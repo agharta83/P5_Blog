@@ -10,69 +10,21 @@ use MyBlog\Services\Uploader;
 class AdminController extends CoreController
 {
 
-    /**
-     * Connexion à l'administration
-     *
-     * @return Object|Array UserModel|Errors
-     */
-    public function login()
+    public function __construct($router) 
     {
+        // Execution du constructeur parent
+        parent::__construct($router);
 
-        $errors = [];
-
-        if (!empty($_POST)) {
-            // On identifie l'utilisateur grâce à son login
-            $login = $_POST['login'];
-            $user = $this->userManager->findByLogin($login);
-
-            if (!$user) {
-                $errors[] = "Utilisateur inconnu";
-            } else {
-                // On teste le mot de passe
-                $hash = $user->getPassword();
-                //$isValid = password_verify($_POST['password'], $hash); TODO A changer lorsque l'inscription aura été faite car le MDP n'est pas hash en bdd
-                $isValid = $_POST['password'] == $hash ? true : false;
-
-                if (!$isValid) {
-                    $errors[] = "Mot de passe incorrect";
-                } else {
-                    // On identifie l'utilisateur
-                    $user = $this->userManager->login($user);
-
-                    // On redirige l'utilisateur
-                    if (count($errors) === 0) $this->redirect('dashboard');
-                }
-            }
-
-            $headTitle = 'Audrey César | Portfolio Blog';
-
-            echo $this->templates->render('main/home', [
-                'title' => $headTitle,
-                'errors' => $errors,
-                'fields' => $_POST
-            ]);
+        // On verifie que l'utilisateur est connecté et si c'est un admin
+        if (!$this->currentUser || !$this->currentUser->isAdmin()) {
+            // On le redirige
+            $this->redirect('home');
         }
-    }
-
-    /**
-     * Permet de se déconnecter et donc détruire la session
-     *
-     * @return void
-     */
-    public function logout()
-    {
-        unset($_SESSION['user']);
-        $_SESSION = [];
-
-        session_destroy();
-
-        $this->redirect('home');
     }
 
     /**
      * Permet d'accéder à la page d'accueil de l'administration et récupére les infos à afficher :
      * - le nb de post publiés
-     * TODO le nb de projets en ligne
      * TODO le nb de commentaires
      * TODO le nb d'utilisateur
      * TODO le nb post en attente de publication
@@ -85,12 +37,21 @@ class AdminController extends CoreController
 
         $headTitle = 'Dashboard';
 
-        // On récupére les datas à afficher (posts, projets, commentaires, users)
+        // On récupére les datas à afficher (posts, commentaires, users)
         $nbPublishedPosts = $this->postManager->countNbPublishedPost();
+        $nbCommentsValidate = $this->commentManager->countNbCommentsValidate();
+        $nbCommentsToValidate = $this->commentManager->countNbCommentsToValidate();
+        $nbUsers = $this->userManager->countNbUsers();
+        //$nbDraftPosts = $this->postManager->countNbDraftPosts();
+        //$mostReadPost = $this->postManager->mostReadPost();
+        //$mostCommentPost = $this->postManager->mostCommentPost();
 
         // On insére les datas dans un tableau
         $countDatas = [
-            'posts' => $nbPublishedPosts
+            'nbPosts' => $nbPublishedPosts,
+            'nbCommentsValid' => $nbCommentsValidate,
+            'nbCommentsToValidate' => $nbCommentsToValidate,
+            'nbUsers' => $nbUsers
         ];
 
         // On affiche le template
@@ -303,5 +264,43 @@ class AdminController extends CoreController
             echo $e->getMessage();
             exit();
         }
+    }
+
+    public function listComments()
+    {
+        $headTitle = 'Dashboard / Comments';
+
+        $comments = $this->commentManager->findAllComments();
+
+        echo $this->templates->render('admin/comments', [
+            'title' => $headTitle,
+            'comments' => $comments
+        ]);
+    }
+
+    public function deleteComment($params)
+    {
+
+    // Id du commentaire à supprimer
+    $id = $params['id'];
+
+    // On récup et supprime le commentaire
+    $this->commentManager->delete($id);
+
+    // On redirige
+    $this->redirect('comments_list');
+
+    }
+
+    public function validComment($params)
+    {
+            // Id du commentaire à supprimer
+    $id = $params['id'];
+
+    // On récup et supprime le commentaire
+    $this->commentManager->valid($id);
+
+    // On redirige
+    $this->redirect('comments_list');
     }
 }

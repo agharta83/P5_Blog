@@ -21,12 +21,15 @@
             <a class="nav-link" href="">Projets</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="">Commentaires</a>
+            <a class="nav-link" href="<?= $router->generate('comments_list'); ?>">Commentaires</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="">Utilisateurs</a>
           </li>
-          <?php if ($user): ?>
+          <?php if ($user->isAdmin()): ?>
+            <li class="nav-item">
+              <a class="nav-link" href="<?= $router->generate('home') ?>">Retour Site</a>
+            </li>
             <li class="nav-item">
               <a class="nav-link" href="<?= $router->generate('logout') ?>">Déconnexion</a>
             </li>

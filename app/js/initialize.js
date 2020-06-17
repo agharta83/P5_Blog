@@ -29,7 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Shuffle js filter and masonry
-    if (window.location.pathname == '/opc/P5_Blog/') {
+    if (window.location.pathname == '/opc/P5_Blog/blog') {
+        console.log('ici');
         var myShuffle = new Shuffle(document.querySelector('.shuffle-wrapper'), {
             itemSelector: '.shuffle-item',
             buffer: 1

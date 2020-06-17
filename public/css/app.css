@@ -12328,5 +12328,10 @@ li.page-item.active .page-link {
   font-size: 1rem;
   padding: 0.375rem 0.75rem; }
 
+.hiddenRow {
+  padding: 0 !important;
+  background-color: #eeeeee;
+  margin: 0 1em; }
+
 
 /*# sourceMappingURL=app.css.map*/

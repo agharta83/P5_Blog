@@ -2,6 +2,7 @@
 
 namespace MyBlog\Controllers;
 
+use MyBlog\Managers\CommentManager;
 use MyBlog\Managers\PostManager;
 use MyBlog\Managers\UserManager;
 use MyBlog\Models\UserModel;
@@ -27,13 +28,20 @@ abstract class CoreController {
 
         // On instancie les Managers
         $this->postManager = new PostManager();
+        $this->commentManager = new CommentManager();
         $this->userManager = new UserManager();
+
+        // On enregistre les informations de l'utilisateur connecté
+        $this->currentUser = $this->userManager->getUserConnected();
 
         // Données globales
         $this->templates->addData([
             'basePath' => $_SERVER['BASE_URI'],
             'router' => $this->router,
-            'user' => UserModel::getUserConnected()
+            'user' => $this->currentUser,
+            'userManager' => $this->userManager,
+            'postManager' => $this->postManager,
+            'commentManager' => $this->commentManager
         ]);
 
     }

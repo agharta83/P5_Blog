@@ -83,7 +83,13 @@ abstract class Database {
             
             $stmt->execute($parameters);
 
-            return $stmt;
+            if (strstr($sql, 'INSERT')) {
+
+                return $this->checkConnexion()->lastInsertId();
+
+            } else {
+                return $stmt;
+            }
         }
 
         $stmt = $this->checkConnexion()->query($sql);

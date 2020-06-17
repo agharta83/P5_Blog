@@ -22,6 +22,7 @@
   <!-- /post -->
 
   <!-- comments -->
+  <?php if (isset($comments) && !empty($comment)) : ?>
   <section>
     <div class="container">
       <div class="row">
@@ -122,6 +123,7 @@
       </div>
     </div>
   </section>
+          <?php endif; ?>
   <!-- /comments -->
 
   <!-- posts similaires -->

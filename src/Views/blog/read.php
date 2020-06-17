@@ -5,9 +5,9 @@
   <!-- /page title -->
 
 <?php $this->insert('partials/blog/blog-single', [
-  'post' => $post,
-  'comments' => $comments,
-  'nbComments' => $nbComments
+  'post' => $post ?? null,
+  'comments' => $comments ?? null,
+  'nbComments' => $nbComments ?? null
 ]) ?>
 
 <!-- contact -->

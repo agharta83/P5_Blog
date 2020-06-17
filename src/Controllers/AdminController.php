@@ -88,17 +88,30 @@ class AdminController extends CoreController
      */
     public function createNewPost()
     {
+        
 
         // Le formulaire de création du post a été soumis
         if (!empty($_POST)) {
 
-            // On check $_FILES et on upload l'image
-            $this->upload($_FILES);
+            if (isset($_POST['submit'])) {
+                // On check $_FILES et on upload l'image
+                $this->upload($_FILES);
 
-            $this->postManager->addPost($_POST, $_FILES);
+                $this->postManager->addPost($_POST, $_FILES);
 
-            // On redirige
-            $this->redirect('admin_blog_list');
+                // On redirige
+                $this->redirect('admin_blog_list');
+            } else if (isset($_POST['preview'])){
+                // L'utilisateur veut prévisualiser le post
+                if (isset($_FILES['name']) && !empty($_FILES['name'])) {
+                    $this->upload($_FILES);
+                }
+
+                $post = $this->postManager->preview($_POST, $_FILES);
+
+                // On affiche le template
+                echo $this->templates->render('blog/read', ['post' => $post]);
+            }
         } else {
             // On affiche la page de création d'un nouveau post
             $headTitle = 'Dashboard / Nouveau post';
@@ -107,6 +120,8 @@ class AdminController extends CoreController
                 'title' => $headTitle
             ]);
         }
+
+            
     }
 
     /**
@@ -236,16 +251,22 @@ class AdminController extends CoreController
      */
     private function upload($files)
     {
-        $this->checkFiles($files);
+        if (isset($files['name']) && !empty($files['name'])) {
+            $this->checkFiles($files);
 
-        // On upload
-        $uploader = new Uploader();
-        $uploadResult = $uploader->upload($files['files']);
-
-
-        if ($uploadResult !== TRUE) {
-            echo 'Impossible d\'enregistrer l\'image.';
+            // On upload
+            $uploader = new Uploader();
+            $uploadResult = $uploader->upload($files['files']);
+    
+    
+            if ($uploadResult !== TRUE) {
+                echo 'Impossible d\'enregistrer l\'image.';
+            }
+        } else {
+            return null;
         }
+
+        
     }
 
     /**

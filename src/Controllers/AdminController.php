@@ -89,7 +89,6 @@ class AdminController extends CoreController
     public function createNewPost()
     {
         
-
         // Le formulaire de création du post a été soumis
         if (!empty($_POST)) {
 
@@ -179,60 +178,14 @@ class AdminController extends CoreController
         $post = $this->postManager->find($id);
 
         if (!empty($_POST)) {
-            // TODO Faire la même chose que pour addPost
-            $post->setCategory($_POST['category']);
-            $post->setTitle($_POST['titre']);
-            $post->setChapo($_POST['chapo']);
-            $post->setcontent($_POST['content']);
-
             // On check $_FILES
-            try {
-                if (!$_FILES) {
-                    throw new \UnexpectedValueException('Un problème est survenu pendant le téléchargement. Veuillez réessayer.');
-                }
-            } catch (\Exception $e) {
-                echo $e->getMessage();
-                exit();
-            }
+            $this->upload($_FILES);
 
-            // On upload
-            if (!$_FILES || $_FILES['files']['name'][0] !== $post->getImg()) {
-                $uploader = new Uploader();
-                $uploadResult = $uploader->upload($_FILES['files']);
-
-
-                if ($uploadResult !== TRUE) {
-                    echo 'Impossible d\'enregistrer l\'image.';
-                }
-
-                // On ne modifie l'img que si elle est différente
-                $post->setImg($_FILES['files']['name'][0]);
-            }
-
-            $post->setSlug($_POST['titre']);
-
-            // On incrémente les reviews
-            $nbReviews = $post->getNumber_reviews();
-            $post->setNumber_reviews($nbReviews + 1);
-
-            $post->setUser_id('1'); // TODO Faire la requete / méthode pour retrouver l'user id quand la partie authentification sera codée
-
-            if (isset($_POST['published']) && !empty($_POST['published'] && $_POST['published'] == 'on')) {
-                $post->setPublished_date(date("Y-m-d"));
-                $post->setPublished(1);
-            } else if (!isset($_POST['published'])) {
-                $post->setPublished(0);
-            }
-
-            $post->setLast_update((date("Y-m-d")));
-
-            // On enregistre
-            $post->save();
+            $this->postManager->updatePost($id, $_POST, $_FILES);
 
             // On redirige
             $this->redirect('admin_blog_list');
         } else {
-
             // On redirige
             $headTitle = 'Dashboard / Edition de post';
 

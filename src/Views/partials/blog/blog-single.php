@@ -21,8 +21,7 @@
   </section>
   <!-- /post -->
 
-  <!-- comments -->
-  
+  <!-- comments -->  
   <section>
     <div class="container">
       <div class="row">
@@ -128,6 +127,7 @@
   <!-- /comments -->
 
   <!-- posts similaires -->
+  <?php foreach($similarPosts as $similarPost) : ?>
   <section class="section">
     <div class="container">
       <div class="row">
@@ -138,42 +138,15 @@
           <article class="card shadow">
             <img class="rounded card-img-top" src="<?= $basePath ?>/public/images/blog/post-3.jpg" alt="post-thumb">
             <div class="card-body">
-              <h4 class="card-title"><a class="text-dark" href="blog-single.html">Amazon increase income 1.5 Million</a>
+              <h4 class="card-title"><a class="text-dark" href="blog-single.html"><?= $similarPost->getTitle(); ?></a>
               </h4>
-              <p class="cars-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                incididunt ut labore et
-                dolore magna aliqua.</p>
-              <a href="blog-single.html" class="btn btn-xs btn-primary">Read More</a>
-            </div>
-          </article>
-        </div>
-        <div class="col-lg-4 col-sm-6 mb-4 mb-lg-0">
-          <article class="card shadow">
-            <img class="rounded card-img-top" src="<?= $basePath ?>/public/images/blog/post-4.jpg" alt="post-thumb">
-            <div class="card-body">
-              <h4 class="card-title"><a class="text-dark" href="blog-single.html">Amazon increase income 1.5 Million</a>
-              </h4>
-              <p class="cars-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                incididunt ut labore et
-                dolore magna aliqua.</p>
-              <a href="blog-single.html" class="btn btn-xs btn-primary">Read More</a>
-            </div>
-          </article>
-        </div>
-        <div class="col-lg-4 col-sm-6 mb-4 mb-lg-0">
-          <article class="card shadow">
-            <img class="rounded card-img-top" src="<?= $basePath ?>/public/images/blog/post-2.jpg" alt="post-thumb">
-            <div class="card-body">
-              <h4 class="card-title"><a class="text-dark" href="blog-single.html">Amazon increase income 1.5 Million</a>
-              </h4>
-              <p class="cars-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                incididunt ut labore et
-                dolore magna aliqua.</p>
-              <a href="blog-single.html" class="btn btn-xs btn-primary">Read More</a>
+              <p class="cars-text"><?= $similarPost->getChapo(); ?></p>
+              <a href="<?= $router->generate('blog_read', ['slug' => $similarPost->getSlug()]); ?>" class="btn btn-xs btn-primary">Lire</a>
             </div>
           </article>
         </div>
       </div>
     </div>
   </section>
+  <?php endforeach; ?>
   <!-- /posts similaires -->

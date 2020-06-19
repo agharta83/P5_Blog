@@ -350,4 +350,57 @@ class PostManager extends Database
         // On enregistre
         $this->save($postToUpdate);
     }
+
+    public function findLastPublishedPost()
+    {
+        // Construction de la requête
+        $sql = '
+                SELECT * FROM post WHERE published_date < NOW() AND published = 1 ORDER BY published_date DESC LIMIT 3
+            ';
+
+        // Traitement de la requête
+        $result = $this->createQuery($sql);
+
+        $posts = [];
+
+        // On parcourt le tableau de résultat et on génére l'objet PostModel
+        foreach($result as $row) {
+            $postId = $row['id'];
+            $posts [$postId] = $this->buildObject($row);
+        }
+
+        $result->closeCursor();
+
+        return $posts;
+    }
+
+    public function findByCategory($category, $id)
+    {
+        // Construction de la requête
+        $sql = '
+                SELECT * FROM post 
+                WHERE NOT id = :id
+                AND published_date < NOW() 
+                AND published = 1
+                AND category = :category
+                ORDER BY published_date 
+                DESC LIMIT 3
+            ';
+
+        // Traitement de la requête
+        $parameters = [':category' => $category, ':id' => $id];
+        $result = $this->createQuery($sql, $parameters);
+
+        $posts = [];
+
+        // On parcourt le tableau de résultat et on génére l'objet PostModel
+        foreach($result as $row) {
+            $postId = $row['id'];
+            $posts [$postId] = $this->buildObject($row);
+        }
+
+        $result->closeCursor();
+
+        return $posts;
+    }
 }

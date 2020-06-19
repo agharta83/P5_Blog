@@ -13,9 +13,15 @@ class MainController extends CoreController {
      * @return view
      */
     public function home() {
+        // Recup des derniers posts publiés
+        $posts = $this->postManager->findLastPublishedPost();
+
         // Render template
         $headTitle = 'Audrey César | Portfolio Blog';
-        echo $this->templates->render('main/home', ['title' => $headTitle]);
+        echo $this->templates->render('main/home', [
+            'title' => $headTitle,
+            'posts' => $posts
+        ]);
     }
 
     /**
@@ -69,14 +75,17 @@ class MainController extends CoreController {
         $post = $this->postManager->findBySlug($slug);
         // Recup des commentaires
         $comments = $this->commentManager->findValidCommentsForPost($post->getId());
-
+        // Recup du nombre de commentaires
         $nbComments = $this->commentManager->countNbCommentsForPost($post->getId());
+        // Récup des posts similaires
+        $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getId());
 
         // On affiche le template
         echo $this->templates->render('blog/read', [
             'post' => $post,
             'comments' => $comments,
-            'nbComments' => $nbComments
+            'nbComments' => $nbComments,
+            'similarPosts' => $similarPosts
         ]);
     }
 

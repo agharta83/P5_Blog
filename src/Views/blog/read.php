@@ -7,7 +7,8 @@
 <?php $this->insert('partials/blog/blog-single', [
   'post' => $post ?? null,
   'comments' => $comments ?? null,
-  'nbComments' => $nbComments ?? null
+  'nbComments' => $nbComments ?? null,
+  'similarPosts' => $similarPosts ?? null
 ]) ?>
 
 <!-- contact -->

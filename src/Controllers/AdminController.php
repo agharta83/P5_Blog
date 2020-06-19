@@ -88,17 +88,29 @@ class AdminController extends CoreController
      */
     public function createNewPost()
     {
-
+        
         // Le formulaire de création du post a été soumis
         if (!empty($_POST)) {
 
-            // On check $_FILES et on upload l'image
-            $this->upload($_FILES);
+            if (isset($_POST['submit'])) {
+                // On check $_FILES et on upload l'image
+                $this->upload($_FILES);
 
-            $this->postManager->addPost($_POST, $_FILES);
+                $this->postManager->addPost($_POST, $_FILES);
 
-            // On redirige
-            $this->redirect('admin_blog_list');
+                // On redirige
+                $this->redirect('admin_blog_list');
+            } else if (isset($_POST['preview'])){
+                // L'utilisateur veut prévisualiser le post
+                if (isset($_FILES['name']) && !empty($_FILES['name'])) {
+                    $this->upload($_FILES);
+                }
+
+                $post = $this->postManager->preview($_POST, $_FILES);
+
+                // On affiche le template
+                echo $this->templates->render('blog/read', ['post' => $post]);
+            }
         } else {
             // On affiche la page de création d'un nouveau post
             $headTitle = 'Dashboard / Nouveau post';
@@ -107,6 +119,8 @@ class AdminController extends CoreController
                 'title' => $headTitle
             ]);
         }
+
+            
     }
 
     /**
@@ -164,60 +178,14 @@ class AdminController extends CoreController
         $post = $this->postManager->find($id);
 
         if (!empty($_POST)) {
-            // TODO Faire la même chose que pour addPost
-            $post->setCategory($_POST['category']);
-            $post->setTitle($_POST['titre']);
-            $post->setChapo($_POST['chapo']);
-            $post->setcontent($_POST['content']);
-
             // On check $_FILES
-            try {
-                if (!$_FILES) {
-                    throw new \UnexpectedValueException('Un problème est survenu pendant le téléchargement. Veuillez réessayer.');
-                }
-            } catch (\Exception $e) {
-                echo $e->getMessage();
-                exit();
-            }
+            $this->upload($_FILES);
 
-            // On upload
-            if (!$_FILES || $_FILES['files']['name'][0] !== $post->getImg()) {
-                $uploader = new Uploader();
-                $uploadResult = $uploader->upload($_FILES['files']);
-
-
-                if ($uploadResult !== TRUE) {
-                    echo 'Impossible d\'enregistrer l\'image.';
-                }
-
-                // On ne modifie l'img que si elle est différente
-                $post->setImg($_FILES['files']['name'][0]);
-            }
-
-            $post->setSlug($_POST['titre']);
-
-            // On incrémente les reviews
-            $nbReviews = $post->getNumber_reviews();
-            $post->setNumber_reviews($nbReviews + 1);
-
-            $post->setUser_id('1'); // TODO Faire la requete / méthode pour retrouver l'user id quand la partie authentification sera codée
-
-            if (isset($_POST['published']) && !empty($_POST['published'] && $_POST['published'] == 'on')) {
-                $post->setPublished_date(date("Y-m-d"));
-                $post->setPublished(1);
-            } else if (!isset($_POST['published'])) {
-                $post->setPublished(0);
-            }
-
-            $post->setLast_update((date("Y-m-d")));
-
-            // On enregistre
-            $post->save();
+            $this->postManager->updatePost($id, $_POST, $_FILES);
 
             // On redirige
             $this->redirect('admin_blog_list');
         } else {
-
             // On redirige
             $headTitle = 'Dashboard / Edition de post';
 
@@ -236,16 +204,22 @@ class AdminController extends CoreController
      */
     private function upload($files)
     {
-        $this->checkFiles($files);
+        if (isset($files['name']) && !empty($files['name'])) {
+            $this->checkFiles($files);
 
-        // On upload
-        $uploader = new Uploader();
-        $uploadResult = $uploader->upload($files['files']);
-
-
-        if ($uploadResult !== TRUE) {
-            echo 'Impossible d\'enregistrer l\'image.';
+            // On upload
+            $uploader = new Uploader();
+            $uploadResult = $uploader->upload($files['files']);
+    
+    
+            if ($uploadResult !== TRUE) {
+                echo 'Impossible d\'enregistrer l\'image.';
+            }
+        } else {
+            return null;
         }
+
+        
     }
 
     /**

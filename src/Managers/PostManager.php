@@ -175,7 +175,9 @@ class PostManager extends Database
         $post['img'] = $files['files']['name'][0];
         $post['slug'] = $post['title'];
         $post['number_reviews'] = 0;
-        $post['user_id'] = 1; // TODO Faire la requete / méthode pour retrouver l'user id quand la partie authentification sera codée
+
+        $userManager = new UserManager();
+        $post['user_id'] = $userManager->getUserConnected()->getId();
 
         // Si le post est publié immédiatement aprés sa création, on met à jour sa date de publication et son statut
         if (isset($post['published']) && !empty($post['published'] && $post['published'] == 'on')) {
@@ -292,5 +294,60 @@ class PostManager extends Database
         $parameters = [':id' => $id];
         $this->createQuery($sql, $parameters);
 
+    }
+
+    public function preview($post, $files)
+    {
+        // On gère les datas qui ne sont pas dans le formulaire mais initialisé à chaque création d'un post
+        $post['img'] = $files['files']['name'][0];
+        $post['slug'] = $post['title'];
+        $post['number_reviews'] = 0;
+
+        $userManager = new UserManager();
+        $post['user_id'] = $userManager->getUserConnected()->getId();
+
+        // Si le post est publié immédiatement aprés sa création, on met à jour sa date de publication et son statut
+        if (isset($post['published']) && !empty($post['published'] && $post['published'] == 'on')) {
+            $post['published_date'] = date("Y-m-d");
+            $post['published'] = 1;
+        } else if (!isset($post['published'])) {
+            $post['published'] = 0;
+        }
+        
+        // On construit l'objet Post
+        $newPost = $this->buildObject($post);
+
+        return $newPost;
+    }
+
+    public function updatePost($id, $post, $files)
+    {
+        // On récupére le post
+        $postToUpdate = $this->find($id);
+
+        $postToUpdate->setCategory($post['category']);
+        $postToUpdate->setTitle($post['titre']);
+        $postToUpdate->setChapo($post['chapo']);
+        $postToUpdate->setcontent($post['content']);
+        $postToUpdate->setSlug($post['titre']);
+
+        // On incrémente les reviews
+        $nbReviews = $postToUpdate->getNumber_reviews();
+        $postToUpdate->setNumber_reviews($nbReviews + 1);
+
+        $userManager = new UserManager();
+        $postToUpdate->setUser_id($userManager->getUserConnected()->getId());
+    
+        if (isset($post['published']) && !empty($post['published'] && $post['published'] == 'on')) {
+            $postToUpdate->setPublished_date(date("Y-m-d"));
+            $postToUpdate->setPublished(1);
+        } else if (!isset($post['published'])) {
+            $postToUpdate->setPublished(0);
+        }
+
+        $postToUpdate->setLast_update((date("Y-m-d")));
+
+        // On enregistre
+        $this->save($postToUpdate);
     }
 }

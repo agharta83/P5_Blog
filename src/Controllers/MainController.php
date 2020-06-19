@@ -143,7 +143,7 @@ class MainController extends CoreController {
             } else {
                 // On teste le mot de passe
                 $hash = $user->getPassword();
-                //$isValid = password_verify($_POST['password'], $hash); TODO A changer lorsque l'inscription aura été faite car le MDP n'est pas hash en bdd
+                //$isValid = password_verify($_POST['password'], $hash); TODO A modifier lorsqu'il y aura la gestion des users
                 $isValid = $_POST['password'] == $hash ? true : false;
 
                 if (!$isValid) {

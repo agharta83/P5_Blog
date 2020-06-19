@@ -10,7 +10,7 @@ $modal3 = 'validComment' . $comment->getId();
 
 ?>
 
-<tr data-toggle="collapse" data-target="<?= $content; ?>" class="accordion-toggle">
+<tr data-toggle="collapse" data-target="<?= $content; ?>" class="accordion-toggle" data-groups="<?= $comment->getIs_valid();?>">
     <td><?= $postManager->findById($comment->getPost_id())->getTitle(); ?></td>
     <td><?= $comment->getCreated_on(); ?></td>
     <td><?= $comment->getIs_valid(); ?></td>

@@ -1,3 +1,5 @@
+<?php use MyBlog\Models\PostModel; ?>
+
 <section class="hero-area hero-admin bg-primary" id="parallax">
 
     <div class="container table-container bg-white">
@@ -7,8 +9,19 @@
                     <div class="col-sm-5">
                         <h3 class="text-left tertiary-font"><b>Commentaires</b></h3>
                     </div>
+                    <div class="col-5 mx-auto">
+                        <div class="btn-group btn-group-toggle justify-content-center d-flex" data-toggle="buttons">
+                            <label class="btn btn-sm btn-primary active">
+                                <input type="radio" name="all" value="all" checked="checked" />Tout
+                            </label>
+                            <label class="btn btn-sm btn-primary">
+                                <input type="radio" name="NotValid" value="0" />A valider
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
+
             <table class="table table-hover">
                 <thead class="uppercase">
                     <tr>

@@ -22,11 +22,12 @@
   <!-- /post -->
 
   <!-- comments -->
-  <?php if (isset($comments) && !empty($comment)) : ?>
+  
   <section>
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
+        <?php if (isset($comments) && !empty($comment)) : ?>
           <h4 class="font-weight-bold mb-3">Commentaires<span class="ml-2 badge badge-dark rounded-circle"><?= $nbComments; ?></span></h4>
           <div class="bg-gray p-5 mb-4">
             <?php
@@ -106,6 +107,7 @@
             endforeach;
             ?>
           </div>
+        <?php endif; ?>
           <h4 class="font-weight-bold mb-3 border-bottom pb-3">Laisser un commentaire</h4>
           <form action="<?= $router->generate("add_comment"); ?>" method="post" class="row">
             <div class="col-md-6">
@@ -123,7 +125,6 @@
       </div>
     </div>
   </section>
-          <?php endif; ?>
   <!-- /comments -->
 
   <!-- posts similaires -->

@@ -39,10 +39,10 @@ class UserManager extends Database
     /**
      * Retourne un utilisateur en fonction de son Id
      *
-     * @param int $id
-     * @return Object UserModel
+     * @param integer $id
+     * @return UserModel
      */
-    public function getUser($id)
+    public function getUser(int $id)
     {
 
         // Construction de la requete
@@ -62,8 +62,13 @@ class UserManager extends Database
         return $this->buildObject($post);
     }
 
-    // Retourne l'utilisateur associé au login
-    public function findByLogin($login)
+    /**
+     * Retourne l'utilisateur associé au login
+     *
+     * @param string $login
+     * @return UserModel
+     */
+    public function findByLogin(string $login)
     {
 
         $sql = 'SELECT * FROM user WHERE login LIKE :login';
@@ -79,8 +84,13 @@ class UserManager extends Database
         return $this->buildObject($user);
     }
 
-    // Enregistre les infos de l'user en session
-    public function saveUserInSession($user)
+    /**
+     * Enregistre les infos de l'utilisateur en session
+     *
+     * @param UserModel $user
+     * @return void
+     */
+    public function saveUserInSession(UserModel $user)
     {
         $_SESSION['user'] = [
             'id' => $user->getId(),
@@ -93,7 +103,13 @@ class UserManager extends Database
         ];
     }
 
-    private function checkUser($email)
+    /**
+     * Vérifie si un utilisateur avec cet email existe en BDD et le retourne
+     *
+     * @param string $email
+     * @return UserModel|false
+     */
+    private function checkUser(string $email)
     {
         if ($user = $this->findUserByEmail($email)) {
             return $user;
@@ -102,7 +118,14 @@ class UserManager extends Database
         return false;
     }
 
-    public function findUserByEmail($email)
+ 
+    /**
+     * Retourne un utilisateur associé à un email
+     *
+     * @param string $email
+     * @return UserModel|false
+     */
+    private function findUserByEmail(string $email)
     {
         $sql = 'SELECT * FROM user WHERE email LIKE :email';
 
@@ -122,6 +145,12 @@ class UserManager extends Database
     }
 
 
+    /**
+     * Ajoute un utilisateur en BDD
+     *
+     * @param array $post
+     * @return UserModel
+     */
     public function addUser($post)
     {
         // On récup les infos de l'utilisateur pour les enregistrer en bdd
@@ -192,7 +221,11 @@ class UserManager extends Database
         return $userObject;
     }
 
-    // Retourne les infos de l'user connecté / enregistré en session
+    /**
+     * Retourne les infos de l'utilisateur connecté / enregistré en session
+     *
+     * @return UserModel|false
+     */
     public function getUserConnected()
     {
         if (!empty($_SESSION['user'])) {
@@ -202,6 +235,11 @@ class UserManager extends Database
         return false;
     }
 
+    /**
+     * Retourne le nombre d'utilisateurs
+     *
+     * @return integer
+     */
     public function countNbUsers()
     {
         // Construction de la requête

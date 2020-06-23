@@ -14,7 +14,7 @@ class PostManager extends Database
      * Convertit chaque champ de la table en propriété de l'objet PostModel
      *
      * @param strint|int|bool $row
-     * @return object PostModel
+     * @return PostModel
      */
     private function buildObject($row)
     {
@@ -41,7 +41,7 @@ class PostManager extends Database
     /**
      * Retourne la liste de tous les posts publiés
      *
-     * @return array PostModel
+     * @return PostModel[]
      */
     public function findAllPostsPublished()
     {
@@ -71,7 +71,7 @@ class PostManager extends Database
     /**
      * Retourne la liste de tous les posts
      *
-     * @return array PostModel
+     * @return PostModel[]
      */
     public function findAllPosts()
     {
@@ -122,7 +122,13 @@ class PostManager extends Database
         return $this->buildObject($post);
     }
 
-    public function findById($id)
+    /**
+     * Retourne un post en fonction de son ID
+     *
+     * @param integer $id
+     * @return PostModel
+     */
+    public function findById(int $id)
     {
         // Construction de la requete
         $sql = '
@@ -198,10 +204,10 @@ class PostManager extends Database
     /**
      * Ajoute un nouveau post un BDD ou le modifie si il existe déjà
      *
-     * @param ModelPost $post
+     * @param PostModel $post
      * @return void
      */
-    private function save($post)
+    private function save(PostModel $post)
     {
         // On crée la requête SQL
         $sql = "
@@ -259,10 +265,10 @@ class PostManager extends Database
     /**
      * Retourne un post à partir de son Id
      *
-     * @param int $id
-     * @return ModelPost
+     * @param integer $id
+     * @return PostModel
      */
-    public function find($id)
+    public function find(int $id)
     {
 
         // On construit la requete
@@ -282,9 +288,10 @@ class PostManager extends Database
     /**
      * Supprime un post en BDD
      *
+     * @param integer $id
      * @return void
      */
-    public function delete($id)
+    public function delete(int $id)
     {
 
         // On construit la requête
@@ -296,6 +303,13 @@ class PostManager extends Database
 
     }
 
+    /**
+     * Permet de prévisualiser un post (sans enregistrement en BDD)
+     *
+     * @param array $post
+     * @param array $files
+     * @return PostModel
+     */
     public function preview($post, $files)
     {
         // On gère les datas qui ne sont pas dans le formulaire mais initialisé à chaque création d'un post
@@ -320,7 +334,15 @@ class PostManager extends Database
         return $newPost;
     }
 
-    public function updatePost($id, $post, $files)
+    /**
+     * Mise à jour d'un post
+     *
+     * @param integer $id
+     * @param array $post
+     * @param array $files
+     * @return void
+     */
+    public function updatePost(int $id, $post, $files)
     {
         // On récupére le post
         $postToUpdate = $this->find($id);
@@ -351,6 +373,11 @@ class PostManager extends Database
         $this->save($postToUpdate);
     }
 
+    /**
+     * Retourne les 3 derniers posts publiés
+     *
+     * @return PostModel[]
+     */
     public function findLastPublishedPost()
     {
         // Construction de la requête
@@ -374,7 +401,14 @@ class PostManager extends Database
         return $posts;
     }
 
-    public function findByCategory($category, $id)
+    /**
+     * Retourne les 3 dernies posts publiés d'une catégorie en particulier (similar posts)  
+     *
+     * @param string $category
+     * @param integer $id
+     * @return PostModel[]
+     */
+    public function findByCategory(string $category, int $id)
     {
         // Construction de la requête
         $sql = '

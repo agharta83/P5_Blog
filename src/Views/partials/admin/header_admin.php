@@ -21,7 +21,7 @@
             <a class="nav-link" href="">Projets</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="<?= $router->generate('comments_list'); ?>">Commentaires</a>
+            <a class="nav-link" href="<?= $router->generate('comments_list', ['page' => '1']); ?>">Commentaires</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="">Utilisateurs</a>

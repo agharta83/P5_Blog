@@ -10,7 +10,12 @@ use MyBlog\Services\Uploader;
 class AdminController extends CoreController
 {
 
-    public function __construct($router) 
+    /**
+     * Admincontroller Constructor
+     *
+     * @param \AltoRouter $router
+     */
+    public function __construct(\AltoRouter $router) 
     {
         // Execution du constructeur parent
         parent::__construct($router);
@@ -25,8 +30,9 @@ class AdminController extends CoreController
     /**
      * Permet d'accéder à la page d'accueil de l'administration et récupére les infos à afficher :
      * - le nb de post publiés
-     * TODO le nb de commentaires
-     * TODO le nb d'utilisateur
+     * - le nb de commentaires validés
+     * - le nb de commentaires à valider
+     * - le nb d'utilisateur
      * TODO le nb post en attente de publication
      * TODO Notif : Comments en attente de validation, post le plus lus, post le plus commenté
      *
@@ -127,7 +133,7 @@ class AdminController extends CoreController
      * Permet d'afficher la page d'un post dans la partie administration
      * TODO implémenter un preview
      *
-     * @param mixed $params
+     * @param array $params
      * @return void
      */
     public function read($params)
@@ -146,7 +152,7 @@ class AdminController extends CoreController
     /**
      * Supprime un post à partir de son Id
      *
-     * @param mixed $params
+     * @param array $params
      * @return void
      */
     public function delete($params)
@@ -165,7 +171,7 @@ class AdminController extends CoreController
     /**
      * Met à jour un post en BDD
      *
-     * @param mixed $params
+     * @param array $params
      * @return void
      */
     public function update($params)
@@ -199,7 +205,7 @@ class AdminController extends CoreController
     /**
      * Permet d'upload l'image
      *
-     * @param Globals $files
+     * @param array $files
      * @return void
      */
     private function upload($files)
@@ -225,6 +231,7 @@ class AdminController extends CoreController
     /**
      * Permet de vérifier si il y a un fichier à upload
      *
+     * @param array $files
      * @return Exception
      */
     private function checkFiles($files)
@@ -240,41 +247,70 @@ class AdminController extends CoreController
         }
     }
 
-    public function listComments()
+    /**
+     * Récupére la liste des commentaires paginées et redirige vers la liste des commentaires
+     *
+     * @param array $params
+     * @return void
+     */
+    public function listComments($params)
     {
         $headTitle = 'Dashboard / Comments';
 
-        $comments = $this->commentManager->findAllComments();
+        $pagination = $this->commentManager->findAllCommentsPaginated(5, $params['page']);
+
+        $results = $pagination->getCurrentPageResults();
+
+        $comments = [];
+        
+        // On parcourt le tableau de résultat et on génére l'objet PostModel
+        foreach ($results as $row) {
+            $commentId = $row['id'];
+            $comments[$commentId] = $this->commentManager->buildObject($row);
+        }
 
         echo $this->templates->render('admin/comments', [
             'title' => $headTitle,
-            'comments' => $comments
+            'comments' => $comments,
+            'pagination' => $pagination
         ]);
     }
 
+    /**
+     * Supprimer un commentaire et redirige vers la liste des commentaires
+     *
+     * @param array $params
+     * @return void
+     */
     public function deleteComment($params)
     {
 
-    // Id du commentaire à supprimer
-    $id = $params['id'];
+        // Id du commentaire à supprimer
+        $id = $params['id'];
 
-    // On récup et supprime le commentaire
-    $this->commentManager->delete($id);
+        // On récup et supprime le commentaire
+        $this->commentManager->delete($id);
 
-    // On redirige
-    $this->redirect('comments_list');
+        // On redirige
+        $this->redirect('comments_list');
 
     }
 
+    /**
+     * Valide un commentaire et redirige vers la liste des commentaires
+     *
+     * @param array $params
+     * @return void
+     */
     public function validComment($params)
     {
-            // Id du commentaire à supprimer
-    $id = $params['id'];
+        // Id du commentaire à supprimer
+        $id = $params['id'];
 
-    // On récup et supprime le commentaire
-    $this->commentManager->valid($id);
+        // On récup et supprime le commentaire
+        $this->commentManager->valid($id);
 
-    // On redirige
-    $this->redirect('comments_list');
+        // On redirige
+        $this->redirect('comments_list');
     }
 }

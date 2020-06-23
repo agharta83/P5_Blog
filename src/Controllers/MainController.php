@@ -10,7 +10,7 @@ class MainController extends CoreController {
     /**
      * Retourne la page d'accueil
      *
-     * @return view
+     * @return void
      */
     public function home() {
         // Recup des derniers posts publiés
@@ -27,7 +27,7 @@ class MainController extends CoreController {
     /**
      * Retourne la page "About"
      *
-     * @return view
+     * @return void
      */
     public function about() {
         echo $this->templates->render('main/about', ['title' => 'about']);
@@ -36,7 +36,7 @@ class MainController extends CoreController {
     /**
      * Retourne la page "Contact"
      *
-     * @return view
+     * @return void
      */
     public function contact() {
         echo $this->templates->render('main/contact', ['title' => 'contact']);
@@ -45,7 +45,7 @@ class MainController extends CoreController {
     /**
      * Affiche la page "Blog" avec la liste des posts publiés
      *
-     * @return view
+     * @return void
      */
     public function blogList() {
 
@@ -63,8 +63,8 @@ class MainController extends CoreController {
     /**
      * Affiche la page d'un article
      *
-     * @param mixed $params
-     * @return view
+     * @param array $params
+     * @return void
      */
     public function blogRead($params) {
 
@@ -101,7 +101,7 @@ class MainController extends CoreController {
     /**
      * Affiche la page d'un projet
      *
-     * @param mixed $params
+     * @param array $params
      * @return void
      */
     public function projectRead($params) {
@@ -111,6 +111,11 @@ class MainController extends CoreController {
         echo $this->templates->render('portfolio/read', ['id' => $projectId]);
     }
 
+    /**
+     * Ajoute un commentaire ainsi qu'un utilisateur et redirige sur le post commenté
+     *
+     * @return void
+     */
     public function addComment() {
 
         if (!empty($_POST)) {
@@ -132,7 +137,7 @@ class MainController extends CoreController {
         }
     }
 
-        /**
+    /**
      * Connexion à l'administration
      *
      * @return Object|Array UserModel|Errors

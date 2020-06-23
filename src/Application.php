@@ -41,11 +41,9 @@ class Application {
         $this->router->map('GET', '/dashboard/posts/[i:id]/delete', ['AdminController', 'delete'], 'delete_post');
         $this->router->map('GET|POST', '/dashboard/posts/update/[i:id]', ['AdminController', 'update'], 'update_post');
         // Gestion des commentaires
-        $this->router->map('GET', '/dashboard/comments', ['AdminController', 'listComments'], 'comments_list');
+        $this->router->map('GET', '/dashboard/comments/[:page]', ['AdminController', 'listComments'], 'comments_list');
         $this->router->map('GET', '/dashboard/comments/[i:id]/delete', ['AdminController', 'deleteComment'], 'delete_comment');
         $this->router->map('GET', '/dashboard/comments/[i:id]/valid', ['AdminController', 'validComment'], 'valid_comment');
-
-        
 
     }
 

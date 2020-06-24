@@ -32,13 +32,14 @@
               <th>Auteur</th>
               <th>Categorie</th>
               <th>Statut</th>
+              <th>Corrections</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             <?php
               foreach($posts as $post) {
-                $this->insert('partials/admin/post_row', ['post' => $post]);
+                $this->insert('partials/admin/post_row', ['post' => $post, 'pagination' => $pagination]);
               } 
             ?>        
           </tbody>

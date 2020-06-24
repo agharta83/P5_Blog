@@ -77,9 +77,15 @@ class AdminController extends CoreController
 
         $headTitle = 'Dashboard / Posts';
 
-        // Récup la liste des posts en db
-        //$posts = $this->postManager->findAllPosts();
-        $pagination = $this->postManager->findAllPostsPaginated(6, $params['page']);
+        try {
+            // Récup la liste des posts en db
+            $pagination = $this->postManager->findAllPostsPaginated(6, $params['page']);
+        } catch (\Exception $e) {
+            // Gére le cas ou l'admin à supprimer le dernier article d'une page, 
+            // On renvoie sur la derniére page
+            $page = $params['page'] - 1;
+            $pagination = $this->postManager->findAllPostsPaginated(6, $page);
+        }
 
         $results = $pagination->getCurrentPageResults();
 
@@ -126,8 +132,11 @@ class AdminController extends CoreController
 
                 $post = $this->postManager->preview($_POST, $_FILES);
 
+                // Récup des posts similaires
+                $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getId());
+
                 // On affiche le template
-                echo $this->templates->render('blog/read', ['post' => $post]);
+                echo $this->templates->render('blog/read', ['post' => $post, 'similarPosts' => $similarPosts]);
             }
         } else {
             // On affiche la page de création d'un nouveau post
@@ -169,15 +178,16 @@ class AdminController extends CoreController
      */
     public function delete($params)
     {
-
+        //var_dump($params);die();
         // Id du post à supprimer
         $id = $params['id'];
+        $currentPage = $params['page'];
 
         // On récup et supprime le post
         $this->postManager->delete($id);
 
         // On redirige
-        $this->redirect('admin_blog_list');
+        $this->redirect('admin_blog_list', ['page' => $currentPage]);
     }
 
     /**
@@ -192,6 +202,9 @@ class AdminController extends CoreController
         // Id du post à éditer
         $id = $params['id'];
 
+        // Page courante
+        $currentPage = $params['page'];
+
         // On récupére le post
         $post = $this->postManager->find($id);
 
@@ -202,14 +215,15 @@ class AdminController extends CoreController
             $this->postManager->updatePost($id, $_POST, $_FILES);
 
             // On redirige
-            $this->redirect('admin_blog_list');
+            $this->redirect('admin_blog_list', ['page' => $currentPage]);
         } else {
             // On redirige
             $headTitle = 'Dashboard / Edition de post';
 
             echo $this->templates->render('admin/update_post', [
                 'title' => $headTitle,
-                'post' => $post
+                'post' => $post,
+                'page' => $currentPage
             ]);
         }
     }

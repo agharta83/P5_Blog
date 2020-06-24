@@ -49,17 +49,21 @@ class CommentManager extends Database
         $parameters = [':postId' => $postId];
         $result = $this->createQuery($sql, $parameters);
 
-        $comments = [];
+        if ($result !== null) {
+            $comments = [];
 
-        // On parcourt le tableau de résultat et on génére l'objet PostModel
-        foreach ($result as $row) {
-            $commentId = $row['id'];
-            $comments[$commentId] = $this->buildObject($row);
+            // On parcourt le tableau de résultat et on génére l'objet PostModel
+            foreach ($result as $row) {
+                $commentId = $row['id'];
+                $comments[$commentId] = $this->buildObject($row);
+            }
+
+            return $comments;
         }
 
         $result->closeCursor();
 
-        return $comments;
+        return false;
     }
 
     /**

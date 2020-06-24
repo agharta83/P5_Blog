@@ -75,6 +75,7 @@ class MainController extends CoreController {
         $post = $this->postManager->findBySlug($slug);
         // Recup des commentaires
         $comments = $this->commentManager->findValidCommentsForPost($post->getId());
+        //var_dump($comments); die();
         // Recup du nombre de commentaires
         $nbComments = $this->commentManager->countNbCommentsForPost($post->getId());
         // Récup des posts similaires

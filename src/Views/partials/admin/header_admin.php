@@ -15,7 +15,7 @@
             <a class="nav-link" href="<?= $router->generate('dashboard'); ?>">Accueil</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="<?= $router->generate('admin_blog_list'); ?>">Posts</a>
+            <a class="nav-link" href="<?= $router->generate('admin_blog_list', ['page' => '1']); ?>">Posts</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="">Projets</a>

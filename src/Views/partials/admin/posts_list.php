@@ -45,17 +45,28 @@
         </table>
 
         <!-- Insert pagination -->
+        <?php
+          $prevPage = $pagination->hasPreviousPage() ? (string)$pagination->getPreviousPage() : null;
+          $nextPage = $pagination->hasNextPage() ? (string)$pagination->getNextPage() : null;
+          $nbPages = $pagination->getNbPages() ?? null;
+        ?>
         <div class="clearfix">
-          <div class="hint-text">Affichage de <b>5</b> posts sur <b>25</b></div>
-            <ul class="pagination">
-              <li class="page-item"><a href="#" class="page-link">Précédent</a></li>
-              <li class="page-item"><a href="#" class="page-link">1</a></li>
-              <li class="page-item"><a href="#" class="page-link">2</a></li>
-              <li class="page-item active"><a href="#" class="page-link">3</a></li>
-              <li class="page-item"><a href="#" class="page-link">4</a></li>
-              <li class="page-item"><a href="#" class="page-link">5</a></li>
-              <li class="page-item"><a href="#" class="page-link">Suivant</a></li>
-            </ul>
+          <div class="hint-text">Affichage de <b><?= $pagination->getCurrentPageOffsetEnd(); ?></b> posts sur <b><?= $pagination->getNbResults(); ?></b></div>
+          <ul class="pagination">
+                    <?php if ($pagination->hasPreviousPage()) : ?>
+                        <li class="page-item"><a href="<?= $router->generate('admin_blog_list', ['page' => $prevPage]); ?>" class="page-link">Précédent</a></li>
+                    <?php endif; ?>
+
+                    <?php for ($i = 1; $i <= $nbPages; $i++) : ?>
+                        <?php
+                            $active = $pagination->getCurrentPage() == $i ? 'active' : null;   
+                        ?>
+                        <li class="page-item <?= $active; ?>"><a href="<?= $router->generate('admin_blog_list', ['page' => $i]); ?>" class="page-link"><?= $i; ?></a></li>
+                    <?php endfor; ?>
+                    <?php if ($pagination->hasNextPage()) : ?>
+                        <li class="page-item"><a href="<?= $router->generate('admin_blog_list', ['page' => $nextPage]); ?>" class="page-link">Suivant</a></li>
+                    <?php endif; ?>
+                </ul>
           </div>
         </div>
     </div>

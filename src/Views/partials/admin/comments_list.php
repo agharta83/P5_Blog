@@ -48,7 +48,7 @@
                 $nbPages = $pagination->getNbPages() ?? null;
             ?>
             <div class="clearfix">
-                <div class="hint-text">Affichage de <b><?= $pagination->getCurrentPageOffsetEnd(); ?></b> posts sur <b><?= $pagination->getNbResults(); ?></b></div>
+                <div class="hint-text">Affichage de <b><?= $pagination->getCurrentPageOffsetEnd(); ?></b> commentaires sur <b><?= $pagination->getNbResults(); ?></b></div>
                 <ul class="pagination">
                     <?php if ($pagination->hasPreviousPage()) : ?>
                         <li class="page-item"><a href="<?= $router->generate('comments_list', ['page' => $prevPage]); ?>" class="page-link">Précédent</a></li>

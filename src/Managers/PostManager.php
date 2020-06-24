@@ -3,6 +3,8 @@
 namespace MyBlog\Managers;
 
 use MyBlog\Models\PostModel;
+use MyBlog\Services\PaginatedQuery;
+use Pagerfanta\Pagerfanta;
 
 /**
  * Permet de manager PostModel 
@@ -16,7 +18,7 @@ class PostManager extends Database
      * @param strint|int|bool $row
      * @return PostModel
      */
-    private function buildObject($row)
+    public function buildObject($row)
     {
         $post = new PostModel();
 
@@ -69,31 +71,21 @@ class PostManager extends Database
     }
 
     /**
-     * Retourne la liste de tous les posts
+     * Retourne la liste de tous les posts paginés
      *
-     * @return PostModel[]
+     * @param integer $perPage
+     * @param integer $currentPage
+     * @return Pagerfanta
      */
-    public function findAllPosts()
+    public function findAllPostsPaginated(int $perPage, int $currentPage)
     {
-        // Construction de la requête
-        $sql = '
-                SELECT * FROM post
-            ';
+        $query = new PaginatedQuery(
+            $this->checkConnexion(),
+            'SELECT * FROM post',
+            'SELECT COUNT(id) FROM post'
+        );
 
-        // Traitement de la requête
-        $result = $this->createQuery($sql);
-
-        $posts = [];
-
-        // On parcourt le tableau de résultat et on génére l'objet PostModel
-        foreach($result as $row) {
-            $postId = $row['id'];
-            $posts [$postId] = $this->buildObject($row);
-        }
-
-        $result->closeCursor();
-
-        return $posts;
+        return (new Pagerfanta($query))->setMaxPerPage($perPage)->setCurrentPage($currentPage);
     }
 
     /**

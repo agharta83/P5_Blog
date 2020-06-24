@@ -68,22 +68,34 @@ class AdminController extends CoreController
     }
 
     /**
-     * Permet d'afficher la liste de tous les posts dans l'administration
+     * Permet d'afficher la liste de tous les posts avec sa pagination
      *
      * @return void
      */
-    public function list()
+    public function list($params) 
     {
 
-        // Récup la liste des posts en db
-        $posts = $this->postManager->findAllPosts();
-
         $headTitle = 'Dashboard / Posts';
+
+        // Récup la liste des posts en db
+        //$posts = $this->postManager->findAllPosts();
+        $pagination = $this->postManager->findAllPostsPaginated(6, $params['page']);
+
+        $results = $pagination->getCurrentPageResults();
+
+        $posts = [];
+
+        // On parcourt le tableau de résultat et on génére l'objet PostModel
+        foreach ($results as $row) {
+            $postId = $row['id'];
+            $posts[$postId] = $this->postManager->buildObject($row);
+        }
 
         // On affiche le template
         echo $this->templates->render('admin/posts', [
             'title' => $headTitle,
-            'posts' => $posts
+            'posts' => $posts,
+            'pagination' => $pagination
         ]);
     }
 

@@ -14,7 +14,7 @@
           <a class="nav-link" href="<?= $router->generate('about'); ?>">A propos</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="<?= $router->generate('blog_list'); ?>">Blog</a>
+          <a class="nav-link" href="<?= $router->generate('blog_list', ['page' => '1']); ?>">Blog</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="<?= $router->generate('portfolio_list'); ?>">Portfolio</a>

@@ -41,32 +41,22 @@ class PostManager extends Database
     }    
 
     /**
-     * Retourne la liste de tous les posts publiés
-     *
-     * @return PostModel[]
+     * Retourne la liste de tous les posts publiés avec la pagination
+     * 
+     * @param integer $perPage
+     * @param integer $currentPage
+     * @return Pagerfanta
      */
-    public function findAllPostsPublished()
+    public function findAllPostsPublishedAndPaginated(int $perPage, int $currentPage)
     {
-        // Construction de la requête
-        $sql = '
-                SELECT * FROM post 
-                WHERE published = 1
-            ';
 
-        // Traitement de la requête
-        $result = $this->createQuery($sql);
+        $query = new PaginatedQuery(
+            $this->checkConnexion(),
+            'SELECT * FROM post WHERE published = 1',
+            'SELECT COUNT(id) FROM post WHERE published = 1'
+        );
 
-        $posts = [];
-
-        // On parcourt le tableau de résultat et on génére l'objet PostModel
-        foreach($result as $row) {
-            $postId = $row['id'];
-            $posts [$postId] = $this->buildObject($row);
-        }
-
-        $result->closeCursor();
-
-        return $posts;
+        return (new Pagerfanta($query))->setMaxPerPage($perPage)->setCurrentPage($currentPage);
 
     }
 

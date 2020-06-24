@@ -127,13 +127,13 @@
 
 <!-- posts similaires -->
 <?php if ($similarPosts) : ?>
-    <section class="section">
-      <div class="container">
-        <div class="row">
-          <div class="col-12 text-center">
-            <h2 class="section-title">Posts similaires</h2>
-          </div>
-          <?php foreach ($similarPosts as $similarPost) : ?>
+  <section class="section">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center">
+          <h2 class="section-title">Posts similaires</h2>
+        </div>
+        <?php foreach ($similarPosts as $similarPost) : ?>
           <div class="col-lg-4 col-sm-6 mb-4 mb-lg-0">
             <article class="card shadow">
               <img class="rounded card-img-top" src="<?= $basePath ?>/public/images/blog/post-3.jpg" alt="post-thumb">
@@ -145,10 +145,10 @@
               </div>
             </article>
           </div>
-          <?php endforeach; ?>
-        </div>
+        <?php endforeach; ?>
       </div>
-    </section>
-  
+    </div>
+  </section>
+
 <?php endif; ?>
 <!-- /posts similaires -->

@@ -47,15 +47,26 @@ class MainController extends CoreController {
      *
      * @return void
      */
-    public function blogList() {
+    public function blogList($params) {
 
         // Récup la liste des posts en db
-        $posts = $this->postManager->findAllPostsPublished();
+        $pagination = $this->postManager->findAllPostsPublishedAndPaginated(6, $params['page']);
+
+        $results = $pagination->getCurrentPageResults();
+
+        $posts = [];
+
+        // On parcourt le tableau de résultat et on génére l'objet PostModel
+        foreach ($results as $row) {
+            $postId = $row['id'];
+            $posts[$postId] = $this->postManager->buildObject($row);
+        }
 
         // On affiche le template
         echo $this->templates->render('blog/list', [
             'title' => 'Blog', 
-            'posts' => $posts
+            'posts' => $posts,
+            'pagination' => $pagination
         ]);
         
     }

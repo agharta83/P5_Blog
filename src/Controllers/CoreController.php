@@ -14,9 +14,9 @@ use MyBlog\Models\UserModel;
 abstract class CoreController {
     
     /**
-     * Constructeur
+     * CoreController constructor
      *
-     * @param Object $router
+     * @param \AltoRouter $router
      */
     public function __construct($router) {
 

@@ -25,7 +25,7 @@ abstract class Database {
     /**
      * Récupére la connexion à la database
      *
-     * @return void
+     * @return \PDO
      */
     private function getConnexion() {
 
@@ -58,9 +58,9 @@ abstract class Database {
     /**
      * Vérifie si une connexion existe
      *
-     * @return object
+     * @return \PDO
      */
-    private function checkConnexion() {
+    protected function checkConnexion() {
 
         if($this->connexion === null) {
             return $this->getConnexion();
@@ -74,7 +74,7 @@ abstract class Database {
      *
      * @param string $sql
      * @param mixed $parameters
-     * @return object
+     * @return object|integer
      */
     protected function createQuery($sql, $parameters = null) {
 

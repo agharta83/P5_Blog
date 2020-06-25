@@ -4,45 +4,19 @@
         <div class="col-12 text-center">
           <h2 class="section-title text-white mb-5">Blogs</h2>
         </div>
+        <?php foreach($posts as $post) : ?>
         <div class="col-lg-4 col-sm-6 mb-4 mb-lg-0">
           <article class="card shadow">
-            <img class="rounded card-img-top" src="<?=$basePath?>/public/images/blog/post-3.jpg" alt="post-thumb">
+            <img class="rounded card-img-top" src="<?=$basePath?>/public/images/uploads/" . <?= $post->getImg(); ?> alt="post-thumb">
             <div class="card-body">
-              <h4 class="card-title"><a class="text-dark" href="blog-single.html">Amazon increase income 1.5 Million</a>
+              <h4 class="card-title"><a class="text-dark" href="blog-single.html"><?= $post->getTitle(); ?></a>
               </h4>
-              <p class="cars-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                incididunt ut labore et
-                dolore magna aliqua.</p>
-              <a href="blog-single.html" class="btn btn-xs btn-primary">Read More</a>
+              <p class="cars-text"><?= $post->getChapo(); ?></p>
+              <a href="<?= $router->generate('blog_read', ['slug' => $post->getSlug()]); ?>" class="btn btn-xs btn-primary">Lire</a>
             </div>
           </article>
         </div>
-        <div class="col-lg-4 col-sm-6 mb-4 mb-lg-0">
-          <article class="card shadow">
-            <img class="rounded card-img-top" src="<?=$basePath?>/public/images/blog/post-4.jpg" alt="post-thumb">
-            <div class="card-body">
-              <h4 class="card-title"><a class="text-dark" href="blog-single.html">Amazon increase income 1.5 Million</a>
-              </h4>
-              <p class="cars-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                incididunt ut labore et
-                dolore magna aliqua.</p>
-              <a href="blog-single.html" class="btn btn-xs btn-primary">Read More</a>
-            </div>
-          </article>
-        </div>
-        <div class="col-lg-4 col-sm-6 mb-4 mb-lg-0">
-          <article class="card shadow">
-            <img class="rounded card-img-top" src="<?=$basePath?>/public/images/blog/post-2.jpg" alt="post-thumb">
-            <div class="card-body">
-              <h4 class="card-title"><a class="text-dark" href="blog-single.html">Amazon increase income 1.5 Million</a>
-              </h4>
-              <p class="cars-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                incididunt ut labore et
-                dolore magna aliqua.</p>
-              <a href="blog-single.html" class="btn btn-xs btn-primary">Read More</a>
-            </div>
-          </article>
-        </div>
+        <?php endforeach; ?>
       </div>
     </div>
     <!-- bg shapes -->

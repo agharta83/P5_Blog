@@ -10,7 +10,12 @@ use MyBlog\Services\Uploader;
 class AdminController extends CoreController
 {
 
-    public function __construct($router) 
+    /**
+     * Admincontroller Constructor
+     *
+     * @param \AltoRouter $router
+     */
+    public function __construct(\AltoRouter $router) 
     {
         // Execution du constructeur parent
         parent::__construct($router);
@@ -25,8 +30,9 @@ class AdminController extends CoreController
     /**
      * Permet d'accéder à la page d'accueil de l'administration et récupére les infos à afficher :
      * - le nb de post publiés
-     * TODO le nb de commentaires
-     * TODO le nb d'utilisateur
+     * - le nb de commentaires validés
+     * - le nb de commentaires à valider
+     * - le nb d'utilisateur
      * TODO le nb post en attente de publication
      * TODO Notif : Comments en attente de validation, post le plus lus, post le plus commenté
      *
@@ -62,22 +68,40 @@ class AdminController extends CoreController
     }
 
     /**
-     * Permet d'afficher la liste de tous les posts dans l'administration
+     * Permet d'afficher la liste de tous les posts avec sa pagination
      *
      * @return void
      */
-    public function list()
+    public function list($params) 
     {
 
-        // Récup la liste des posts en db
-        $posts = $this->postManager->findAllPosts();
-
         $headTitle = 'Dashboard / Posts';
+
+        try {
+            // Récup la liste des posts en db
+            $pagination = $this->postManager->findAllPostsPaginated(6, $params['page']);
+        } catch (\Exception $e) {
+            // Gére le cas ou l'admin à supprimer le dernier article d'une page, 
+            // On renvoie sur la derniére page
+            $page = $params['page'] - 1;
+            $pagination = $this->postManager->findAllPostsPaginated(6, $page);
+        }
+
+        $results = $pagination->getCurrentPageResults();
+
+        $posts = [];
+
+        // On parcourt le tableau de résultat et on génére l'objet PostModel
+        foreach ($results as $row) {
+            $postId = $row['id'];
+            $posts[$postId] = $this->postManager->buildObject($row);
+        }
 
         // On affiche le template
         echo $this->templates->render('admin/posts', [
             'title' => $headTitle,
-            'posts' => $posts
+            'posts' => $posts,
+            'pagination' => $pagination
         ]);
     }
 
@@ -108,8 +132,11 @@ class AdminController extends CoreController
 
                 $post = $this->postManager->preview($_POST, $_FILES);
 
+                // Récup des posts similaires
+                $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getId());
+
                 // On affiche le template
-                echo $this->templates->render('blog/read', ['post' => $post]);
+                echo $this->templates->render('blog/read', ['post' => $post, 'similarPosts' => $similarPosts]);
             }
         } else {
             // On affiche la page de création d'un nouveau post
@@ -127,7 +154,7 @@ class AdminController extends CoreController
      * Permet d'afficher la page d'un post dans la partie administration
      * TODO implémenter un preview
      *
-     * @param mixed $params
+     * @param array $params
      * @return void
      */
     public function read($params)
@@ -146,26 +173,27 @@ class AdminController extends CoreController
     /**
      * Supprime un post à partir de son Id
      *
-     * @param mixed $params
+     * @param array $params
      * @return void
      */
     public function delete($params)
     {
-
+        //var_dump($params);die();
         // Id du post à supprimer
         $id = $params['id'];
+        $currentPage = $params['page'];
 
         // On récup et supprime le post
         $this->postManager->delete($id);
 
         // On redirige
-        $this->redirect('admin_blog_list');
+        $this->redirect('admin_blog_list', ['page' => $currentPage]);
     }
 
     /**
      * Met à jour un post en BDD
      *
-     * @param mixed $params
+     * @param array $params
      * @return void
      */
     public function update($params)
@@ -173,6 +201,9 @@ class AdminController extends CoreController
 
         // Id du post à éditer
         $id = $params['id'];
+
+        // Page courante
+        $currentPage = $params['page'];
 
         // On récupére le post
         $post = $this->postManager->find($id);
@@ -184,14 +215,15 @@ class AdminController extends CoreController
             $this->postManager->updatePost($id, $_POST, $_FILES);
 
             // On redirige
-            $this->redirect('admin_blog_list');
+            $this->redirect('admin_blog_list', ['page' => $currentPage]);
         } else {
             // On redirige
             $headTitle = 'Dashboard / Edition de post';
 
             echo $this->templates->render('admin/update_post', [
                 'title' => $headTitle,
-                'post' => $post
+                'post' => $post,
+                'page' => $currentPage
             ]);
         }
     }
@@ -199,7 +231,7 @@ class AdminController extends CoreController
     /**
      * Permet d'upload l'image
      *
-     * @param Globals $files
+     * @param array $files
      * @return void
      */
     private function upload($files)
@@ -225,6 +257,7 @@ class AdminController extends CoreController
     /**
      * Permet de vérifier si il y a un fichier à upload
      *
+     * @param array $files
      * @return Exception
      */
     private function checkFiles($files)
@@ -240,41 +273,70 @@ class AdminController extends CoreController
         }
     }
 
-    public function listComments()
+    /**
+     * Récupére la liste des commentaires paginées et redirige vers la liste des commentaires
+     *
+     * @param array $params
+     * @return void
+     */
+    public function listComments($params)
     {
         $headTitle = 'Dashboard / Comments';
 
-        $comments = $this->commentManager->findAllComments();
+        $pagination = $this->commentManager->findAllCommentsPaginated(5, $params['page']);
+
+        $results = $pagination->getCurrentPageResults();
+
+        $comments = [];
+        
+        // On parcourt le tableau de résultat et on génére l'objet PostModel
+        foreach ($results as $row) {
+            $commentId = $row['id'];
+            $comments[$commentId] = $this->commentManager->buildObject($row);
+        }
 
         echo $this->templates->render('admin/comments', [
             'title' => $headTitle,
-            'comments' => $comments
+            'comments' => $comments,
+            'pagination' => $pagination
         ]);
     }
 
+    /**
+     * Supprimer un commentaire et redirige vers la liste des commentaires
+     *
+     * @param array $params
+     * @return void
+     */
     public function deleteComment($params)
     {
 
-    // Id du commentaire à supprimer
-    $id = $params['id'];
+        // Id du commentaire à supprimer
+        $id = $params['id'];
 
-    // On récup et supprime le commentaire
-    $this->commentManager->delete($id);
+        // On récup et supprime le commentaire
+        $this->commentManager->delete($id);
 
-    // On redirige
-    $this->redirect('comments_list');
+        // On redirige
+        $this->redirect('comments_list');
 
     }
 
+    /**
+     * Valide un commentaire et redirige vers la liste des commentaires
+     *
+     * @param array $params
+     * @return void
+     */
     public function validComment($params)
     {
-            // Id du commentaire à supprimer
-    $id = $params['id'];
+        // Id du commentaire à supprimer
+        $id = $params['id'];
 
-    // On récup et supprime le commentaire
-    $this->commentManager->valid($id);
+        // On récup et supprime le commentaire
+        $this->commentManager->valid($id);
 
-    // On redirige
-    $this->redirect('comments_list');
+        // On redirige
+        $this->redirect('comments_list');
     }
 }

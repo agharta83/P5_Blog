@@ -10,18 +10,24 @@ class MainController extends CoreController {
     /**
      * Retourne la page d'accueil
      *
-     * @return view
+     * @return void
      */
     public function home() {
+        // Recup des derniers posts publiés
+        $posts = $this->postManager->findLastPublishedPost();
+
         // Render template
         $headTitle = 'Audrey César | Portfolio Blog';
-        echo $this->templates->render('main/home', ['title' => $headTitle]);
+        echo $this->templates->render('main/home', [
+            'title' => $headTitle,
+            'posts' => $posts
+        ]);
     }
 
     /**
      * Retourne la page "About"
      *
-     * @return view
+     * @return void
      */
     public function about() {
         echo $this->templates->render('main/about', ['title' => 'about']);
@@ -30,7 +36,7 @@ class MainController extends CoreController {
     /**
      * Retourne la page "Contact"
      *
-     * @return view
+     * @return void
      */
     public function contact() {
         echo $this->templates->render('main/contact', ['title' => 'contact']);
@@ -39,17 +45,28 @@ class MainController extends CoreController {
     /**
      * Affiche la page "Blog" avec la liste des posts publiés
      *
-     * @return view
+     * @return void
      */
-    public function blogList() {
+    public function blogList($params) {
 
         // Récup la liste des posts en db
-        $posts = $this->postManager->findAllPostsPublished();
+        $pagination = $this->postManager->findAllPostsPublishedAndPaginated(6, $params['page']);
+
+        $results = $pagination->getCurrentPageResults();
+
+        $posts = [];
+
+        // On parcourt le tableau de résultat et on génére l'objet PostModel
+        foreach ($results as $row) {
+            $postId = $row['id'];
+            $posts[$postId] = $this->postManager->buildObject($row);
+        }
 
         // On affiche le template
         echo $this->templates->render('blog/list', [
             'title' => 'Blog', 
-            'posts' => $posts
+            'posts' => $posts,
+            'pagination' => $pagination
         ]);
         
     }
@@ -57,8 +74,8 @@ class MainController extends CoreController {
     /**
      * Affiche la page d'un article
      *
-     * @param mixed $params
-     * @return view
+     * @param array $params
+     * @return void
      */
     public function blogRead($params) {
 
@@ -69,14 +86,18 @@ class MainController extends CoreController {
         $post = $this->postManager->findBySlug($slug);
         // Recup des commentaires
         $comments = $this->commentManager->findValidCommentsForPost($post->getId());
-
+        //var_dump($comments); die();
+        // Recup du nombre de commentaires
         $nbComments = $this->commentManager->countNbCommentsForPost($post->getId());
+        // Récup des posts similaires
+        $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getId());
 
         // On affiche le template
         echo $this->templates->render('blog/read', [
             'post' => $post,
             'comments' => $comments,
-            'nbComments' => $nbComments
+            'nbComments' => $nbComments,
+            'similarPosts' => $similarPosts
         ]);
     }
 
@@ -92,7 +113,7 @@ class MainController extends CoreController {
     /**
      * Affiche la page d'un projet
      *
-     * @param mixed $params
+     * @param array $params
      * @return void
      */
     public function projectRead($params) {
@@ -102,6 +123,11 @@ class MainController extends CoreController {
         echo $this->templates->render('portfolio/read', ['id' => $projectId]);
     }
 
+    /**
+     * Ajoute un commentaire ainsi qu'un utilisateur et redirige sur le post commenté
+     *
+     * @return void
+     */
     public function addComment() {
 
         if (!empty($_POST)) {
@@ -123,7 +149,7 @@ class MainController extends CoreController {
         }
     }
 
-        /**
+    /**
      * Connexion à l'administration
      *
      * @return Object|Array UserModel|Errors

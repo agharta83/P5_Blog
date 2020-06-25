@@ -21,7 +21,7 @@ class Application {
         $this->router->map('GET', '/about', ['MainController', 'about'], 'about');
         $this->router->map('GET', '/contact', ['MainController', 'contact'], 'contact');
         // Blog
-        $this->router->map('GET', '/blog', ['MainController', 'blogList'], 'blog_list');
+        $this->router->map('GET', '/blog/[:page]', ['MainController', 'blogList'], 'blog_list');
         $this->router->map('GET', '/blog/[:slug]', ['MainController', 'blogRead'], 'blog_read');
         $this->router->map('POST', '/comment/add', ['MainController', 'addComment'], 'add_comment');
         // Portfolio
@@ -35,17 +35,15 @@ class Application {
         // Dashboard
         $this->router->map('GET', '/dashboard', ['AdminController', 'home'], 'dashboard');
         // Gestion des posts
-        $this->router->map('GET', '/dashboard/posts', ['AdminController', 'list'], 'admin_blog_list');
+        $this->router->map('GET', '/dashboard/posts/[:page]', ['AdminController', 'list'], 'admin_blog_list');
         $this->router->map('GET|POST', '/dashboard/posts/new', ['AdminController', 'createNewPost'], 'new_post');
         $this->router->map('GET', '/dashboard/posts/read/[:slug]', ['AdminController', 'read'], 'read_post');
-        $this->router->map('GET', '/dashboard/posts/[i:id]/delete', ['AdminController', 'delete'], 'delete_post');
-        $this->router->map('GET|POST', '/dashboard/posts/update/[i:id]', ['AdminController', 'update'], 'update_post');
+        $this->router->map('GET', '/dashboard/posts/[i:id]/delete/[:page]', ['AdminController', 'delete'], 'delete_post');
+        $this->router->map('GET|POST', '/dashboard/posts/update/[i:id]/[:page]', ['AdminController', 'update'], 'update_post');
         // Gestion des commentaires
-        $this->router->map('GET', '/dashboard/comments', ['AdminController', 'listComments'], 'comments_list');
+        $this->router->map('GET', '/dashboard/comments/[:page]', ['AdminController', 'listComments'], 'comments_list');
         $this->router->map('GET', '/dashboard/comments/[i:id]/delete', ['AdminController', 'deleteComment'], 'delete_comment');
         $this->router->map('GET', '/dashboard/comments/[i:id]/valid', ['AdminController', 'validComment'], 'valid_comment');
-
-        
 
     }
 

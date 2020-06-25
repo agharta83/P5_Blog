@@ -3,6 +3,8 @@
 namespace MyBlog\Managers;
 
 use MyBlog\Models\CommentModel;
+use MyBlog\Services\PaginatedQuery;
+use Pagerfanta\Pagerfanta;
 
 class CommentManager extends Database
 {
@@ -12,7 +14,7 @@ class CommentManager extends Database
      * @param strint|int|bool $row
      * @return object CommentModel
      */
-    private function buildObject($row)
+    public function buildObject($row)
     {
         $comment = new CommentModel();
 
@@ -27,7 +29,13 @@ class CommentManager extends Database
         return $comment;
     }
 
-    public function findValidCommentsForPost($postId)
+    /**
+     * Retourne les commentaires validés par post
+     *
+     * @param integer $postId
+     * @return CommentModel[]
+     */
+    public function findValidCommentsForPost(int $postId)
     {
         // Construction de la requête
         $sql = '
@@ -41,20 +49,30 @@ class CommentManager extends Database
         $parameters = [':postId' => $postId];
         $result = $this->createQuery($sql, $parameters);
 
-        $comments = [];
+        if ($result !== null) {
+            $comments = [];
 
-        // On parcourt le tableau de résultat et on génére l'objet PostModel
-        foreach ($result as $row) {
-            $commentId = $row['id'];
-            $comments[$commentId] = $this->buildObject($row);
+            // On parcourt le tableau de résultat et on génére l'objet PostModel
+            foreach ($result as $row) {
+                $commentId = $row['id'];
+                $comments[$commentId] = $this->buildObject($row);
+            }
+
+            return $comments;
         }
 
         $result->closeCursor();
 
-        return $comments;
+        return false;
     }
 
-    public function countNbCommentsForPost($postId)
+    /**
+     * Retourne le nombre de commentaires par post
+     *
+     * @param integer $postId
+     * @return integer
+     */
+    public function countNbCommentsForPost(int $postId)
     {
         // Construction de la requête
         $sql = '
@@ -71,7 +89,13 @@ class CommentManager extends Database
         return $result->fetchColumn();
     }
 
-    public function findCommentWhoHasAnswer($commentId)
+    /**
+     * Récupére un commentaire associé à un autre commentaire
+     *
+     * @param integer $commentId
+     * @return false|CommentModel
+     */
+    public function findCommentWhoHasAnswer(int $commentId)
     {
         // Construction de la requête
         $sql = '
@@ -95,8 +119,13 @@ class CommentManager extends Database
         return false;
     }
 
-    // Le commentaire à une réponse
-    public function thisCommentHasAnswer($commentId)
+    /**
+     * Retourne un commentaire associé à un autre commentaire
+     *
+     * @param integer $commentId
+     * @return bool|CommentModel
+     */
+    public function thisCommentHasAnswer(int $commentId)
     {
         if ($respondTo = $this->findCommentWhoHasAnswer($commentId)) {
             return $respondTo;
@@ -105,6 +134,13 @@ class CommentManager extends Database
         return false;
     }
 
+    /**
+     * Ajoute un commentaire en BDD
+     *
+     * @param array $post
+     * @param UserModel $user
+     * @return void
+     */
     public function addComment($post, $user)
     {
         // Initialisation
@@ -147,6 +183,11 @@ class CommentManager extends Database
         $this->createQuery($sql, $parameters);
     }
 
+    /**
+     * Retourne le nombre de commentaires validés
+     *
+     * @return integer
+     */
     public function countNbCommentsValidate()
     {
         // Construction de la requête
@@ -162,6 +203,11 @@ class CommentManager extends Database
         return $result->fetchColumn();
     }
 
+    /**
+     * Retourne le nombre de commentaires à valider
+     *
+     * @return integer
+     */
     public function countNbCommentsToValidate()
     {
         // Construction de la requête
@@ -177,27 +223,22 @@ class CommentManager extends Database
         return $result->fetchColumn();
     }
 
-    public function findAllComments()
+    /**
+     * Retourne la liste des commentaires paginés
+     *
+     * @param integer $perPage
+     * @param integer $currentPage
+     * @return Pagerfanta
+     */
+    public function findAllCommentsPaginated(int $perPage, int $currentPage)
     {
-        // Construction de la requête
-        $sql = '
-            SELECT * FROM comment
-        ';
+        $query = new PaginatedQuery(
+            $this->checkConnexion(),
+            'SELECT * FROM comment',
+            'SELECT COUNT(id) FROM comment'
+        );
 
-        // Traitement de la requête
-        $result = $this->createQuery($sql);
-
-        $comments = [];
-
-        // On parcourt le tableau de résultat et on génére l'objet PostModel
-        foreach ($result as $row) {
-            $commentId = $row['id'];
-            $comments[$commentId] = $this->buildObject($row);
-        }
-
-        $result->closeCursor();
-
-        return $comments;
+        return (new Pagerfanta($query))->setMaxPerPage($perPage)->setCurrentPage($currentPage);
     }
 
     /**
@@ -217,7 +258,13 @@ class CommentManager extends Database
         return $author->getFirstname() . ' ' . $author->getLastname();
     }
 
-    public function delete($id)
+    /**
+     * Supprime un commentaire
+     *
+     * @param integer $id
+     * @return void
+     */
+    public function delete(int $id)
     {
 
         // On construit la requête
@@ -229,7 +276,13 @@ class CommentManager extends Database
 
     }
 
-    public function valid($id)
+    /**
+     * Valide un commentaire
+     *
+     * @param integer $id
+     * @return void
+     */
+    public function valid(int $id)
     {
         // On construit la requête
         $sql = 'UPDATE comment SET is_valid = 1 WHERE id = :id';

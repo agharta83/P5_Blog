@@ -36,7 +36,7 @@ if (!empty($errors)) {
   <!-- /portfolio -->
 
   <!-- blogs -->
-  <?php $this->insert('partials/home/blogs'); ?>
+  <?php $this->insert('partials/home/blogs', ['posts' => $posts]); ?>
   <!-- /blog -->
 
   <!-- contact -->

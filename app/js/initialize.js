@@ -43,6 +43,36 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Comment list filter valid or not
+    if (window.location.pathname == '/opc/P5_Blog/dashboard/comments') {
+        $('input[name="NotValid"]').on('change', function (evt) {
+            var input = evt.currentTarget;
+            if (input.checked) {
+                var rows = $('tr[data-groups]');
+                
+                rows.each(function (index, row) {
+                    
+                    if (row.getAttribute("data-groups") == "1") {
+                        $(this).hide();
+                    }
+                });
+            }
+        });
+
+        $('input[name="all"]').on('change', function (evt) {
+            var input = evt.currentTarget;
+            if (input.checked) {
+                var rows = $('tr[data-groups]');
+                
+                rows.each(function (index, row) {
+                    $(this).show();
+                    
+                });
+            }
+        });
+    }
+    
     
 
     // Sticky elements (pinning)

@@ -13,7 +13,7 @@
                 </small>
               </p>
               <div class="post-footer d-flex justify-content-between">
-                <a href="<?= $router->generate('blog_read', ['slug' => $post->getSlug()]); ?>" class="btn btn-xs btn-primary">Lire la suite</a>
+                <a href="<?= $router->generate('blog_read', ['page' => $pagination->getCurrentPage(), 'slug' => $post->getSlug()]); ?>" class="btn btn-xs btn-primary">Lire la suite</a>
                 <span class="badge badge-secondary d-table px-3 py-2"><?= $post->getCategory()?></span>
               </div>
               

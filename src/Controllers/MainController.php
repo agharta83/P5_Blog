@@ -50,7 +50,7 @@ class MainController extends CoreController {
     public function blogList($params) {
 
         // Récup la liste des posts en db
-        $pagination = $this->postManager->findAllPostsPublishedAndPaginated(6, $params['page']);
+        $pagination = $this->postManager->findAllPostsPublishedAndPaginated(6, (int)$params['page']);
 
         $results = $pagination->getCurrentPageResults();
 
@@ -86,7 +86,6 @@ class MainController extends CoreController {
         $post = $this->postManager->findBySlug($slug);
         // Recup des commentaires
         $comments = $this->commentManager->findValidCommentsForPost($post->getId());
-        //var_dump($comments); die();
         // Recup du nombre de commentaires
         $nbComments = $this->commentManager->countNbCommentsForPost($post->getId());
         // Récup des posts similaires
@@ -97,7 +96,8 @@ class MainController extends CoreController {
             'post' => $post,
             'comments' => $comments,
             'nbComments' => $nbComments,
-            'similarPosts' => $similarPosts
+            'similarPosts' => $similarPosts,
+            'currentPage' => $params['page']
         ]);
     }
 

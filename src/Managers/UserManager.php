@@ -3,6 +3,9 @@
 namespace MyBlog\Managers;
 
 use MyBlog\Models\UserModel;
+use MyBlog\Services\PaginatedQuery;
+use Pagerfanta\Pagerfanta;
+use Swift;
 
 /**
  * Permet de manager UserModel
@@ -17,7 +20,7 @@ class UserManager extends Database
      * @param strint|int|bool $row
      * @return object UserModel
      */
-    private function buildObject($row)
+    public function buildObject($row)
     {
 
         $user = new UserModel();
@@ -29,8 +32,8 @@ class UserManager extends Database
         $user->setStatut_user($row['statut_user'] ?? 1);
         $user->setUser_role($row['user_role'] ?? UserModel::USER);
         $user->setCreated_on($row['created_on'] ?? null);
-        $user->setFirstname($row['firstname']);
-        $user->setLastname($row['lastname']);
+        $user->setFirstname($row['firstname'] ?? null);
+        $user->setLastname($row['lastname'] ?? null);
         $user->setAvatar($row['avatar'] ?? null);
 
         return $user;
@@ -253,4 +256,238 @@ class UserManager extends Database
         // Return les résultats
         return $result->fetchColumn();
     }
+
+    /**
+     * Retourne la liste des utilisateurs avec la pagination
+     *
+     * @param integer $perpage
+     * @param integer $currentPage
+     * @return Pagerfanta
+     */
+    public function findAllUsersPaginated(int $perPage, int $currentPage)
+    {
+        $query = new PaginatedQuery(
+            $this->checkConnexion(),
+            'SELECT * FROM user ORDER BY created_on DESC',
+            'SELECT COUNT(id) FROM user'
+        );
+
+        return (new Pagerfanta($query))->setMaxPerPage($perPage)->setCurrentPage($currentPage);
+    }
+
+    /**
+     * Desactive un utilisateur
+     *
+     * @param integer $id
+     * @return void
+     */
+    public function disable(int $id)
+    {
+        // On construit la requête
+        $sql = 'UPDATE user SET statut_user = 0 WHERE id = :id';
+
+        // Traitement de la requête
+        $parameters = [':id' => $id];
+        $this->createQuery($sql, $parameters);
+    }
+
+    /**
+     * Activation d'un utilisateur
+     *
+     * @param integer $id
+     * @return void
+     */
+    public function enable(int $id)
+    {
+        // On construit la requête
+        $sql = 'UPDATE user SET statut_user = 1 WHERE id = :id';
+
+        // Traitement de la requête
+        $parameters = [':id' => $id];
+        $this->createQuery($sql, $parameters);
+    }
+
+    /**
+     * Rétrograde l'utilisateur
+     *
+     * @param integer $id
+     * @return void
+     */
+    public function downgrade(int $id)
+    {
+        // On construit la requête
+        $sql = 'UPDATE user SET user_role = :user WHERE id = :id';
+
+        // Traitement de la requête
+        $parameters = [':id' => $id, ':user' => UserModel::USER];
+        $this->createQuery($sql, $parameters);
+    }
+
+    /**
+     * Création d'un nouvel utilisateur et enregistrement en BDD
+     *
+     * @param array $post
+     * @return void
+     */
+    public function createUser($post)
+    {
+
+       // Initialisation
+       $post['created_on'] = date('Y-m-d H:i:s');
+       $post['password'] = password_hash($this->generatePassword(8), PASSWORD_DEFAULT);
+       // TODO Gérer l'envoi pas mail du mot de passe
+
+       $user = $this->buildObject($post);
+
+       $sql = '
+           INSERT INTO user (
+               id,
+               login,
+               password,
+               email,
+               statut_user,
+               user_role,
+               created_on,
+               firstname,
+               lastname,
+               avatar
+           ) VALUES (
+               :id,
+               :login,
+               :password,
+               :email,
+               :statut_user,
+               :user_role,
+               :created_on,
+               :firstname,
+               :lastname,
+               :avatar
+           )
+       ';
+
+       $parameters = [
+           ':id' => $user->getId(),
+           ':login' => $user->getLogin(),
+           ':password' => $user->getPassword(),
+           ':email' => $user->getEmail(),
+           ':statut_user' => $user->getStatut_user(),
+           ':user_role' => $user->getUser_role(),
+           ':created_on' => $user->getCreated_on(),
+           ':firstname' => $user->getFirstname(),
+           ':lastname' => $user->getLastname(),
+           ':avatar' => $user->getAvatar()
+       ];
+
+       $this->createQuery($sql, $parameters);
+    }
+
+    /**
+     * Génére un mot de passe
+     *
+     * @param integer $nbChar
+     * @return string
+     */
+    private function generatePassword(int $nbChar)
+    {
+        return substr(str_shuffle(
+            'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 1,
+            $nbChar);
+    }
+
+    /**
+     * Met à jour en BDD les enregistrements d'un utilisateur avec les informations saisies dans le formulaire
+     *
+     * @param integer $id
+     * @param array $post
+     * @param array $files
+     * @return void
+     */
+    public function updateUser($id, $post, $files)
+    {
+        $user = $this->findUserById($id);
+
+        $user->setLogin($post['login']);
+        $user->setEmail($post['email']);
+        $user->setPassword(password_hash($post['password'], PASSWORD_DEFAULT));
+        $user->setFirstname($post['firstname']);
+        $user->setLastname($post['lastname']);
+        if (isset($files) && !empty($files)) {
+            $user->setAvatar($files['files']['name'][0]);
+        }
+        
+        // On enregistre
+        $this->save($user);
+    }
+
+    /**
+     * Modifie les enregistrements liés à un utilisateur
+     *
+     * @param UserModel $user
+     * @return void
+     */
+    private function save(UserModel $user)
+    {
+        // On crée la requête SQL
+        $sql = "
+                REPLACE INTO user (
+                    id,
+                    login,
+                    password,
+                    email,
+                    statut_user,
+                    user_role,
+                    created_on,
+                    firstname,
+                    lastname,
+                    avatar
+                )
+                VALUES (
+                    :id,
+                    :login,
+                    :password,
+                    :email,
+                    :statut_user,
+                    :user_role,
+                    :created_on,
+                    :firstname,
+                    :lastname,
+                    :avatar
+                )";
+
+        // Traitemennt de la requete
+        $parameters = [
+            ':login' => $user->getLogin(),
+            ':password' => $user->getPassword(),
+            ':email' => $user->getEmail(),
+            ':statut_user' => $user->getStatut_user(),
+            ':user_role' => $user->getUser_role(),
+            ':created_on' => $user->getCreated_on(),
+            ':firstname' =>$user->getFirstname(),
+            ':lastname' => $user->getLastname(),
+            ':avatar' => $user->getAvatar(),
+            ':id' => $user->getId()
+        ];
+        
+        $this->createQuery($sql, $parameters);
+    }
+
+    private function findUserById(int $id)
+    {
+        $sql = 'SELECT * FROM user WHERE id = :id';
+
+        // Traitement de la requête
+        $parameters = [':id' => $id];
+        $result = $this->createQuery($sql, $parameters);
+
+        $user = $result->fetch();
+
+        if ($user) {
+            $result->closeCursor();
+
+            return $this->buildObject($user);
+        }
+
+        return false;
+    }
+
 }

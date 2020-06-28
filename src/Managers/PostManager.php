@@ -71,7 +71,7 @@ class PostManager extends Database
     {
         $query = new PaginatedQuery(
             $this->checkConnexion(),
-            'SELECT * FROM post',
+            'SELECT * FROM post ORDER BY created_on DESC',
             'SELECT COUNT(id) FROM post'
         );
 

@@ -8,7 +8,8 @@
   'post' => $post ?? null,
   'comments' => $comments ?? null,
   'nbComments' => $nbComments ?? null,
-  'similarPosts' => $similarPosts ?? null
+  'similarPosts' => $similarPosts ?? null,
+  'currentPage' => $currentPage ?? null
 ]) ?>
 
 <!-- contact -->

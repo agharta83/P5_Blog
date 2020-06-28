@@ -141,7 +141,7 @@
                 <h4 class="card-title"><a class="text-dark" href="blog-single.html"><?= $similarPost->getTitle(); ?></a>
                 </h4>
                 <p class="cars-text"><?= $similarPost->getChapo(); ?></p>
-                <a href="<?= $router->generate('blog_read', ['slug' => $similarPost->getSlug()]); ?>" class="btn btn-xs btn-primary">Lire</a>
+                <a href="<?= $router->generate('blog_read', ['page' => $currentPage, 'slug' => $similarPost->getSlug()]); ?>" class="btn btn-xs btn-primary">Lire</a>
               </div>
             </article>
           </div>

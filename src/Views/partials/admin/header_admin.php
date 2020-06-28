@@ -24,7 +24,7 @@
             <a class="nav-link" href="<?= $router->generate('comments_list', ['page' => '1']); ?>">Commentaires</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="">Utilisateurs</a>
+            <a class="nav-link" href="<?= $router->generate('users_list', ['page' => '1']); ?>">Utilisateurs</a>
           </li>
           <?php if ($user->isAdmin()): ?>
             <li class="nav-item">

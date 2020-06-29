@@ -471,6 +471,12 @@ class UserManager extends Database
         $this->createQuery($sql, $parameters);
     }
 
+    /**
+     * Retourne un utilisateur à partir de son Id
+     *
+     * @param integer $id
+     * @return UserModel
+     */
     private function findUserById(int $id)
     {
         $sql = 'SELECT * FROM user WHERE id = :id';
@@ -488,6 +494,25 @@ class UserManager extends Database
         }
 
         return false;
+    }
+
+    /**
+     * Réinitilisation du mot de passe
+     *
+     * @param string $password
+     * @param string $login
+     * @return void
+     */
+    public function resetPassword($password, $login)
+    {
+        // Hash du password
+        $password = password_hash($password, PASSWORD_DEFAULT);
+
+        $sql = 'UPDATE user SET password = :password WHERE login = :login';
+
+        $parameters = [':password' => $password, ':login' => $login];
+
+        $this->createQuery($sql, $parameters);
     }
 
 }

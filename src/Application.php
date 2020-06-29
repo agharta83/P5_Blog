@@ -30,6 +30,7 @@ class Application {
         // Connexion
         $this->router->map('GET|POST', '/login', ['MainController', 'login'], 'login');
         $this->router->map('GET', '/logout', ['MainController', 'logout'], 'logout');
+        $this->router->map('POST', '/resetPassword', ['MainController', 'resetPassword'], 'reset_password');
 
         /** Administration */
         // Dashboard

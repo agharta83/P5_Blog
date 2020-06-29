@@ -207,5 +207,34 @@ class MainController extends CoreController {
 
         $this->redirect('home');
     }
+
+    // TODO Faire une vérif en ajax
+    /**
+     * Fait les vérifications et appelle la méthode du manager pour réinitialiser le mot de passe
+     *
+     * @return void
+     */
+    public function resetPassword()
+    {
+        if (isset($_POST) && !empty($_POST)) {
+            $user = $this->userManager->findByLogin($_POST['login']);
+
+            if (!$user) {
+                $errors[] = "Utilisateur inconnu";
+            } else {
+                // On regarde si les mots de passe sont identiques
+                if ($_POST['password'] === $_POST['password2']) {
+                    // On enregistre le nouveau mot de passe
+                    $this->userManager->resetPassword($_POST['password'], $_POST['login']);
+                } else {
+                    $errors[] = "Les mots de passe ne sont pas identiques";
+                }
+
+                // On redirige l'utilisateur
+                if (count($errors) === 0) $this->redirect('dashboard');
+            }
+            
+        }
+    }
     
 }

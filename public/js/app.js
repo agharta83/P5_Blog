@@ -317,7 +317,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  ; //someFunction();
+  ;
+  $('#link_reset_password').click(function (e) {
+    $('#login').modal('toggle');
+  }); //someFunction();
 });
 });
 

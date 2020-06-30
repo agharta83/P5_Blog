@@ -31,6 +31,8 @@ class Application {
         $this->router->map('GET|POST', '/login', ['MainController', 'login'], 'login');
         $this->router->map('GET', '/logout', ['MainController', 'logout'], 'logout');
         $this->router->map('POST', '/resetPassword', ['MainController', 'resetPassword'], 'reset_password');
+        // Contact form
+        $this->router->map('POST', '/contactForm', ['MainController', 'contactForm'], 'contact_form');
 
         /** Administration */
         // Dashboard

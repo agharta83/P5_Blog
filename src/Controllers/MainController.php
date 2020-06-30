@@ -169,8 +169,7 @@ class MainController extends CoreController {
             } else {
                 // On teste le mot de passe
                 $hash = $user->getPassword();
-                //$isValid = password_verify($_POST['password'], $hash); TODO A modifier lorsqu'il y aura la gestion des users
-                $isValid = $_POST['password'] == $hash ? true : false;
+                $isValid = password_verify($_POST['password'], $hash); // TODO A tester
 
                 if (!$isValid) {
                     $errors[] = "Mot de passe incorrect";
@@ -234,6 +233,31 @@ class MainController extends CoreController {
                 if (count($errors) === 0) $this->redirect('dashboard');
             }
             
+        }
+    }
+
+    public function contactForm()
+    {
+        //var_dump($_POST); die();
+
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $message = $_POST['message'];
+
+        $errors = [];
+
+        $errors = isset($name) && empty($name) ? 'Veuillez saisir votre nom' : false;
+        $errors = isset($email) && empty($email) ? 'Veuillez saisir une adresse mail valide' : null;
+        $errors = isset($message) && empty($message) ? 'Veuillez saisir un message' : null;
+
+        if (!$errors) {
+            
+            $this->userManager->sendEmail($name, $email, $message);
+
+            $message = 'Le formulaire à bien été envoyé.';
+
+            $this->home();
+
         }
     }
     

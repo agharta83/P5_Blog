@@ -515,4 +515,22 @@ class UserManager extends Database
         $this->createQuery($sql, $parameters);
     }
 
+    public function sendEmail($name, $email, $message)
+    {
+        $data = require __DIR__ .'/config-mail.php';
+
+        $transport = (new \Swift_SmtpTransport($data['SMTP'], 465, 'ssl'))
+            ->setUsername($data['email'])
+            ->setPassword($data['password']);
+
+        $mailer = new \Swift_Mailer($transport);
+
+        $message = (new \Swift_Message('Message du Blog de ' . $name))
+            ->setFrom($email)
+            ->setTo($data['email'])
+            ->setBody($message);
+
+        $mailer->send($message);
+    }
+
 }

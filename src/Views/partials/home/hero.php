@@ -7,7 +7,7 @@
             <i class="fas fa-quote-left pr-4"></i>Je réalise votre projet de A à Z ! <i
               class="fas fa-quote-right pl-4"></i></p>
           <div class="col-lg-6 col-10 mt-5 mx-auto">
-            <button class="btn btn-secondary font-tertiary">Mon CV</button>
+            <a href="<?= $basePath . '/public/pdf/CV.pdf'; ?>" class="btn btn-secondary font-tertiary">Mon CV</a>
           </div>
         </div>
         <div class="zindex-1PR col-lg-5 text-end wave-img">

@@ -29,7 +29,7 @@ use MyBlog\Models\PostModel; ?>
     <div class="row shuffle-wrapper">
 
       <?php foreach ($posts as $post) : ?>
-        <?php $this->insert('partials/blog/list-post', ['post' => $post]); ?>
+        <?php $this->insert('partials/blog/list-post', ['post' => $post, 'pagination' => $pagination]); ?>
       <?php endforeach; ?>
 
     </div>

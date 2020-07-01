@@ -30,6 +30,7 @@ Thumbs.db
 
 # personal
 /app/images/moi.jpg
-src/config.ini
+src/Managers/config.ini
+src/Managers/config-mail.php
 /vendor/
 public/images/

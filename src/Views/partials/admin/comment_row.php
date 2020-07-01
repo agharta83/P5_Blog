@@ -7,7 +7,6 @@ $modal1 = 'deleteComment' . $comment->getId();
 
 $modal2 = '#validComment' . $comment->getId();
 $modal3 = 'validComment' . $comment->getId();
-
 ?>
 
 <tr data-toggle="collapse" data-target="<?= $content; ?>" class="accordion-toggle" data-groups="<?= $comment->getIs_valid();?>">
@@ -44,7 +43,7 @@ $modal3 = 'validComment' . $comment->getId();
         Voulez vous supprimer ce commentaire ?
       </div>
       <div class="modal-footer">
-        <a href="<?= $router->generate('delete_comment', ['id' => $comment->getId()]); ?>" role="button" class="btn btn-primary">Supprimer</a>
+        <a href="<?= $router->generate('delete_comment', ['id' => $comment->getId(), 'page' => $pagination->getCurrentPage()]); ?>" role="button" class="btn btn-primary">Supprimer</a>
       </div>
     </div>
   </div>
@@ -64,7 +63,7 @@ $modal3 = 'validComment' . $comment->getId();
         Voulez vous valider ce commentaire ?
       </div>
       <div class="modal-footer">
-        <a href="<?= $router->generate('valid_comment', ['id' => $comment->getId()]); ?>" role="button" class="btn btn-primary">Valider</a>
+        <a href="<?= $router->generate('valid_comment', ['id' => $comment->getId(), 'page' => $pagination->getCurrentPage()]); ?>" role="button" class="btn btn-primary">Valider</a>
       </div>
     </div>
   </div>

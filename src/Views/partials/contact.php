@@ -6,7 +6,7 @@
         </div>
         <div class="col-lg-8 mx-auto">
           <div class="bg-white rounded text-center p-5 shadow-down">
-            <form action="#" class="row">
+            <form action="<?= $router->generate('contact_form');?>" method="post" class="row" name="contact_form">
               <div class="col-md-6">
                 <input type="text" id="name" name="name" placeholder="Nom" class="form-control px-0 mb-4">
               </div>
@@ -18,7 +18,7 @@
                   placeholder="Votre message ici"></textarea>
               </div>
               <div class="col-lg-6 col-10 mx-auto">
-                <button class="btn btn-primary w-100">envoyer</button>
+                <button type="submit" class="btn btn-primary w-100">envoyer</button>
               </div>
             </form>
           </div>

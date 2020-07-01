@@ -8,178 +8,180 @@ document.addEventListener('DOMContentLoaded', () => {
   // Sticky Menu
   $(window).scroll(function () {
     if ($('.navigation').offset().top > 100) {
-        $('.navigation').addClass('nav-bg');
+      $('.navigation').addClass('nav-bg');
     } else {
-        $('.navigation').removeClass('nav-bg');
+      $('.navigation').removeClass('nav-bg');
     }
+  });
+
+  // Background-images
+  $('[data-background]').each(function () {
+    $(this).css({
+      'background-image': 'url(' + $(this).data('background') + ')'
+    });
+  });
+
+  // background color
+  $('[data-color]').each(function () {
+    $(this).css({
+      'background-color': $(this).data('color')
+    });
+  });
+
+  // Shuffle js filter and masonry
+  if (window.location.pathname == '/opc/P5_Blog/blog') {
+    console.log('ici');
+    var myShuffle = new Shuffle(document.querySelector('.shuffle-wrapper'), {
+      itemSelector: '.shuffle-item',
+      buffer: 1
     });
 
-    // Background-images
-    $('[data-background]').each(function () {
-        $(this).css({
-            'background-image': 'url(' + $(this).data('background') + ')'
+    $('input[name="shuffle-filter"]').on('change', function (evt) {
+      var input = evt.currentTarget;
+      if (input.checked) {
+        myShuffle.filter(input.value);
+      }
+    });
+  }
+
+  // Comment list filter valid or not
+  if (window.location.pathname == '/opc/P5_Blog/dashboard/comments') {
+    $('input[name="NotValid"]').on('change', function (evt) {
+      var input = evt.currentTarget;
+      if (input.checked) {
+        var rows = $('tr[data-groups]');
+
+        rows.each(function (index, row) {
+
+          if (row.getAttribute("data-groups") == "1") {
+            $(this).hide();
+          }
         });
+      }
     });
 
-    // background color
-    $('[data-color]').each(function () {
-        $(this).css({
-            'background-color': $(this).data('color')
-        });
-    });
+    $('input[name="all"]').on('change', function (evt) {
+      var input = evt.currentTarget;
+      if (input.checked) {
+        var rows = $('tr[data-groups]');
 
-    // Shuffle js filter and masonry
-    if (window.location.pathname == '/opc/P5_Blog/blog') {
-        console.log('ici');
-        var myShuffle = new Shuffle(document.querySelector('.shuffle-wrapper'), {
-            itemSelector: '.shuffle-item',
-            buffer: 1
+        rows.each(function (index, row) {
+          $(this).show();
+
         });
-    
-        $('input[name="shuffle-filter"]').on('change', function (evt) {
-            var input = evt.currentTarget;
-            if (input.checked) {
-                myShuffle.filter(input.value);
-            }
-        });
+      }
+    });
+  }
+
+  // Sticky elements (pinning)
+  var controller = new ScrollMagic.Controller();
+
+  var pins_elem = $('.pin-elem');
+
+  $.each(pins_elem, function (indexInArray, valueOfElement) {
+    new ScrollMagic.Scene({
+        offset: 100
+      })
+      .setPin(this)
+      .addTo(controller);
+  });
+
+  // Admin home counter func
+  function count($this) {
+    var current = parseInt($this.html(), 10);
+    current = current + 1;
+    $this.html(++current);
+
+    if (current > $this.data('count')) {
+      $this.html($this.data('count'));
+    } else {
+      setTimeout(function () {
+        count($this)
+      }, 50);
     }
+  };
 
-    // Comment list filter valid or not
-    if (window.location.pathname == '/opc/P5_Blog/dashboard/comments') {
-        $('input[name="NotValid"]').on('change', function (evt) {
-            var input = evt.currentTarget;
-            if (input.checked) {
-                var rows = $('tr[data-groups]');
-                
-                rows.each(function (index, row) {
-                    
-                    if (row.getAttribute("data-groups") == "1") {
-                        $(this).hide();
-                    }
-                });
-            }
-        });
+  if (window.location.pathname == '/opc/P5_Blog/dashboard') {
+    $(".stat-count").each(function () {
+      $(this).data('count', parseInt($(this).html(), 10));
+      $(this).html('0');
+      count($(this));
+    });
+  };
 
-        $('input[name="all"]').on('change', function (evt) {
-            var input = evt.currentTarget;
-            if (input.checked) {
-                var rows = $('tr[data-groups]');
-                
-                rows.each(function (index, row) {
-                    $(this).show();
-                    
-                });
-            }
-        });
-    }
-    
-    
+  // Animate input search length
+  if (window.location.pathname == '/opc/P5_Blog/dashboard/posts') {
+    var searchInput = $(".search-box input");
+    var inputGroup = $(".search-box .input-group");
+    var boxWidth = inputGroup.width();
 
-    // Sticky elements (pinning)
-    var controller = new ScrollMagic.Controller();
+    searchInput.focus(function () {
+      inputGroup.animate({
+        width: "300"
+      });
+    }).blur(function () {
+      inputGroup.animate({
+        width: boxWidth
+      });
+    });
+  };
 
-    var pins_elem = $('.pin-elem');
-
-    $.each(pins_elem, function (indexInArray, valueOfElement) { 
-        new ScrollMagic.Scene({
-            offset: 100
-        })
-        .setPin(this)
-        .addTo(controller);
+  if (window.location.pathname == '/opc/P5_Blog/dashboard/posts/new' || window.location.href.indexOf("update") > -1) {
+    tinymce.init({
+      selector: '#new_post_form_chapo',
+      height: '300',
+      plugins: 'a11ychecker advcode casechange formatpainter linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker',
+      toolbar: 'a11ycheck addcomment showcomments casechange checklist code formatpainter pageembed permanentpen table',
+      toolbar_mode: 'floating',
+      tinycomments_mode: 'embedded',
+      tinycomments_author: 'Author name',
     });
 
-    // Admin home counter func
-    function count($this) {
-        var current = parseInt($this.html(), 10);
-        current = current +1;
-        $this.html(++current);
+    tinymce.init({
+      selector: '#new_post_form_content',
+      height: '500',
+      plugins: 'a11ychecker advcode casechange formatpainter linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker',
+      toolbar: 'a11ycheck addcomment showcomments casechange checklist code formatpainter pageembed permanentpen table',
+      toolbar_mode: 'floating',
+      tinycomments_mode: 'embedded',
+      tinycomments_author: 'Author name',
+    });
 
-        if (current > $this.data('count')) {
-            $this.html($this.data('count'));
-        } else {
-            setTimeout(function() {
-                count($this)
-            }, 50);
-        }
-    };
+    // Read url IMG on form input and preview img
+    $('input[type="file"]').change(function (e) {
 
-    if (window.location.pathname == '/opc/P5_Blog/dashboard') {
-        $(".stat-count").each(function() {
-            $(this).data('count', parseInt($(this).html(), 10));
-            $(this).html('0');
-            count($(this));
-        });
-    };
+      var preview = document.querySelector('.wrapper-preview');
+      preview.innerHTML = '';
+      var file = document.querySelector('input[type=file]').files[0];
 
-     // Animate input search length
-    if (window.location.pathname == '/opc/P5_Blog/dashboard/posts') {
-        var searchInput = $(".search-box input");
-	    var inputGroup = $(".search-box .input-group");
-        var boxWidth = inputGroup.width();
-    
-	    searchInput.focus(function(){
-		    inputGroup.animate({
-			    width: "300"
-		    });
-	    }).blur(function(){
-		    inputGroup.animate({
-			    width: boxWidth
-		    });
-	    });
-    };
+      if (/\.(jpe?g|png|gif)$/i.test(file.name)) {
+        var reader = new FileReader();
 
-    if (window.location.pathname == '/opc/P5_Blog/dashboard/posts/new' || window.location.href.indexOf("update") > -1) {
-        tinymce.init({
-            selector: '#new_post_form_chapo',
-            height: '300',
-            plugins: 'a11ychecker advcode casechange formatpainter linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker',
-            toolbar: 'a11ycheck addcomment showcomments casechange checklist code formatpainter pageembed permanentpen table',
-            toolbar_mode: 'floating',
-            tinycomments_mode: 'embedded',
-            tinycomments_author: 'Author name',
-        });
+        reader.addEventListener("load", function () {
+          var image = new Image();
+          image.width = 400;
+          image.title = file.name;
+          image.src = this.result;
+          preview.appendChild(image);
+        }, false);
 
-        tinymce.init({
-            selector: '#new_post_form_content',
-            height: '500',
-            plugins: 'a11ychecker advcode casechange formatpainter linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker',
-            toolbar: 'a11ycheck addcomment showcomments casechange checklist code formatpainter pageembed permanentpen table',
-            toolbar_mode: 'floating',
-            tinycomments_mode: 'embedded',
-            tinycomments_author: 'Author name',
-        });
+        reader.readAsDataURL(file);
+      }
 
-        // Read url IMG on form input and preview img
-        $('input[type="file"]').change(function(e) {
-          
-            var preview = document.querySelector('.wrapper-preview');
-            preview.innerHTML = '';
-            var file = document.querySelector('input[type=file]').files[0];
+      var label = document.querySelector('.custom-file-label');
+      label.innerText = file.name;
 
-            if ( /\.(jpe?g|png|gif)$/i.test(file.name) ) {
-                var reader = new FileReader();
-          
-                reader.addEventListener("load", function () {
-                  var image = new Image();
-                  image.width = 400;
-                  image.title = file.name;
-                  image.src = this.result;
-                  preview.appendChild( image );
-                }, false);
-          
-                reader.readAsDataURL(file);
-            }
+    });
 
-            var label = document.querySelector('.custom-file-label');
-            label.innerText = file.name;
+  };
 
-        });
+  $('#link_reset_password').click(function(e) {
+    $('#login').modal('toggle');
+  });
 
-    };
 
-   
-	
-    
+
+
 
   //someFunction();
 });

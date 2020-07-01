@@ -35,7 +35,7 @@
                 <tbody>
                     <?php
                     foreach ($comments as $comment) {
-                        $this->insert('partials/admin/comment_row', ['comment' => $comment]);
+                        $this->insert('partials/admin/comment_row', ['comment' => $comment, 'pagination' => $pagination]);
                     }
                     ?>
                 </tbody>

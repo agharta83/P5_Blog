@@ -16,8 +16,23 @@ class UserModel {
     private $lastname;
     private $avatar;
 
+    /**
+     * L'utilisateur est Admin ou pas
+     *
+     * @return boolean
+     */
     public function isAdmin() {
         return $this->getUser_role() == self::ADMIN ? true : false;
+    }
+
+    /**
+     * Retourne le statut de l'utilisateur Actif / Inactif;
+     *
+     * @return string
+     */
+    public function getStatut()
+    {
+        return $this->getStatut_user() == 1 ? 'ACTIF' : 'INACTIF';
     }
 
     /**

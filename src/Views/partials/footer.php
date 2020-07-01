@@ -1,4 +1,5 @@
-<?php //var_dump($errors); ?>
+<?php //var_dump($errors); 
+?>
 
 <footer class="bg-dark footer-section">
   <div class="section">
@@ -29,42 +30,81 @@
   </div>
 </footer>
 
-<!-- Modal HTML -->
+<!-- Modal LOGIN HTML -->
 <div id="login" class="modal fade">
   <div class="modal-dialog modal-dialog-centered modal-login">
     <div class="modal-content">
-      <form name ="login" action="<?= $router->generate('login'); ?>" method="post" enctype="multipart/form-data">
+      <form name="login" action="<?= $router->generate('login'); ?>" method="post" enctype="multipart/form-data">
         <div class="modal-header">
           <h4 class="modal-title">Connexion à l'administration</h4>
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         </div>
-        <?php 
+        <?php
         if (!empty($errors)) {
-          foreach($errors as $error) : ?>
-          <div class="alert alert-danger">
-                    <?= $error; ?>
-          </div>
+          foreach ($errors as $error) : ?>
+            <div class="alert alert-danger">
+              <?= $error; ?>
+            </div>
           <?php endforeach; ?>
-        <?php 
+        <?php
         }
         ?>
         <div class="modal-body">
           <div class="form-group">
             <label>Nom d'utilisateur</label>
-            <input name="login" type="text" class="form-control" required="required" value="<?=$fields['login'] ?? ''; ?>">
+            <input name="login" type="text" class="form-control" required="required" value="<?= $fields['login'] ?? ''; ?>">
           </div>
           <div class="form-group">
             <div class="clearfix">
               <label>Mot de passe</label>
-              <a href="#" class="pull-right text-muted"><small>Mot de passe oublié ?</small></a>
             </div>
-
             <input name="password" type="password" class="form-control" required="required">
           </div>
         </div>
         <div class="modal-footer justify-content-between">
-          <label class="checkbox-inline"><input type="checkbox" class="mr-2">Se souvenir</label>
+          <a href="#reset_password" class="trigger-btn" id="link_reset_password" data-toggle="modal">Mot de passe oublié ?</a>
           <input type="submit" class="btn btn-primary text-white" value="Login">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal RESET PASSWORD HTML -->
+<div id="reset_password" class="modal fade">
+  <div class="modal-dialog modal-dialog-centered modal-login">
+    <div class="modal-content">
+      <form name="reset_password" action="<?= $router->generate('reset_password'); ?>" method="post" enctype="multipart/form-data">
+        <div class="modal-header">
+          <h4 class="modal-title">Réinitialisation du mot de passe</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+        <?php
+        if (!empty($errors)) {
+          foreach ($errors as $error) : ?>
+            <div class="alert alert-danger">
+              <?= $error; ?>
+            </div>
+          <?php endforeach; ?>
+        <?php
+        }
+        ?>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Nom d'utilisateur</label>
+            <input name="login" type="text" class="form-control" required="required" value="<?= $fields['login'] ?? ''; ?>">
+          </div>
+          <div class="form-group">
+            <label>Mot de passe</label>
+            <input name="password" type="password" class="form-control" required="required">
+          </div>
+          <div class="form-group">
+            <label>Confirmation mot de passe</label>
+            <input name="password2" type="password" class="form-control" required="required">
+          </div>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <input type="submit" class="btn btn-primary text-white" value="Réinitialiser">
         </div>
       </form>
     </div>

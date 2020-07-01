@@ -5,7 +5,6 @@ namespace MyBlog\Controllers;
 use MyBlog\Managers\CommentManager;
 use MyBlog\Managers\PostManager;
 use MyBlog\Managers\UserManager;
-use MyBlog\Models\UserModel;
 
 /**
  * Controller Mere servant à instancier le Router, les Managers et le templating

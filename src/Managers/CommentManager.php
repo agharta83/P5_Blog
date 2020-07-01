@@ -234,7 +234,7 @@ class CommentManager extends Database
     {
         $query = new PaginatedQuery(
             $this->checkConnexion(),
-            'SELECT * FROM comment',
+            'SELECT * FROM comment ORDER BY created_on DESC',
             'SELECT COUNT(id) FROM comment'
         );
 

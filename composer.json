@@ -14,8 +14,11 @@
         }
     },
     "require": {
+        "php": ">=7.0",
         "altorouter/altorouter": "^2.0",
         "league/plates": "^3.3",
-        "pagerfanta/pagerfanta": "^2.3"
+        "pagerfanta/pagerfanta": "^2.3",
+        "swiftmailer/swiftmailer": "^6.2"
+
     }
 }

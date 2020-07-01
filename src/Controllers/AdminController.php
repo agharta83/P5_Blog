@@ -15,7 +15,7 @@ class AdminController extends CoreController
      *
      * @param \AltoRouter $router
      */
-    public function __construct(\AltoRouter $router) 
+    public function __construct(\AltoRouter $router)
     {
         // Execution du constructeur parent
         parent::__construct($router);
@@ -72,7 +72,7 @@ class AdminController extends CoreController
      *
      * @return void
      */
-    public function list($params) 
+    public function list($params)
     {
 
         $headTitle = 'Dashboard / Posts';
@@ -112,7 +112,7 @@ class AdminController extends CoreController
      */
     public function createNewPost()
     {
-        
+
         // Le formulaire de création du post a été soumis
         if (!empty($_POST)) {
 
@@ -124,7 +124,7 @@ class AdminController extends CoreController
 
                 // On redirige
                 $this->redirect('admin_blog_list');
-            } else if (isset($_POST['preview'])){
+            } else if (isset($_POST['preview'])) {
                 // L'utilisateur veut prévisualiser le post
                 if (isset($_FILES['name']) && !empty($_FILES['name'])) {
                     $this->upload($_FILES);
@@ -146,8 +146,6 @@ class AdminController extends CoreController
                 'title' => $headTitle
             ]);
         }
-
-            
     }
 
     /**
@@ -178,7 +176,6 @@ class AdminController extends CoreController
      */
     public function delete($params)
     {
-        //var_dump($params);die();
         // Id du post à supprimer
         $id = $params['id'];
         $currentPage = $params['page'];
@@ -242,16 +239,14 @@ class AdminController extends CoreController
             // On upload
             $uploader = new Uploader();
             $uploadResult = $uploader->upload($files['files']);
-    
-    
+
+
             if ($uploadResult !== TRUE) {
                 echo 'Impossible d\'enregistrer l\'image.';
             }
         } else {
             return null;
         }
-
-        
     }
 
     /**
@@ -288,7 +283,7 @@ class AdminController extends CoreController
         $results = $pagination->getCurrentPageResults();
 
         $comments = [];
-        
+
         // On parcourt le tableau de résultat et on génére l'objet PostModel
         foreach ($results as $row) {
             $commentId = $row['id'];
@@ -314,12 +309,14 @@ class AdminController extends CoreController
         // Id du commentaire à supprimer
         $id = $params['id'];
 
+        // Page courante
+        $currentPage = $params['page'];
+
         // On récup et supprime le commentaire
         $this->commentManager->delete($id);
 
         // On redirige
-        $this->redirect('comments_list');
-
+        $this->redirect('comments_list', ['page' => $currentPage]);
     }
 
     /**
@@ -333,10 +330,158 @@ class AdminController extends CoreController
         // Id du commentaire à supprimer
         $id = $params['id'];
 
+        // Page courange
+        $currentPage = $params['page'];
+
         // On récup et supprime le commentaire
         $this->commentManager->valid($id);
 
         // On redirige
-        $this->redirect('comments_list');
+        $this->redirect('comments_list', ['page' => $currentPage]);
+    }
+
+    /**
+     * Retourne la liste des utilisateurs paginées
+     *
+     * @param [type] $params
+     * @return void
+     */
+    public function listUsers($params)
+    {
+        $headTitle = 'Dashboard / Utilisateurs';
+
+        $pagination = $this->userManager->findAllUsersPaginated(6, (int) $params['page']);
+
+        $results = $pagination->getCurrentPageResults();
+
+        $users = [];
+
+        // On parcourt le tableau de résultat et on génére l'objet PostModel
+        foreach ($results as $row) {
+            $userId = $row['id'];
+            $users[$userId] = $this->userManager->buildObject($row);
+        }
+
+        echo $this->templates->render('admin/users', [
+            'title' => $headTitle,
+            'users' => $users,
+            'pagination' => $pagination
+        ]);
+    }
+
+    /**
+     * Desactive un utilisateur
+     *
+     * @param array $params
+     * @return void
+     */
+    public function disableUser($params)
+    {
+        // Id de l'utilisateur à désactiver
+        $id = $params['id'];
+        // Page courante
+        $currentPage = $params['page'];
+
+        // On récup et désactive l'utilisateur
+        $this->userManager->disable($id);
+
+        // On redirige
+        $this->redirect('users_list', ['page' => $currentPage]);
+    }
+
+    /**
+     * Activer l'utilisateur
+     *
+     * @param array $params
+     * @return void
+     */
+    public function enableUser($params)
+    {
+        // Id de l'utilisateur à activer
+        $id = $params['id'];
+        // Page courante
+        $currentPage = $params['page'];
+
+        // On récup et active l'utilisateur
+        $this->userManager->enable($id);
+
+        // On redirige
+        $this->redirect('users_list', ['page' => $currentPage]);
+    }
+
+    /**
+     * Promotion d'un utilisateur en Administrateur
+     *
+     * @param [type] $params
+     * @return void
+     */
+    public function promoteUser($params)
+    {
+        // Id de l'utilisateur à promouvoir
+        $id = $params['id'];
+        // Page courante
+        $currentPage = $params['page'];
+
+        // On récup et promeut l'utilisateur
+        $this->userManager->promote($id);
+
+        // On redirige
+        $this->redirect('users_list', ['page' => $currentPage]);
+    }
+
+    /**
+     * Retrograde l'utilisateur en role User
+     *
+     * @param array $params
+     * @return void
+     */
+    public function downgradeUser($params)
+    {
+        // Id de l'utilisateur à rétrograder
+        $id = $params['id'];
+        // Page courante
+        $currentPage = $params['page'];
+
+        // On récup et rétrograde l'utilisateur
+        $this->userManager->downgrade($id);
+
+        // On redirige
+        $this->redirect('users_list', ['page' => $currentPage]);
+    }
+
+    /**
+     * Création d'un nouvel utilisateur
+     *
+     * @param [type] $params
+     * @return void
+     */
+    public function createUser($params)
+    {   
+        $currentPage = $params['page'];
+
+        $this->userManager->createUser($_POST);
+
+        // On redirige
+        $this->redirect('users_list', ['page' => $currentPage]);
+    }
+
+    public function updateUser($params)
+    {
+        // Page courante
+        $currentPage = $params['page'];
+
+        if (!empty($_POST)) {
+            // On check $_FILES
+            $this->upload($_FILES);
+
+            $id = $_POST['userId'];
+
+            $this->userManager->updateUser($id, $_POST, $_FILES);
+
+        } 
+
+        // On redirige
+        $this->redirect('users_list', ['page' => $currentPage]);
+        
     }
 }

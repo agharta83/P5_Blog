@@ -236,10 +236,13 @@ class MainController extends CoreController {
         }
     }
 
+    /**
+     * Formulaire de contact
+     *
+     * @return void
+     */
     public function contactForm()
     {
-        //var_dump($_POST); die();
-
         $name = $_POST['name'];
         $email = $_POST['email'];
         $message = $_POST['message'];

@@ -7,7 +7,7 @@
             <i class="fas fa-quote-left pr-4"></i>Je réalise votre projet de A à Z ! <i
               class="fas fa-quote-right pl-4"></i></p>
           <div class="col-lg-6 col-10 mt-5 mx-auto">
-            <button class="btn btn-secondary font-tertiary">Mon CV</button>
+            <a href="<?= $basePath . '/public/pdf/CV.pdf'; ?>" class="btn btn-secondary font-tertiary">Mon CV</a>
           </div>
         </div>
         <div class="zindex-1PR col-lg-5 text-end wave-img">
@@ -44,10 +44,9 @@
     </div>
     <!-- social icon -->
     <ul class="list-unstyled ml-5 mt-3 position-relative zindex-1">
-      <li class="mb-3"><a class="text-white" href="#"><i class="ti-facebook"></i></a></li>
-      <li class="mb-3"><a class="text-white" href="#"><i class="ti-instagram"></i></a></li>
-      <li class="mb-3"><a class="text-white" href="#"><i class="ti-dribbble"></i></a></li>
-      <li class="mb-3"><a class="text-white" href="#"><i class="ti-twitter"></i></a></li>
+      <li class="mb-3"><h4><a class="text-white" href="http://www.linkedin.com/in/audrey-cesar"><i class="fab fa-linkedin"></i></a></h4></li>
+      <li class="mb-3"><h4><a class="text-white" href="https://github.com/agharta83"><i class="fab fa-github-square"></i></a></h4></li>
+      <li class="mb-3"><h4><a class="text-white" href="https://twitter.com/MlleAudrey83?s=07"><i class="fab fa-twitter-square"></i></a></h4></li>
     </ul>
     <!-- /social icon -->
   </section>

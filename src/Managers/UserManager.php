@@ -95,7 +95,7 @@ class UserManager extends Database
      */
     public function saveUserInSession(UserModel $user)
     {
-        $_SESSION['user'] = [
+        $this->session->set('user', [
             'id' => $user->getId(),
             'email' => $user->getEmail(),
             'login' => $user->getLogin(),
@@ -103,7 +103,7 @@ class UserManager extends Database
             'lastname' => $user->getLastname(),
             'avatar' => $user->getAvatar(),
             'is_admin' => (bool) $user->isAdmin()
-        ];
+        ]);
     }
 
     /**
@@ -231,8 +231,8 @@ class UserManager extends Database
      */
     public function getUserConnected()
     {
-        if (!empty($_SESSION['user'])) {
-            return $this->getUser($_SESSION['user']['id']);
+        if (!empty($this->session->get('user'))) {
+            return $this->getUser($this->session->get('user')['id']);
         }
 
         return false;

@@ -51,9 +51,9 @@
                       <div class="col-md-6">
                         <input type="hidden" value="<?= $post->getId(); ?>" id="post_id" name="post_id">
                         <input type="hidden" value="<?= $comment->getId(); ?>" id="respond_to1" name="respond_to">
-                        <input type="text" class="form-control mb-3" placeholder="Prénom" name="firstname" id="firstname" value="<?= $_SESSION['user']['firstname'] ?? ''; ?>">
-                        <input type="text" class="form-control mb-3" placeholder="Nom" name="lastname" id="lastname" value="<?= $_SESSION['user']['lastname'] ?? ''; ?>">
-                        <input type="text" class="form-control mb-3" placeholder="Email *" name="email" id="email" value="<?= $_SESSION['user']['email'] ?? ''; ?>">
+                        <input type="text" class="form-control mb-3" placeholder="Prénom" name="firstname" id="firstname" value="<?= $session->get('user')['firstname'] ?? ''; ?>">
+                        <input type="text" class="form-control mb-3" placeholder="Nom" name="lastname" id="lastname" value="<?= $session->get('user')['lastname'] ?? ''; ?>">
+                        <input type="text" class="form-control mb-3" placeholder="Email *" name="email" id="email" value="<?= $session->get('user')['email'] ?? ''; ?>">
                       </div>
                       <div class="col-md-6">
                         <textarea name="content" id="content" placeholder="Message" class="form-control mb-4"></textarea>
@@ -87,9 +87,9 @@
                         <div class="col-md-6">
                           <input type="hidden" value="<?= $post->getId(); ?>" id="post_id" name="post_id">
                           <input type="hidden" value="<?= $comment->getId(); ?>" id="respond_to2" name="respond_to">
-                          <input type="text" class="form-control mb-3" placeholder="Prénom" name="firstname" id="firstname" value="<?= $_SESSION['user']['firstname'] ?? ''; ?>">
-                          <input type="text" class="form-control mb-3" placeholder="Nom" name="lastname" id="lastname" value="<?= $_SESSION['user']['lastname'] ?? ''; ?>">
-                          <input type="text" class="form-control mb-3" placeholder="Email *" name="email" id="email" value="<?= $_SESSION['user']['email'] ?? ''; ?>">
+                          <input type="text" class="form-control mb-3" placeholder="Prénom" name="firstname" id="firstname" value="<?= $session->get('user')['firstname'] ?? ''; ?>">
+                          <input type="text" class="form-control mb-3" placeholder="Nom" name="lastname" id="lastname" value="<?= $session->get('user')['lastname'] ?? ''; ?>">
+                          <input type="text" class="form-control mb-3" placeholder="Email *" name="email" id="email" value="<?= $session->get('user')['email'] ?? ''; ?>">
                         </div>
                         <div class="col-md-6">
                           <textarea name="content" id="content" placeholder="Message" class="form-control mb-4"></textarea>
@@ -110,9 +110,9 @@
         <form action="<?= $router->generate("add_comment"); ?>" method="post" class="row">
           <div class="col-md-6">
             <input type="hidden" value="<?= $post->getId(); ?>" id="post_id" name="post_id">
-            <input type="text" class="form-control mb-3" placeholder="Prénom" name="firstname" id="firstname" value="<?= $_SESSION['user']['firstname'] ?? ''; ?>">
-            <input type="text" class="form-control mb-3" placeholder="Nom" name="lastname" id="lastname" value="<?= $_SESSION['user']['lastname'] ?? ''; ?>">
-            <input type="text" class="form-control mb-3" placeholder="Email *" name="email" id="email" value="<?= $_SESSION['user']['email'] ?? ''; ?>">
+            <input type="text" class="form-control mb-3" placeholder="Prénom" name="firstname" id="firstname" value="<?= $session->get('user')['firstname'] ?? ''; ?>">
+            <input type="text" class="form-control mb-3" placeholder="Nom" name="lastname" id="lastname" value="<?= $session->get('user')['lastname'] ?? ''; ?>">
+            <input type="text" class="form-control mb-3" placeholder="Email *" name="email" id="email" value="<?= $session->get('user')['email'] ?? ''; ?>">
           </div>
           <div class="col-md-6">
             <textarea name="content" id="content" placeholder="Message" class="form-control mb-4"></textarea>

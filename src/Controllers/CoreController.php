@@ -28,6 +28,9 @@ abstract class CoreController {
 
         // Instance de la classe Request
         $this->request = new Request();
+        $this->get = $this->request->getRequest();
+        $this->post = $this->request->postRequest();
+        $this->session = $this->request->getSession();
 
         // On instancie les Managers
         $this->postManager = new PostManager();
@@ -44,7 +47,8 @@ abstract class CoreController {
             'user' => $this->currentUser,
             'userManager' => $this->userManager,
             'postManager' => $this->postManager,
-            'commentManager' => $this->commentManager
+            'commentManager' => $this->commentManager,
+            'session' => $this->session
         ]);
 
     }

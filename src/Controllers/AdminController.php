@@ -116,7 +116,7 @@ class AdminController extends CoreController
         $currentPage = $params['page'];
 
         // Le formulaire de création du post a été soumis
-        $post = $this->request->postRequest();
+        $post = $this->post;
         //var_dump(!empty($post->getParameter('submit'))); die();
         if ( null !== $post->getParameter('submit') && !empty($post->getParameter('submit')) ) {
 
@@ -208,11 +208,11 @@ class AdminController extends CoreController
         // On récupére le post
         $post = $this->postManager->find($id);
 
-        if (!empty($this->request->postRequest())) {
+        if (!empty($this->post)) {
             // On check $_FILES
             $this->upload($_FILES);
 
-            $this->postManager->updatePost($id, $this->request->postRequest(), $_FILES);
+            $this->postManager->updatePost($id, $this->post, $_FILES);
 
             // On redirige
             $this->redirect('admin_blog_list', ['page' => $currentPage]);
@@ -462,7 +462,7 @@ class AdminController extends CoreController
     {
         $currentPage = $params['page'];
 
-        $this->userManager->createUser($this->request->postRequest());
+        $this->userManager->createUser($this->post);
 
         // On redirige
         $this->redirect('users_list', ['page' => $currentPage]);
@@ -473,11 +473,11 @@ class AdminController extends CoreController
         // Page courante
         $currentPage = $params['page'];
 
-        if (!empty($this->request->postRequest())) {
+        if (!empty($this->post)) {
             // On check $_FILES
             $this->upload($_FILES);
 
-            $post = $this->request->postRequest();
+            $post = $this->post;
 
             $id = $post->getParameter('userId');
 

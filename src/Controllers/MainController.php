@@ -130,7 +130,7 @@ class MainController extends CoreController {
      */
     public function addComment() {
 
-        $post = $this->request->postRequest();
+        $post = $this->post;
 
         if (!empty($post)) {
             // On récup l'id du post
@@ -161,8 +161,8 @@ class MainController extends CoreController {
 
         $errors = [];
 
-        if (!empty($this->request->postRequest())) {
-            $post = $this->request->postRequest();
+        if (!empty($this->post)) {
+            $post = $this->post;
             
             // On identifie l'utilisateur grâce à son login
             $login = $post->getParameter('login');
@@ -203,10 +203,11 @@ class MainController extends CoreController {
      */
     public function logout()
     {
-        unset($_SESSION['user']);
-        $_SESSION = [];
+        $this->session->remove('user');
 
-        session_destroy();
+        $this->session = [];
+
+        $this->session->stop();
 
         $this->redirect('home');
     }
@@ -219,7 +220,7 @@ class MainController extends CoreController {
      */
     public function resetPassword()
     {
-        $post = $this->request->postRequest();
+        $post = $this->post;
 
         if (isset($post) && !empty($post)) {
             $user = $this->userManager->findByLogin($post->getParameter('login'));
@@ -249,7 +250,7 @@ class MainController extends CoreController {
      */
     public function contactForm()
     {
-        $post = $this->request->postRequest();
+        $post = $this->post;
 
         $name = $post->getParameter('name');
         $email = $post->getParameter('email');

@@ -5,6 +5,7 @@ namespace MyBlog\Managers;
 use MyBlog\Models\CommentModel;
 use MyBlog\Services\PaginatedQuery;
 use Pagerfanta\Pagerfanta;
+use MyBlog\Services\Parameter;
 
 class CommentManager extends Database
 {
@@ -137,16 +138,16 @@ class CommentManager extends Database
     /**
      * Ajoute un commentaire en BDD
      *
-     * @param array $post
+     * @param Parameter $post
      * @param UserModel $user
      * @return void
      */
-    public function addComment($post, $user)
+    public function addComment(Parameter $post, $user)
     {
         // Initialisation
-        $post['created_on'] = date('Y-m-d H:i:s');
-        $post['is_valid'] = 0;
-        $post['user_id'] = $user->getId();
+        $post->setParameter('created_on', date('Y-m-d H:i:s'));
+        $post->setParameter('is_valid', 0);
+        $post->setParameter('user_id', $user->getId());
 
         $comment = $this->buildObject($post);
 

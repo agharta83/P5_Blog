@@ -5,6 +5,7 @@ namespace MyBlog\Managers;
 use MyBlog\Models\PostModel;
 use MyBlog\Services\PaginatedQuery;
 use Pagerfanta\Pagerfanta;
+use MyBlog\Services\Parameter;
 
 /**
  * Permet de manager PostModel 
@@ -153,26 +154,26 @@ class PostManager extends Database
     /**
      * Permet d'hydrater l'objet PostModel et l'insere en BDD en appelant la méthode save() 
      *
-     * @param array $post
+     * @param Parameter $post
      * @param array $files
      * @return void
      */
-    public function addPost($post, $files)
+    public function addPost(Parameter $post, $files) // TODO J'ai changé le $post pour utiliser la classe parameter, je n'ai pas testé !!!
     {
         // On gère les datas qui ne sont pas dans le formulaire mais initialisé à chaque création d'un post
-        $post['img'] = $files['files']['name'][0];
-        $post['slug'] = $post['title'];
-        $post['number_reviews'] = 0;
+        $post->setParameter('img', $files['files']['name'][0]);
+        $post->setParameter('slug', $post->getParameter('title'));
+        $post->setParameter('number_reviews', 0);
 
         $userManager = new UserManager();
-        $post['user_id'] = $userManager->getUserConnected()->getId();
+        $post->setParameter('user_id', $userManager->getUserConnected()->getId());
 
         // Si le post est publié immédiatement aprés sa création, on met à jour sa date de publication et son statut
-        if (isset($post['published']) && !empty($post['published'] && $post['published'] == 'on')) {
-            $post['published_date'] = date("Y-m-d");
-            $post['published'] = 1;
-        } else if (!isset($post['published'])) {
-            $post['published'] = 0;
+        if (null !== $post->getParameter('published') && !empty($post->getParameter('published') && $post->getParameter('published') == 'on')) {
+            $post->setParameter('published_date', date("Y-m-d"));
+            $post->setParameter('published', 1);
+        } else if (null === ($post->getParameter('published'))) {
+            $post->setParameter('published', 0);
         }
         
         // On construit l'objet Post
@@ -288,26 +289,26 @@ class PostManager extends Database
     /**
      * Permet de prévisualiser un post (sans enregistrement en BDD)
      *
-     * @param array $post
+     * @param Parameter $post
      * @param array $files
      * @return PostModel
      */
-    public function preview($post, $files)
+    public function preview(Parameter $post, $files)
     {
         // On gère les datas qui ne sont pas dans le formulaire mais initialisé à chaque création d'un post
-        $post['img'] = $files['files']['name'][0];
-        $post['slug'] = $post['title'];
-        $post['number_reviews'] = 0;
+        $post->setParameter('img', $files['files']['name'][0]);
+        $post->setParameter('slug', $post->getParameter('title'));
+        $post->setParameter('number_reviews', 0);
 
         $userManager = new UserManager();
-        $post['user_id'] = $userManager->getUserConnected()->getId();
+        $post->setParameter('user_id', $userManager->getUserConnected()->getId());
 
         // Si le post est publié immédiatement aprés sa création, on met à jour sa date de publication et son statut
-        if (isset($post['published']) && !empty($post['published'] && $post['published'] == 'on')) {
-            $post['published_date'] = date("Y-m-d");
-            $post['published'] = 1;
-        } else if (!isset($post['published'])) {
-            $post['published'] = 0;
+        if (null !== $post->getParameter('published') && !empty($post->getParameter('published')) && $post->getParameter('published') == 'on') {
+            $post->setParameter('published_date', date("Y-m-d"));
+            $post->setParameter('published', 1);
+        } else if (null == $post->getParameter('published')) {
+            $post->setParameter('published', 0);
         }
         
         // On construit l'objet Post
@@ -320,20 +321,20 @@ class PostManager extends Database
      * Mise à jour d'un post
      *
      * @param integer $id
-     * @param array $post
+     * @param Parameter $post
      * @param array $files
      * @return void
      */
-    public function updatePost(int $id, $post, $files)
+    public function updatePost(int $id, Parameter $post, $files)
     {
         // On récupére le post
         $postToUpdate = $this->find($id);
 
-        $postToUpdate->setCategory($post['category']);
-        $postToUpdate->setTitle($post['titre']);
-        $postToUpdate->setChapo($post['chapo']);
-        $postToUpdate->setcontent($post['content']);
-        $postToUpdate->setSlug($post['titre']);
+        $postToUpdate->setCategory($post->getParameter('category'));
+        $postToUpdate->setTitle($post->getParameter('titre'));
+        $postToUpdate->setChapo($post->getParameter('chapo'));
+        $postToUpdate->setcontent($post->getParameter('content'));
+        $postToUpdate->setSlug($post->getParameter('titre'));
 
         // On incrémente les reviews
         $nbReviews = $postToUpdate->getNumber_reviews();
@@ -342,10 +343,10 @@ class PostManager extends Database
         $userManager = new UserManager();
         $postToUpdate->setUser_id($userManager->getUserConnected()->getId());
     
-        if (isset($post['published']) && !empty($post['published'] && $post['published'] == 'on')) {
+        if (null !== $post->getParameter('published') && !empty($post->getParameter('published') && $post->getParameter('published') == 'on')) {
             $postToUpdate->setPublished_date(date("Y-m-d"));
             $postToUpdate->setPublished(1);
-        } else if (!isset($post['published'])) {
+        } else if (null == $post->getParameter('published')) {
             $postToUpdate->setPublished(0);
         }
 

@@ -5,7 +5,7 @@ namespace MyBlog\Managers;
 use MyBlog\Models\UserModel;
 use MyBlog\Services\PaginatedQuery;
 use Pagerfanta\Pagerfanta;
-use Swift;
+use MyBlog\Services\Parameter;
 
 /**
  * Permet de manager UserModel
@@ -151,16 +151,16 @@ class UserManager extends Database
     /**
      * Ajoute un utilisateur en BDD
      *
-     * @param array $post
+     * @param Parameter $post
      * @return UserModel
      */
-    public function addUser($post)
+    public function addUser(Parameter $post)
     {
         // On récup les infos de l'utilisateur pour les enregistrer en bdd
         $user = [];
-        $user['firstname'] = $post['firstname'];
-        $user['lastname'] = $post['lastname'];
-        $user['email'] = $post['email'];
+        $user['firstname'] = $post->getParameter('firstname');
+        $user['lastname'] = $post->getParameter('lastname');
+        $user['email'] = $post->getParameter('email');
 
         //On va vérifier si l'utilisateur est déjà enregistrer ou pas
         $userObject = $this->checkUser($user['email']) ?? false;
@@ -326,15 +326,15 @@ class UserManager extends Database
     /**
      * Création d'un nouvel utilisateur et enregistrement en BDD
      *
-     * @param array $post
+     * @param Parameter $post
      * @return void
      */
-    public function createUser($post)
+    public function createUser(Parameter $post)
     {
 
        // Initialisation
-       $post['created_on'] = date('Y-m-d H:i:s');
-       $post['password'] = password_hash($this->generatePassword(8), PASSWORD_DEFAULT);
+       $post->setParameter('created_on', date('Y-m-d H:i:s'));
+       $post->setParameter('password', password_hash($this->generatePassword(8), PASSWORD_DEFAULT));
        // TODO Gérer l'envoi pas mail du mot de passe
 
        $user = $this->buildObject($post);
@@ -398,19 +398,19 @@ class UserManager extends Database
      * Met à jour en BDD les enregistrements d'un utilisateur avec les informations saisies dans le formulaire
      *
      * @param integer $id
-     * @param array $post
+     * @param Parameter $post
      * @param array $files
      * @return void
      */
-    public function updateUser($id, $post, $files)
+    public function updateUser($id, Parameter $post, $files)
     {
         $user = $this->findUserById($id);
 
-        $user->setLogin($post['login']);
-        $user->setEmail($post['email']);
-        $user->setPassword(password_hash($post['password'], PASSWORD_DEFAULT));
-        $user->setFirstname($post['firstname']);
-        $user->setLastname($post['lastname']);
+        $user->setLogin($post->getParameter('login'));
+        $user->setEmail($post->getParameter('email'));
+        $user->setPassword(password_hash($post->getParameter('password'), PASSWORD_DEFAULT));
+        $user->setFirstname($post->getParameter('firstname'));
+        $user->setLastname($post->getParameter('lastname'));
         if (isset($files) && !empty($files)) {
             $user->setAvatar($files['files']['name'][0]);
         }

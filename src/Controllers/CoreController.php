@@ -5,6 +5,7 @@ namespace MyBlog\Controllers;
 use MyBlog\Managers\CommentManager;
 use MyBlog\Managers\PostManager;
 use MyBlog\Managers\UserManager;
+use MyBlog\Services\Request;
 
 /**
  * Controller Mere servant à instancier le Router, les Managers et le templating
@@ -25,6 +26,9 @@ abstract class CoreController {
         // Instance de Plates pour gérer les templates
         $this->templates = new \League\Plates\Engine( __DIR__ . '/../Views' );
 
+        // Instance de la classe Request
+        $this->request = new Request();
+
         // On instancie les Managers
         $this->postManager = new PostManager();
         $this->commentManager = new CommentManager();
@@ -33,7 +37,7 @@ abstract class CoreController {
         // On enregistre les informations de l'utilisateur connecté
         $this->currentUser = $this->userManager->getUserConnected();
 
-        // Données globales
+        // Données globales accessibles dans les vues
         $this->templates->addData([
             'basePath' => $_SERVER['BASE_URI'],
             'router' => $this->router,

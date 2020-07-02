@@ -130,16 +130,18 @@ class MainController extends CoreController {
      */
     public function addComment() {
 
-        if (!empty($_POST)) {
+        $post = $this->request->postRequest();
+
+        if (!empty($post)) {
             // On récup l'id du post
-            $postId = $_POST['post_id'];
+            $postId = $post->getParameter('post_id');
 
             // On va check si l'utilisateur existe 
             // et on le créé en BDD si besoin
-            $user = $this->userManager->addUser($_POST);
+            $user = $this->userManager->addUser($post);
 
             // On insére le commentaire en BDD
-            $this->commentManager->addComment($_POST, $user);
+            $this->commentManager->addComment($post, $user);
 
             // On récup le slug du post
             $postSlug = $this->postManager->findById($postId)->getSlug();
@@ -159,9 +161,11 @@ class MainController extends CoreController {
 
         $errors = [];
 
-        if (!empty($_POST)) {
+        if (!empty($this->request->postRequest())) {
+            $post = $this->request->postRequest();
+            
             // On identifie l'utilisateur grâce à son login
-            $login = $_POST['login'];
+            $login = $post->getParameter('login');
             $user = $this->userManager->findByLogin($login);
 
             if (!$user) {
@@ -169,7 +173,7 @@ class MainController extends CoreController {
             } else {
                 // On teste le mot de passe
                 $hash = $user->getPassword();
-                $isValid = password_verify($_POST['password'], $hash); // TODO A tester
+                $isValid = password_verify($post->getParameter('password'), $hash); // TODO A tester
 
                 if (!$isValid) {
                     $errors[] = "Mot de passe incorrect";
@@ -187,7 +191,7 @@ class MainController extends CoreController {
             echo $this->templates->render('main/home', [
                 'title' => $headTitle,
                 'errors' => $errors,
-                'fields' => $_POST
+                'fields' => $post
             ]);
         }
     }
@@ -215,16 +219,18 @@ class MainController extends CoreController {
      */
     public function resetPassword()
     {
-        if (isset($_POST) && !empty($_POST)) {
-            $user = $this->userManager->findByLogin($_POST['login']);
+        $post = $this->request->postRequest();
+
+        if (isset($post) && !empty($post)) {
+            $user = $this->userManager->findByLogin($post->getParameter('login'));
 
             if (!$user) {
                 $errors[] = "Utilisateur inconnu";
             } else {
                 // On regarde si les mots de passe sont identiques
-                if ($_POST['password'] === $_POST['password2']) {
+                if ($post->getParameter('password') === $post->getParameter('password2')) {
                     // On enregistre le nouveau mot de passe
-                    $this->userManager->resetPassword($_POST['password'], $_POST['login']);
+                    $this->userManager->resetPassword($post->getParameter('password'), $post->getParameter('login'));
                 } else {
                     $errors[] = "Les mots de passe ne sont pas identiques";
                 }
@@ -243,9 +249,11 @@ class MainController extends CoreController {
      */
     public function contactForm()
     {
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-        $message = $_POST['message'];
+        $post = $this->request->postRequest();
+
+        $name = $post->getParameter('name');
+        $email = $post->getParameter('email');
+        $message = $post->getParameter('message');
 
         $errors = [];
 

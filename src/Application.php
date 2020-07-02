@@ -39,7 +39,7 @@ class Application {
         $this->router->map('GET', '/dashboard', ['AdminController', 'home'], 'dashboard');
         // Gestion des posts
         $this->router->map('GET', '/dashboard/posts/[:page]', ['AdminController', 'list'], 'admin_blog_list');
-        $this->router->map('GET|POST', '/dashboard/posts/new', ['AdminController', 'createNewPost'], 'new_post');
+        $this->router->map('GET|POST', '/dashboard/posts/new/[:page]', ['AdminController', 'createNewPost'], 'new_post');
         $this->router->map('GET', '/dashboard/posts/read/[:slug]', ['AdminController', 'read'], 'read_post');
         $this->router->map('GET', '/dashboard/posts/[i:id]/delete/[:page]', ['AdminController', 'delete'], 'delete_post');
         $this->router->map('GET|POST', '/dashboard/posts/update/[i:id]/[:page]', ['AdminController', 'update'], 'update_post');
@@ -65,10 +65,12 @@ class Application {
         $match = $this->router->match();
 
         if (!$match) {
-            // Pas de route
+            // Pas de route // TODO Faire une belle page 404
             die('Route inconnue');
         } else {
             // Route OK, on récupére les infos
+            // $match['target'][0] => Nom du controller
+            // $match['target'][1] => Nom de la méthode 
             $data = $match['target'];
             $controllerName = '\MyBlog\Controllers\\' . $data[0];
             $methodName = $data[1];
@@ -76,6 +78,7 @@ class Application {
             // Instance du controller
             $controller = new $controllerName($this->router);
             // Execution de la methode
+            // $match['params'] => $_GET
             $controller->$methodName($match['params']);
 
         }

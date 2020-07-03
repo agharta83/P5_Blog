@@ -26,7 +26,7 @@ class Request
     }
 
     /**
-     * @return void
+     * @return Parameter
      */
     public function getRequest()
     {
@@ -34,7 +34,7 @@ class Request
     }
 
     /**
-     * @return void
+     * @return Parameter
      */
     public function postRequest()
     {
@@ -50,7 +50,7 @@ class Request
     }
 
     /**
-     * @return void
+     * @return Session
      */
     public function sessionRequest()
     {

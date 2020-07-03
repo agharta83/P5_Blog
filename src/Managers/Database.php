@@ -88,12 +88,14 @@ abstract class Database {
                 return $this->checkConnexion()->lastInsertId();
 
             } else {
+
                 return $stmt;
             }
+        } else {
+            $stmt = $this->checkConnexion()->query($sql);
+
+            return $stmt;
         }
 
-        $stmt = $this->checkConnexion()->query($sql);
-
-        return $stmt;
     }
 }

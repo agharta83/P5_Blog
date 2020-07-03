@@ -6,16 +6,18 @@ use MyBlog\Models\UserModel;
 use MyBlog\Services\PaginatedQuery;
 use Pagerfanta\Pagerfanta;
 use MyBlog\Services\Parameter;
+use MyBlog\Services\Request;
 
 /**
  * Permet de manager UserModel
  * en faisant le lien avec le controller
  */
-class UserManager extends Database
+class UserManager extends CoreManager
 {
 
     /**
      * Convertit chaque champ de la table en propriété de l'objet UserModel
+     * et définit des valeurs par défault à certaines propriétés
      *
      * @param strint|int|bool $row
      * @return object UserModel
@@ -24,17 +26,17 @@ class UserManager extends Database
     {
 
         $user = new UserModel();
-
-        $user->setId($row['id'] ?? null);
-        $user->setLogin($row['login'] ?? null);
-        $user->setPassword($row['password'] ?? null);
-        $user->setEmail($row['email']);
-        $user->setStatut_user($row['statut_user'] ?? 1);
-        $user->setUser_role($row['user_role'] ?? UserModel::USER);
-        $user->setCreated_on($row['created_on'] ?? null);
-        $user->setFirstname($row['firstname'] ?? null);
-        $user->setLastname($row['lastname'] ?? null);
-        $user->setAvatar($row['avatar'] ?? null);
+        //var_dump($row); die();
+        $user->setId($row->id ?? null);
+        $user->setLogin($row->login ?? null);
+        $user->setPassword($row->password ?? null);
+        $user->setEmail($row->email);
+        $user->setStatut_user($row->statut_user ?? 1);
+        $user->setUser_role($row->user_role ?? UserModel::USER);
+        $user->setCreated_on($row->created_on ?? null);
+        $user->setFirstname($row->firstname ?? null);
+        $user->setLastname($row->lastname ?? null);
+        $user->setAvatar($row->avatar ?? null);
 
         return $user;
     }
@@ -58,7 +60,7 @@ class UserManager extends Database
         $parameters = [':id' => $id];
         $result = $this->createQuery($sql, $parameters);
 
-        $post = $result->fetch();
+        $post = $result->fetch(\PDO::FETCH_OBJ);
 
         $result->closeCursor();
 
@@ -80,30 +82,13 @@ class UserManager extends Database
         $parameters = [':login' => $login];
         $result = $this->createQuery($sql, $parameters);
 
-        $user = $result->fetch();
+        $user = $result->fetch(\PDO::FETCH_OBJ);
+
+        //var_dump($user); die();
 
         $result->closeCursor();
 
         return $this->buildObject($user);
-    }
-
-    /**
-     * Enregistre les infos de l'utilisateur en session
-     *
-     * @param UserModel $user
-     * @return void
-     */
-    public function saveUserInSession(UserModel $user)
-    {
-        $this->session->set('user', [
-            'id' => $user->getId(),
-            'email' => $user->getEmail(),
-            'login' => $user->getLogin(),
-            'firstname' => $user->getFirstname(),
-            'lastname' => $user->getLastname(),
-            'avatar' => $user->getAvatar(),
-            'is_admin' => (bool) $user->isAdmin()
-        ]);
     }
 
     /**
@@ -217,25 +202,8 @@ class UserManager extends Database
             $userObject = $this->getUser($idUser);
         }
 
-        // On enregistre l'user en session
-        $this->saveUserInSession($userObject);
-
         // Il est déjà présent, on returne l'user
         return $userObject;
-    }
-
-    /**
-     * Retourne les infos de l'utilisateur connecté / enregistré en session
-     *
-     * @return UserModel|false
-     */
-    public function getUserConnected()
-    {
-        if (!empty($this->session->get('user'))) {
-            return $this->getUser($this->session->get('user')['id']);
-        }
-
-        return false;
     }
 
     /**
@@ -336,6 +304,8 @@ class UserManager extends Database
        $post->setParameter('created_on', date('Y-m-d H:i:s'));
        $post->setParameter('password', password_hash($this->generatePassword(8), PASSWORD_DEFAULT));
        // TODO Gérer l'envoi pas mail du mot de passe
+
+       var_dump($post); die();
 
        $user = $this->buildObject($post);
 

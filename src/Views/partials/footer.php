@@ -52,7 +52,7 @@
         <div class="modal-body">
           <div class="form-group">
             <label>Nom d'utilisateur</label>
-            <input name="login" type="text" class="form-control" required="required" value="<?= $fields['login'] ?? ''; ?>">
+            <input name="login" type="text" class="form-control" required="required" value="<?= $fields->login ?? ''; ?>">
           </div>
           <div class="form-group">
             <div class="clearfix">
@@ -92,7 +92,7 @@
         <div class="modal-body">
           <div class="form-group">
             <label>Nom d'utilisateur</label>
-            <input name="login" type="text" class="form-control" required="required" value="<?= $fields['login'] ?? ''; ?>">
+            <input name="login" type="text" class="form-control" required="required" value="<?= $fields->login ?? ''; ?>">
           </div>
           <div class="form-group">
             <label>Mot de passe</label>

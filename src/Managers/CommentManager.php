@@ -7,7 +7,7 @@ use MyBlog\Services\PaginatedQuery;
 use Pagerfanta\Pagerfanta;
 use MyBlog\Services\Parameter;
 
-class CommentManager extends Database
+class CommentManager extends CoreManager
 {
     /**
      * Convertit chaque champ de la table en propriété de l'objet CommentModel

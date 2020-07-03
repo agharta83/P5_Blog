@@ -11,7 +11,7 @@ use MyBlog\Services\Parameter;
  * Permet de manager PostModel 
  * en relation avec le controller
  */
-class PostManager extends Database
+class PostManager extends CoreManager
 {
     /**
      * Convertit chaque champ de la table en propriété de l'objet PostModel

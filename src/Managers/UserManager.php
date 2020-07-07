@@ -26,7 +26,7 @@ class UserManager extends CoreManager
     {
 
         $user = new UserModel();
-        //var_dump($row); die();
+
         $user->setId($row->id ?? null);
         $user->setLogin($row->login ?? null);
         $user->setPassword($row->password ?? null);
@@ -47,9 +47,8 @@ class UserManager extends CoreManager
      * @param integer $id
      * @return UserModel
      */
-    public function getUser(int $id)
+    public function getUser($id)
     {
-
         // Construction de la requete
         $sql = '
             SELECT * FROM user 
@@ -60,11 +59,11 @@ class UserManager extends CoreManager
         $parameters = [':id' => $id];
         $result = $this->createQuery($sql, $parameters);
 
-        $post = $result->fetch(\PDO::FETCH_OBJ);
+        $user = $result->fetch(\PDO::FETCH_OBJ);
 
         $result->closeCursor();
 
-        return $this->buildObject($post);
+        return $this->buildObject($user);
     }
 
     /**
@@ -83,8 +82,6 @@ class UserManager extends CoreManager
         $result = $this->createQuery($sql, $parameters);
 
         $user = $result->fetch(\PDO::FETCH_OBJ);
-
-        //var_dump($user); die();
 
         $result->closeCursor();
 
@@ -106,7 +103,7 @@ class UserManager extends CoreManager
         return false;
     }
 
- 
+
     /**
      * Retourne un utilisateur associé à un email
      *
@@ -300,16 +297,14 @@ class UserManager extends CoreManager
     public function createUser(Parameter $post)
     {
 
-       // Initialisation
-       $post->setParameter('created_on', date('Y-m-d H:i:s'));
-       $post->setParameter('password', password_hash($this->generatePassword(8), PASSWORD_DEFAULT));
-       // TODO Gérer l'envoi pas mail du mot de passe
+        // Initialisation
+        $post->setParameter('created_on', date('Y-m-d H:i:s'));
+        $post->setParameter('password', password_hash($this->generatePassword(8), PASSWORD_DEFAULT));
+        // TODO Gérer l'envoi pas mail du mot de passe
 
-       var_dump($post); die();
+        $user = $this->buildObject($post);
 
-       $user = $this->buildObject($post);
-
-       $sql = '
+        $sql = '
            INSERT INTO user (
                id,
                login,
@@ -335,20 +330,20 @@ class UserManager extends CoreManager
            )
        ';
 
-       $parameters = [
-           ':id' => $user->getId(),
-           ':login' => $user->getLogin(),
-           ':password' => $user->getPassword(),
-           ':email' => $user->getEmail(),
-           ':statut_user' => $user->getStatut_user(),
-           ':user_role' => $user->getUser_role(),
-           ':created_on' => $user->getCreated_on(),
-           ':firstname' => $user->getFirstname(),
-           ':lastname' => $user->getLastname(),
-           ':avatar' => $user->getAvatar()
-       ];
+        $parameters = [
+            ':id' => $user->getId(),
+            ':login' => $user->getLogin(),
+            ':password' => $user->getPassword(),
+            ':email' => $user->getEmail(),
+            ':statut_user' => $user->getStatut_user(),
+            ':user_role' => $user->getUser_role(),
+            ':created_on' => $user->getCreated_on(),
+            ':firstname' => $user->getFirstname(),
+            ':lastname' => $user->getLastname(),
+            ':avatar' => $user->getAvatar()
+        ];
 
-       $this->createQuery($sql, $parameters);
+        $this->createQuery($sql, $parameters);
     }
 
     /**
@@ -359,9 +354,13 @@ class UserManager extends CoreManager
      */
     private function generatePassword(int $nbChar)
     {
-        return substr(str_shuffle(
-            'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 1,
-            $nbChar);
+        return substr(
+            str_shuffle(
+                'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+            ),
+            1,
+            $nbChar
+        );
     }
 
     /**
@@ -369,10 +368,10 @@ class UserManager extends CoreManager
      *
      * @param integer $id
      * @param Parameter $post
-     * @param array $files
+     * @param Parameter $files
      * @return void
      */
-    public function updateUser($id, Parameter $post, $files)
+    public function updateUser($id, Parameter $post, Parameter $files)
     {
         $user = $this->findUserById($id);
 
@@ -382,9 +381,9 @@ class UserManager extends CoreManager
         $user->setFirstname($post->getParameter('firstname'));
         $user->setLastname($post->getParameter('lastname'));
         if (isset($files) && !empty($files)) {
-            $user->setAvatar($files['files']['name'][0]);
+            $user->setAvatar($files->getParameter('files')['name'][0]);
         }
-        
+
         // On enregistre
         $this->save($user);
     }
@@ -432,12 +431,12 @@ class UserManager extends CoreManager
             ':statut_user' => $user->getStatut_user(),
             ':user_role' => $user->getUser_role(),
             ':created_on' => $user->getCreated_on(),
-            ':firstname' =>$user->getFirstname(),
+            ':firstname' => $user->getFirstname(),
             ':lastname' => $user->getLastname(),
             ':avatar' => $user->getAvatar(),
             ':id' => $user->getId()
         ];
-        
+
         $this->createQuery($sql, $parameters);
     }
 
@@ -487,7 +486,7 @@ class UserManager extends CoreManager
 
     public function sendEmail($name, $email, $message)
     {
-        $data = require __DIR__ .'/config-mail.php';
+        $data = require __DIR__ . '/config-mail.php';
 
         $transport = (new \Swift_SmtpTransport($data['SMTP'], 465, 'ssl'))
             ->setUsername($data['email'])
@@ -503,4 +502,20 @@ class UserManager extends CoreManager
         $mailer->send($message);
     }
 
+    /**
+     * Retourne les infos de l'utilisateur connecté / enregistré en session
+     *
+     * @return UserModel|false
+     */
+    public function getUserConnected()
+    {
+
+        if ($this->getSession()) {
+            if (null !== $this->getSession()->get('user')) {
+                return $this->getUser($this->getSession()->get('user')['id']);
+            }
+        }
+
+        return false;
+    }
 }

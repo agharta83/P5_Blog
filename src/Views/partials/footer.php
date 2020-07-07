@@ -1,6 +1,3 @@
-<?php //var_dump($errors); 
-?>
-
 <footer class="bg-dark footer-section">
   <div class="section">
     <div class="container">

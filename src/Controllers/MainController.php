@@ -91,12 +91,13 @@ class MainController extends CoreController
 
         // Récup du post
         $post = $this->postManager->findBySlug($slug);
+
         // Recup des commentaires
         $comments = $this->commentManager->findValidCommentsForPost($post->getId());
         // Recup du nombre de commentaires
         $nbComments = $this->commentManager->countNbCommentsForPost($post->getId());
         // Récup des posts similaires
-        $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getId());
+        $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getSlug());
 
         // On affiche le template
         echo $this->templates->render('blog/read', [

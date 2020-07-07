@@ -3,6 +3,7 @@
 namespace MyBlog\Controllers;
 
 use MyBlog\Services\Uploader;
+use MyBlog\Services\Parameter;
 
 /**
  * Controller pour l'administration
@@ -117,26 +118,26 @@ class AdminController extends CoreController
 
         // Le formulaire de création du post a été soumis
         $post = $this->post;
-        //var_dump(!empty($post->getParameter('submit'))); die();
+
         if ( null !== $post->getParameter('submit') && !empty($post->getParameter('submit')) ) {
 
             // On check $_FILES et on upload l'image
-            $this->upload($_FILES);
+            $this->upload($this->files);
 
-            $this->postManager->addPost($post, $_FILES);
+            $this->postManager->addPost($post, $this->files);
 
             // On redirige
             $this->redirect('admin_blog_list', ['page' => $currentPage]);
         } else if (null !== $post->getParameter('preview') && !empty($post->getParameter('preview'))) {
             // L'utilisateur veut prévisualiser le post
-            if (isset($_FILES['name']) && !empty($_FILES['name'])) {
-                $this->upload($_FILES);
+            if (null !== $this->files->getParameter('name') && !empty($this->files->getParameter('name'))) {
+                $this->upload($this->files);
             }
 
-            $post = $this->postManager->preview($post, $_FILES);
+            $post = $this->postManager->preview($post, $this->files);
 
             // Récup des posts similaires
-            $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getId());
+            $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getSlug());
 
             // On affiche le template
             echo $this->templates->render('blog/read', ['post' => $post, 'similarPosts' => $similarPosts]);
@@ -153,7 +154,6 @@ class AdminController extends CoreController
 
     /**
      * Permet d'afficher la page d'un post dans la partie administration
-     * TODO implémenter un preview
      *
      * @param array $params
      * @return void
@@ -198,32 +198,43 @@ class AdminController extends CoreController
      */
     public function update($params)
     {
-
         // Id du post à éditer
         $id = $params['id'];
-
-        // Page courante
-        $currentPage = $params['page'];
 
         // On récupére le post
         $post = $this->postManager->find($id);
 
-        if (!empty($this->post)) {
+        if (null !== $this->post->getParameter('update')) {
             // On check $_FILES
-            $this->upload($_FILES);
+            $this->upload($this->files);
 
-            $this->postManager->updatePost($id, $this->post, $_FILES);
+            $this->postManager->updatePost($id, $this->post, $this->files);
 
             // On redirige
             $this->redirect('admin_blog_list', ['page' => $currentPage]);
+        } elseif (null !== $this->post->getParameter('preview')) {
+            // L'utilisateur veut prévisualiser le post
+            if (null !== $this->files->getParameter('name') && !empty($this->files->getParameter('name'))) {
+                $this->upload($this->files);
+            }
+
+            $post = $this->postManager->preview($post, $this->files);
+
+            //var_dump($post); die();
+
+            // Récup des posts similaires
+            $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getSlug());
+
+            // On affiche le template
+            echo $this->templates->render('blog/read', ['post' => $post, 'similarPosts' => $similarPosts, 'page' => $currentPage]);
+    
         } else {
             // On redirige
             $headTitle = 'Dashboard / Edition de post';
 
             echo $this->templates->render('admin/update_post', [
                 'title' => $headTitle,
-                'post' => $post,
-                'page' => $currentPage
+                'post' => $post
             ]);
         }
     }
@@ -231,17 +242,17 @@ class AdminController extends CoreController
     /**
      * Permet d'upload l'image
      *
-     * @param array $files
+     * @param Parameter $files
      * @return void
      */
-    private function upload($files)
+    private function upload(Parameter $files)
     {
-        if (isset($files['name']) && !empty($files['name'])) {
+        if (null !== $files->getParameter('name') && !empty($files->getParameter('name'))) {
             $this->checkFiles($files);
 
             // On upload
             $uploader = new Uploader();
-            $uploadResult = $uploader->upload($files['files']);
+            $uploadResult = $uploader->upload($files->getParameter('files'));
 
 
             if ($uploadResult !== TRUE) {
@@ -255,10 +266,10 @@ class AdminController extends CoreController
     /**
      * Permet de vérifier si il y a un fichier à upload
      *
-     * @param array $files
+     * @param Parameter $files
      * @return Exception
      */
-    private function checkFiles($files)
+    private function checkFiles(Parameter $files)
     {
         // On check $_FILES
         try {
@@ -475,13 +486,13 @@ class AdminController extends CoreController
 
         if (!empty($this->post)) {
             // On check $_FILES
-            $this->upload($_FILES);
+            $this->upload($this->files);
 
             $post = $this->post;
 
             $id = $post->getParameter('userId');
 
-            $this->userManager->updateUser($id, $post, $_FILES);
+            $this->userManager->updateUser($id, $post, $this->files);
         }
 
         // On redirige

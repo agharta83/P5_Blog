@@ -21,7 +21,7 @@ class Request
     {
         $this->get = new Parameter($_GET);
         $this->post = new Parameter($_POST);
-        $this->files = $_FILES;
+        $this->files = new Parameter($_FILES);
         $this->session = new Session($_SESSION);
     }
 
@@ -42,7 +42,7 @@ class Request
     }
 
     /**
-     * @return void
+     * @return Parameter
      */
     public function filesRequest()
     {

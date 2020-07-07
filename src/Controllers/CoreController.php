@@ -30,6 +30,7 @@ abstract class CoreController {
         $this->request = new Request();
         $this->get = $this->request->getRequest();
         $this->post = $this->request->postRequest();
+        $this->files = $this->request->filesRequest();
         $this->session = $this->request->sessionRequest();
 
         // On instancie les Managers
@@ -38,7 +39,7 @@ abstract class CoreController {
         $this->userManager = new UserManager();
 
         // On enregistre les informations de l'utilisateur connecté
-        $this->currentUser = $this->getUserConnected();
+        $this->currentUser = $this->userManager->getUserConnected();
 
         // Données globales accessibles dans les vues
         $this->templates->addData([
@@ -63,23 +64,6 @@ abstract class CoreController {
     public function redirect ($routeName, $infos = []) {
         header('Location: ' . $this->router->generate($routeName, $infos));
         exit();
-    }
-
-    /**
-     * Retourne les infos de l'utilisateur connecté / enregistré en session
-     *
-     * @return UserModel|false
-     */
-    public function getUserConnected()
-    {
-
-        if ($this->session) {
-            if (null !== $this->session->get('user')) {
-                return $this->userManager->getUser($this->session->get('user')['id']);
-            }
-        }
-
-        return false;
     }
     
 }

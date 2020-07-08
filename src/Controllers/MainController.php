@@ -101,7 +101,7 @@ class MainController extends CoreController
         $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getSlug());
 
         // On affiche le template
-        echo $this->templates->render('blog/read', [
+        echo $this->renderView('blog/read', [
             'post' => $post,
             'comments' => $comments,
             'nbComments' => $nbComments,

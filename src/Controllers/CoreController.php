@@ -8,6 +8,7 @@ use MyBlog\Managers\UserManager;
 use MyBlog\Services\Request;
 use Myblog\Services\Parameter;
 use MyBlog\Services\Uploader;
+use MyBlog\Services\Validator;
 
 /**
  * Controller Mere servant à instancier le Router, les Managers et le templating
@@ -45,6 +46,9 @@ abstract class CoreController {
         $this->commentManager = new CommentManager();
         $this->userManager = new UserManager();
 
+        // On instancie les services
+        $this->validator = new Validator();
+
         // On enregistre les informations de l'utilisateur connecté
         $this->currentUser = $this->userManager->getUserConnected();
 
@@ -56,7 +60,8 @@ abstract class CoreController {
             'userManager' => $this->userManager,
             'postManager' => $this->postManager,
             'commentManager' => $this->commentManager,
-            'session' => $this->session
+            'session' => $this->session,
+            'validator' => $this->validator
         ]);
 
     }

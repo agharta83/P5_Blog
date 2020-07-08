@@ -2,11 +2,11 @@
 
 namespace MyBlog\Controllers;
 
-use MyBlog\Services\Uploader;
+
 use MyBlog\Services\Parameter;
 
 /**
- * Controller pour l'administration
+ * Classe permettant de piloter la partie administration
  */
 class AdminController extends CoreController
 {
@@ -39,7 +39,7 @@ class AdminController extends CoreController
      *
      * @return void
      */
-    public function home()
+    public function dashboard()
     {
 
         $headTitle = 'Dashboard';
@@ -62,7 +62,7 @@ class AdminController extends CoreController
         ];
 
         // On affiche le template
-        echo $this->templates->render('admin/home', [
+        return $this->renderView('admin/home', [
             'title' => $headTitle,
             'countDatas' => $countDatas
         ]);
@@ -76,8 +76,6 @@ class AdminController extends CoreController
      */
     public function list($params)
     {
-
-        $headTitle = 'Dashboard / Posts';
 
         try {
             // Récup la liste des posts en db
@@ -100,402 +98,10 @@ class AdminController extends CoreController
         }
 
         // On affiche le template
-        echo $this->templates->render('admin/posts', [
-            'title' => $headTitle,
+        return $this->renderView('admin/posts', [
             'posts' => $posts,
             'pagination' => $pagination
         ]);
     }
 
-    /**
-     * Permet de créer un post
-     *
-     * @return void
-     */
-    public function createNewPost($params)
-    {
-        $currentPage = $params['page'];
-
-        // Le formulaire de création du post a été soumis
-        $post = $this->post;
-
-        if ( null !== $post->getParameter('submit') && !empty($post->getParameter('submit')) ) {
-
-            // On check $_FILES et on upload l'image
-            $this->upload($this->files);
-
-            $this->postManager->addPost($post, $this->files);
-
-            // On redirige
-            $this->redirect('admin_blog_list', ['page' => $currentPage]);
-        } else if (null !== $post->getParameter('preview') && !empty($post->getParameter('preview'))) {
-            // L'utilisateur veut prévisualiser le post
-            if (null !== $this->files->getParameter('name') && !empty($this->files->getParameter('name'))) {
-                $this->upload($this->files);
-            }
-
-            $post = $this->postManager->preview($post, $this->files);
-
-            // Récup des posts similaires
-            $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getSlug());
-
-            // On affiche le template
-            echo $this->templates->render('blog/read', ['post' => $post, 'similarPosts' => $similarPosts]);
-        } else {
-            // On affiche la page de création d'un nouveau post
-            $headTitle = 'Dashboard / Nouveau post';
-
-            echo $this->templates->render('admin/new_post', [
-                'title' => $headTitle,
-                'page' => $currentPage
-            ]);
-        }
-    }
-
-    /**
-     * Permet d'afficher la page d'un post dans la partie administration
-     *
-     * @param array $params
-     * @return void
-     */
-    public function read($params)
-    {
-
-        // Slug du post à afficher
-        $slug = $params['slug'];
-
-        // Récup du post
-        $post = $this->postManager->findBySlug($slug);
-
-        // On affiche le template
-        echo $this->templates->render('blog/read', ['post' => $post]);
-    }
-
-    /**
-     * Supprime un post à partir de son Id
-     *
-     * @param array $params
-     * @return void
-     */
-    public function delete($params)
-    {
-        // Id du post à supprimer
-        $id = $params['id'];
-        $currentPage = $params['page'];
-
-        // On récup et supprime le post
-        $this->postManager->delete($id);
-
-        // On redirige
-        $this->redirect('admin_blog_list', ['page' => $currentPage]);
-    }
-
-    /**
-     * Met à jour un post en BDD
-     *
-     * @param array $params
-     * @return void
-     */
-    public function update($params)
-    {
-        // Id du post à éditer
-        $id = $params['id'];
-
-        // On récupére le post
-        $post = $this->postManager->find($id);
-
-        if (null !== $this->post->getParameter('update')) {
-            // On check $_FILES
-            $this->upload($this->files);
-
-            $this->postManager->updatePost($id, $this->post, $this->files);
-
-            // On redirige
-            $this->redirect('admin_blog_list', ['page' => $currentPage]);
-        } elseif (null !== $this->post->getParameter('preview')) {
-            // L'utilisateur veut prévisualiser le post
-            if (null !== $this->files->getParameter('name') && !empty($this->files->getParameter('name'))) {
-                $this->upload($this->files);
-            }
-
-            $post = $this->postManager->preview($post, $this->files);
-
-            //var_dump($post); die();
-
-            // Récup des posts similaires
-            $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getSlug());
-
-            // On affiche le template
-            echo $this->templates->render('blog/read', ['post' => $post, 'similarPosts' => $similarPosts, 'page' => $currentPage]);
-    
-        } else {
-            // On redirige
-            $headTitle = 'Dashboard / Edition de post';
-
-            echo $this->templates->render('admin/update_post', [
-                'title' => $headTitle,
-                'post' => $post
-            ]);
-        }
-    }
-
-    /**
-     * Permet d'upload l'image
-     *
-     * @param Parameter $files
-     * @return void
-     */
-    private function upload(Parameter $files)
-    {
-        if (null !== $files->getParameter('name') && !empty($files->getParameter('name'))) {
-            $this->checkFiles($files);
-
-            // On upload
-            $uploader = new Uploader();
-            $uploadResult = $uploader->upload($files->getParameter('files'));
-
-
-            if ($uploadResult !== TRUE) {
-                echo 'Impossible d\'enregistrer l\'image.';
-            }
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Permet de vérifier si il y a un fichier à upload
-     *
-     * @param Parameter $files
-     * @return Exception
-     */
-    private function checkFiles(Parameter $files)
-    {
-        // On check $_FILES
-        try {
-            if (!$files) {
-                throw new \UnexpectedValueException('Un problème est survenu pendant le téléchargement. Veuillez réessayer.');
-            }
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-            exit();
-        }
-    }
-
-    /**
-     * Récupére la liste des commentaires paginées et redirige vers la liste des commentaires
-     *
-     * @param array $params
-     * @return void
-     */
-    public function listComments($params)
-    {
-        $headTitle = 'Dashboard / Comments';
-
-        $pagination = $this->commentManager->findAllCommentsPaginated(5, $params['page']);
-
-        $results = $pagination->getCurrentPageResults();
-
-        $comments = [];
-
-        // On parcourt le tableau de résultat et on génére l'objet PostModel
-        foreach ($results as $row) {
-            $commentId = $row['id'];
-            $comments[$commentId] = $this->commentManager->buildObject($row);
-        }
-
-        echo $this->templates->render('admin/comments', [
-            'title' => $headTitle,
-            'comments' => $comments,
-            'pagination' => $pagination
-        ]);
-    }
-
-    /**
-     * Supprimer un commentaire et redirige vers la liste des commentaires
-     *
-     * @param array $params
-     * @return void
-     */
-    public function deleteComment($params)
-    {
-
-        // Id du commentaire à supprimer
-        $id = $params['id'];
-
-        // Page courante
-        $currentPage = $params['page'];
-
-        // On récup et supprime le commentaire
-        $this->commentManager->delete($id);
-
-        // On redirige
-        $this->redirect('comments_list', ['page' => $currentPage]);
-    }
-
-    /**
-     * Valide un commentaire et redirige vers la liste des commentaires
-     *
-     * @param array $params
-     * @return void
-     */
-    public function validComment($params)
-    {
-        // Id du commentaire à supprimer
-        $id = $params['id'];
-
-        // Page courange
-        $currentPage = $params['page'];
-
-        // On récup et supprime le commentaire
-        $this->commentManager->valid($id);
-
-        // On redirige
-        $this->redirect('comments_list', ['page' => $currentPage]);
-    }
-
-    /**
-     * Retourne la liste des utilisateurs paginées
-     *
-     * @param [type] $params
-     * @return void
-     */
-    public function listUsers($params)
-    {
-        $headTitle = 'Dashboard / Utilisateurs';
-
-        $pagination = $this->userManager->findAllUsersPaginated(6, (int) $params['page']);
-
-        $results = $pagination->getCurrentPageResults();
-
-        $users = [];
-
-        // On parcourt le tableau de résultat et on génére l'objet PostModel
-        foreach ($results as $row) {
-            $userId = $row['id'];
-            $users[$userId] = $this->userManager->buildObject($row);
-        }
-
-        echo $this->templates->render('admin/users', [
-            'title' => $headTitle,
-            'users' => $users,
-            'pagination' => $pagination
-        ]);
-    }
-
-    /**
-     * Desactive un utilisateur
-     *
-     * @param array $params
-     * @return void
-     */
-    public function disableUser($params)
-    {
-        // Id de l'utilisateur à désactiver
-        $id = $params['id'];
-        // Page courante
-        $currentPage = $params['page'];
-
-        // On récup et désactive l'utilisateur
-        $this->userManager->disable($id);
-
-        // On redirige
-        $this->redirect('users_list', ['page' => $currentPage]);
-    }
-
-    /**
-     * Activer l'utilisateur
-     *
-     * @param array $params
-     * @return void
-     */
-    public function enableUser($params)
-    {
-        // Id de l'utilisateur à activer
-        $id = $params['id'];
-        // Page courante
-        $currentPage = $params['page'];
-
-        // On récup et active l'utilisateur
-        $this->userManager->enable($id);
-
-        // On redirige
-        $this->redirect('users_list', ['page' => $currentPage]);
-    }
-
-    /**
-     * Promotion d'un utilisateur en Administrateur
-     *
-     * @param [type] $params
-     * @return void
-     */
-    public function promoteUser($params)
-    {
-        // Id de l'utilisateur à promouvoir
-        $id = $params['id'];
-        // Page courante
-        $currentPage = $params['page'];
-
-        // On récup et promeut l'utilisateur
-        $this->userManager->promote($id);
-
-        // On redirige
-        $this->redirect('users_list', ['page' => $currentPage]);
-    }
-
-    /**
-     * Retrograde l'utilisateur en role User
-     *
-     * @param array $params
-     * @return void
-     */
-    public function downgradeUser($params)
-    {
-        // Id de l'utilisateur à rétrograder
-        $id = $params['id'];
-        // Page courante
-        $currentPage = $params['page'];
-
-        // On récup et rétrograde l'utilisateur
-        $this->userManager->downgrade($id);
-
-        // On redirige
-        $this->redirect('users_list', ['page' => $currentPage]);
-    }
-
-    /**
-     * Création d'un nouvel utilisateur
-     *
-     * @param [type] $params
-     * @return void
-     */
-    public function createUser($params)
-    {
-        $currentPage = $params['page'];
-
-        $this->userManager->createUser($this->post);
-
-        // On redirige
-        $this->redirect('users_list', ['page' => $currentPage]);
-    }
-
-    public function updateUser($params)
-    {
-        // Page courante
-        $currentPage = $params['page'];
-
-        if (!empty($this->post)) {
-            // On check $_FILES
-            $this->upload($this->files);
-
-            $post = $this->post;
-
-            $id = $post->getParameter('userId');
-
-            $this->userManager->updateUser($id, $post, $this->files);
-        }
-
-        // On redirige
-        $this->redirect('users_list', ['page' => $currentPage]);
-    }
 }

@@ -36,25 +36,25 @@ class Application {
 
         /** Administration */
         // Dashboard
-        $this->router->map('GET', '/dashboard', ['AdminController', 'home'], 'dashboard');
+        $this->router->map('GET', '/dashboard', ['AdminController', 'dashboard'], 'dashboard');
         // Gestion des posts
         $this->router->map('GET', '/dashboard/posts/[:page]', ['AdminController', 'list'], 'admin_blog_list');
-        $this->router->map('GET|POST', '/dashboard/posts/new/[:page]', ['AdminController', 'createNewPost'], 'new_post');
-        $this->router->map('GET', '/dashboard/posts/read/[:slug]', ['AdminController', 'read'], 'read_post');
-        $this->router->map('GET', '/dashboard/posts/[i:id]/delete/[:page]', ['AdminController', 'delete'], 'delete_post');
-        $this->router->map('GET|POST', '/dashboard/posts/update/[i:id]', ['AdminController', 'update'], 'update_post');
+        $this->router->map('GET|POST', '/dashboard/posts/new/[:page]', ['PostController', 'createNewPost'], 'new_post');
+        $this->router->map('GET', '/dashboard/posts/read/[:slug]', ['PostController', 'read'], 'read_post');
+        $this->router->map('GET', '/dashboard/posts/[i:id]/delete/[:page]', ['PostController', 'delete'], 'delete_post');
+        $this->router->map('GET|POST', '/dashboard/posts/update/[i:id]', ['PostController', 'update'], 'update_post');
         // Gestion des commentaires
-        $this->router->map('GET', '/dashboard/comments/[:page]', ['AdminController', 'listComments'], 'comments_list');
-        $this->router->map('GET', '/dashboard/comments/[i:id]/delete/[:page]', ['AdminController', 'deleteComment'], 'delete_comment');
-        $this->router->map('GET', '/dashboard/comments/[i:id]/valid/[:page]', ['AdminController', 'validComment'], 'valid_comment');
+        $this->router->map('GET', '/dashboard/comments/[:page]', ['CommentController', 'listComments'], 'comments_list');
+        $this->router->map('GET', '/dashboard/comments/[i:id]/delete/[:page]', ['CommentController', 'deleteComment'], 'delete_comment');
+        $this->router->map('GET', '/dashboard/comments/[i:id]/valid/[:page]', ['CommentController', 'validComment'], 'valid_comment');
         // Gestion des utilisateurs
-        $this->router->map('GET', '/dashboard/users/[:page]', ['AdminController', 'listUsers'], 'users_list');
-        $this->router->map('GET', '/dashboard/users/[i:id]/disable/[:page]', ['AdminController', 'disableUser'], 'disable_user');
-        $this->router->map('GET', '/dashboard/users/[i:id]/enable/[:page]', ['AdminController', 'enableUser'], 'enable_user');
-        $this->router->map('GET', '/dashboard/users/[i:id]/promote/[:page]', ['AdminController', 'promoteUser'], 'promote_user');
-        $this->router->map('GET', '/dashboard/users/[i:id]/downgrade/[:page]', ['AdminController', 'downgradeUser'], 'downgrade_user');
-        $this->router->map('POST', '/dashboard/users/create/[:page]', ['AdminController', 'createUser'], 'create_user');
-        $this->router->map('POST', '/dashboard/users/update/[:page]', ['AdminController', 'updateUser'], 'update_user');
+        $this->router->map('GET', '/dashboard/users/[:page]', ['UserController', 'listUsers'], 'users_list');
+        $this->router->map('GET', '/dashboard/users/[i:id]/disable/[:page]', ['UserController', 'disableUser'], 'disable_user');
+        $this->router->map('GET', '/dashboard/users/[i:id]/enable/[:page]', ['UserController', 'enableUser'], 'enable_user');
+        $this->router->map('GET', '/dashboard/users/[i:id]/promote/[:page]', ['UserController', 'promoteUser'], 'promote_user');
+        $this->router->map('GET', '/dashboard/users/[i:id]/downgrade/[:page]', ['UserController', 'downgradeUser'], 'downgrade_user');
+        $this->router->map('POST', '/dashboard/users/create/[:page]', ['UserController', 'createUser'], 'create_user');
+        $this->router->map('POST', '/dashboard/users/update/[:page]', ['UserController', 'updateUser'], 'update_user');
 
     }
 

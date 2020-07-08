@@ -5,7 +5,7 @@ namespace MyBlog\Controllers;
 use MyBlog\Models\UserModel;
 
 /**
- * Controller pour les pages publiques
+ * Classe permettant d'afficher et de piloter les pages publiques
  */
 class MainController extends CoreController
 {
@@ -22,8 +22,9 @@ class MainController extends CoreController
 
         // Render template
         $headTitle = 'Audrey César | Portfolio Blog';
-        echo $this->templates->render('main/home', [
-            'title' => $headTitle,
+
+        return $this->renderView('main/home', [
+            'title' => htmlspecialchars($headTitle),
             'posts' => $posts
         ]);
     }
@@ -35,7 +36,7 @@ class MainController extends CoreController
      */
     public function about()
     {
-        echo $this->templates->render('main/about', ['title' => 'about']);
+        return $this->renderView('main/about', ['title' => 'about']);
     }
 
     /**
@@ -45,7 +46,7 @@ class MainController extends CoreController
      */
     public function contact()
     {
-        echo $this->templates->render('main/contact', ['title' => 'contact']);
+        return $this->renderView('main/contact', ['title' => 'contact']);
     }
 
     /**
@@ -70,7 +71,7 @@ class MainController extends CoreController
         }
 
         // On affiche le template
-        echo $this->templates->render('blog/list', [
+        return $this->renderView('blog/list', [
             'title' => 'Blog',
             'posts' => $posts,
             'pagination' => $pagination

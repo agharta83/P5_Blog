@@ -275,7 +275,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   ;
 
-  if (window.location.pathname == '/opc/P5_Blog/dashboard/posts/new' || window.location.href.indexOf("update") > -1) {
+  if (window.location.href.indexOf("posts/new") || window.location.href.indexOf("update") > -2) {
+    console.log('test tiny');
     tinymce.init({
       selector: '#new_post_form_chapo',
       height: '300',

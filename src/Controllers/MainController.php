@@ -2,17 +2,21 @@
 
 namespace MyBlog\Controllers;
 
+use MyBlog\Models\UserModel;
+
 /**
  * Controller pour les pages publiques
  */
-class MainController extends CoreController {
+class MainController extends CoreController
+{
 
     /**
      * Retourne la page d'accueil
      *
      * @return void
      */
-    public function home() {
+    public function home()
+    {
         // Recup des derniers posts publiés
         $posts = $this->postManager->findLastPublishedPost();
 
@@ -29,7 +33,8 @@ class MainController extends CoreController {
      *
      * @return void
      */
-    public function about() {
+    public function about()
+    {
         echo $this->templates->render('main/about', ['title' => 'about']);
     }
 
@@ -38,7 +43,8 @@ class MainController extends CoreController {
      *
      * @return void
      */
-    public function contact() {
+    public function contact()
+    {
         echo $this->templates->render('main/contact', ['title' => 'contact']);
     }
 
@@ -47,10 +53,11 @@ class MainController extends CoreController {
      *
      * @return void
      */
-    public function blogList($params) {
+    public function blogList($params)
+    {
 
         // Récup la liste des posts en db
-        $pagination = $this->postManager->findAllPostsPublishedAndPaginated(6, (int)$params['page']);
+        $pagination = $this->postManager->findAllPostsPublishedAndPaginated(6, (int) $params['page']);
 
         $results = $pagination->getCurrentPageResults();
 
@@ -64,11 +71,10 @@ class MainController extends CoreController {
 
         // On affiche le template
         echo $this->templates->render('blog/list', [
-            'title' => 'Blog', 
+            'title' => 'Blog',
             'posts' => $posts,
             'pagination' => $pagination
         ]);
-        
     }
 
     /**
@@ -77,19 +83,21 @@ class MainController extends CoreController {
      * @param array $params
      * @return void
      */
-    public function blogRead($params) {
+    public function blogRead($params)
+    {
 
         // Slug du post à afficher
         $slug = $params['slug'] ?? $params;
 
         // Récup du post
         $post = $this->postManager->findBySlug($slug);
+
         // Recup des commentaires
         $comments = $this->commentManager->findValidCommentsForPost($post->getId());
         // Recup du nombre de commentaires
         $nbComments = $this->commentManager->countNbCommentsForPost($post->getId());
         // Récup des posts similaires
-        $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getId());
+        $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getSlug());
 
         // On affiche le template
         echo $this->templates->render('blog/read', [
@@ -106,7 +114,8 @@ class MainController extends CoreController {
      *
      * @return void
      */
-    public function projectList() {
+    public function projectList()
+    {
         echo $this->templates->render('portfolio/list', ['title' => 'Portfolio']);
     }
 
@@ -116,7 +125,8 @@ class MainController extends CoreController {
      * @param array $params
      * @return void
      */
-    public function projectRead($params) {
+    public function projectRead($params)
+    {
         // Id du projet
         $projectId = $params['id'];
 
@@ -128,24 +138,29 @@ class MainController extends CoreController {
      *
      * @return void
      */
-    public function addComment() {
+    public function addComment()
+    {
 
-        if (!empty($_POST)) {
+        $post = $this->post;
+
+        if (!empty($post)) {
             // On récup l'id du post
-            $postId = $_POST['post_id'];
+            $postId = $post->getParameter('post_id');
 
             // On va check si l'utilisateur existe 
             // et on le créé en BDD si besoin
-            $user = $this->userManager->addUser($_POST);
+            $user = $this->userManager->addUser($post);
+
+            // On enregistre l'user en session
+            $this->saveUserInSession($user);
 
             // On insére le commentaire en BDD
-            $this->commentManager->addComment($_POST, $user);
+            $this->commentManager->addComment($post, $user);
 
             // On récup le slug du post
             $postSlug = $this->postManager->findById($postId)->getSlug();
 
             $this->blogRead($postSlug);
-
         }
     }
 
@@ -159,9 +174,11 @@ class MainController extends CoreController {
 
         $errors = [];
 
-        if (!empty($_POST)) {
+        if (!empty($this->post)) {
+            $post = $this->post;
+
             // On identifie l'utilisateur grâce à son login
-            $login = $_POST['login'];
+            $login = $post->getParameter('login');
             $user = $this->userManager->findByLogin($login);
 
             if (!$user) {
@@ -169,13 +186,13 @@ class MainController extends CoreController {
             } else {
                 // On teste le mot de passe
                 $hash = $user->getPassword();
-                $isValid = password_verify($_POST['password'], $hash); // TODO A tester
+                $isValid = password_verify($post->getParameter('password'), $hash); // TODO A tester
 
                 if (!$isValid) {
                     $errors[] = "Mot de passe incorrect";
                 } else {
                     // On enregistre les infos de l'user en session
-                    $this->userManager->saveUserInSession($user);
+                    $this->saveUserInSession($user);
 
                     // On redirige l'utilisateur
                     if (count($errors) === 0) $this->redirect('dashboard');
@@ -187,7 +204,7 @@ class MainController extends CoreController {
             echo $this->templates->render('main/home', [
                 'title' => $headTitle,
                 'errors' => $errors,
-                'fields' => $_POST
+                'fields' => $post
             ]);
         }
     }
@@ -199,10 +216,11 @@ class MainController extends CoreController {
      */
     public function logout()
     {
-        unset($_SESSION['user']);
-        $_SESSION = [];
+        $this->session->remove('user');
 
-        session_destroy();
+        $this->session->set('user', []);
+
+        $this->session->stop();
 
         $this->redirect('home');
     }
@@ -215,16 +233,18 @@ class MainController extends CoreController {
      */
     public function resetPassword()
     {
-        if (isset($_POST) && !empty($_POST)) {
-            $user = $this->userManager->findByLogin($_POST['login']);
+        $post = $this->post;
+
+        if (isset($post) && !empty($post)) {
+            $user = $this->userManager->findByLogin($post->getParameter('login'));
 
             if (!$user) {
                 $errors[] = "Utilisateur inconnu";
             } else {
                 // On regarde si les mots de passe sont identiques
-                if ($_POST['password'] === $_POST['password2']) {
+                if ($post->getParameter('password') === $post->getParameter('password2')) {
                     // On enregistre le nouveau mot de passe
-                    $this->userManager->resetPassword($_POST['password'], $_POST['login']);
+                    $this->userManager->resetPassword($post->getParameter('password'), $post->getParameter('login'));
                 } else {
                     $errors[] = "Les mots de passe ne sont pas identiques";
                 }
@@ -232,7 +252,6 @@ class MainController extends CoreController {
                 // On redirige l'utilisateur
                 if (count($errors) === 0) $this->redirect('dashboard');
             }
-            
         }
     }
 
@@ -243,9 +262,11 @@ class MainController extends CoreController {
      */
     public function contactForm()
     {
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-        $message = $_POST['message'];
+        $post = $this->post;
+
+        $name = $post->getParameter('name');
+        $email = $post->getParameter('email');
+        $message = $post->getParameter('message');
 
         $errors = [];
 
@@ -254,14 +275,33 @@ class MainController extends CoreController {
         $errors = isset($message) && empty($message) ? 'Veuillez saisir un message' : null;
 
         if (!$errors) {
-            
+
             $this->userManager->sendEmail($name, $email, $message);
 
             $message = 'Le formulaire à bien été envoyé.';
 
             $this->home();
-
         }
     }
-    
+
+    /**
+     * Enregistre les infos de l'utilisateur en session
+     *
+     * @param UserModel $user
+     * @return Session
+     */
+    public function saveUserInSession(UserModel $user)
+    {
+
+        $this->session->set('user', [
+            'id' => $user->getId(),
+            'email' => $user->getEmail(),
+            'login' => $user->getLogin(),
+            'firstname' => $user->getFirstname(),
+            'lastname' => $user->getLastname(),
+            'avatar' => $user->getAvatar(),
+            'is_admin' => (bool) $user->isAdmin()
+        ]);
+    }
+
 }

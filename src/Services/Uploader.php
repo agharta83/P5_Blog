@@ -22,7 +22,7 @@ class Uploader {
     }
 
     // Upload files list
-    public function upload(array $files = []) {
+    public function upload($files) {
         // Normalize
         $normalizedFiles = $this->normalizeFiles($files);
 

@@ -104,7 +104,7 @@ use MyBlog\Models\PostModel;
 
             <div class="row mt-5">
               <div class="col-sm-12 d-flex justify-content-around">
-                <a href="<?= $router->generate('admin_blog_list'); ?>" class="btn btn-secondary">Retour</a>
+                <a href="<?= $router->generate('admin_blog_list', ['page' => 1]); ?>" class="btn btn-secondary">Retour</a>
                 <h3><button name="preview" type="submit" value="preview" class="view" title="Voir" data-toggle="tooltip"><i class="far fa-eye"></i></a></h3>
                 <button type="submit" name="submit" class="btn-primary btn" value="Enregistrer">Enregistrer</button>
               </div>

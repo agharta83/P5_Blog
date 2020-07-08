@@ -5,40 +5,60 @@ namespace MyBlog\Managers;
 use MyBlog\Models\PostModel;
 use MyBlog\Services\PaginatedQuery;
 use Pagerfanta\Pagerfanta;
+use MyBlog\Services\Parameter;
 
 /**
  * Permet de manager PostModel 
  * en relation avec le controller
  */
-class PostManager extends Database
+class PostManager extends CoreManager
 {
     /**
      * Convertit chaque champ de la table en propriété de l'objet PostModel
      *
-     * @param strint|int|bool $row
+     * @param Parameter|Array $row
      * @return PostModel
      */
     public function buildObject($row)
     {
         $post = new PostModel();
 
-        $post->setId($row['id'] ?? null);
-        $post->setTitle($row['title']);
-        $post->setChapo($row['chapo']);
-        $post->setContent($row['content']);
-        $post->setCreated_on($row['created_on'] ?? null);
-        $post->setLast_update($row['last_update'] ?? null);
-        $post->setImg($row['img'] ?? null);
-        $post->setNumber_reviews($row['number_reviews'] ?? 0);
-        $post->setPublished_date($row['published_date'] ?? null);
-        $post->setPublished($row['published']);
-        $post->setSlug($row['slug']);
-        $post->setCategory($row['category']);
-        $post->setUser_id($row['user_id']);
+        if (is_array($row)) {
+            $post->setId($row['id'] ?? null);
+            $post->setTitle($row['title']);
+            $post->setChapo($row['chapo']);
+            $post->setContent($row['content']);
+            $post->setCreated_on($row['created_on'] ?? null);
+            $post->setLast_update($row['last_update'] ?? null);
+            $post->setImg($row['img'] ?? null);
+            $post->setNumber_reviews($row['number_reviews'] ?? 0);
+            $post->setPublished_date($row['published_date'] ?? null);
+            $post->setPublished($row['published']);
+            $post->setSlug($row['slug']);
+            $post->setCategory($row['category']);
+            $post->setUser_id($row['user_id']);
+        }
+
+        if ($row instanceof Parameter) {
+            $post->setId($row->getParameter('id') ?? null);
+            $post->setTitle($row->getParameter('title'));
+            $post->setChapo($row->getParameter('chapo'));
+            $post->setContent($row->getParameter('content'));
+            $post->setCreated_on($row->getParameter('created_on') ?? null);
+            $post->setLast_update($row->getParameter('last_update') ?? null);
+            $post->setImg($row->getParameter('img') ?? null);
+            $post->setNumber_reviews($row->getParameter('number_reviews') ?? 0);
+            $post->setPublished_date($row->getParameter('published_date') ?? null);
+            $post->setPublished($row->getParameter('published'));
+            $post->setSlug($row->getParameter('slug'));
+            $post->setCategory($row->getParameter('category'));
+            $post->setUser_id($row->getParameter('user_id'));
+        }
+
+
 
         return $post;
-
-    }    
+    }
 
     /**
      * Retourne la liste de tous les posts publiés avec la pagination
@@ -57,7 +77,6 @@ class PostManager extends Database
         );
 
         return (new Pagerfanta($query))->setMaxPerPage($perPage)->setCurrentPage($currentPage);
-
     }
 
     /**
@@ -153,34 +172,33 @@ class PostManager extends Database
     /**
      * Permet d'hydrater l'objet PostModel et l'insere en BDD en appelant la méthode save() 
      *
-     * @param array $post
-     * @param array $files
+     * @param Parameter $post
+     * @param Parameter $files
      * @return void
      */
-    public function addPost($post, $files)
+    public function addPost(Parameter $post, Parameter $files)
     {
         // On gère les datas qui ne sont pas dans le formulaire mais initialisé à chaque création d'un post
-        $post['img'] = $files['files']['name'][0];
-        $post['slug'] = $post['title'];
-        $post['number_reviews'] = 0;
+        $post->setParameter('img', $files->getParameter('files')['name'][0]);
+        $post->setParameter('slug', $post->getParameter('title'));
+        $post->setParameter('number_reviews', 0);
 
         $userManager = new UserManager();
-        $post['user_id'] = $userManager->getUserConnected()->getId();
+        $post->setParameter('user_id', $userManager->getUserConnected()->getId());
 
         // Si le post est publié immédiatement aprés sa création, on met à jour sa date de publication et son statut
-        if (isset($post['published']) && !empty($post['published'] && $post['published'] == 'on')) {
-            $post['published_date'] = date("Y-m-d");
-            $post['published'] = 1;
-        } else if (!isset($post['published'])) {
-            $post['published'] = 0;
+        if (null !== $post->getParameter('published') && !empty($post->getParameter('published') && $post->getParameter('published') == 'on')) {
+            $post->setParameter('published_date', date("Y-m-d"));
+            $post->setParameter('published', 1);
+        } else if (null === ($post->getParameter('published'))) {
+            $post->setParameter('published', 0);
         }
-        
-        // On construit l'objet Post
+
+        // On va build l'objet Post avant de l'insérer
         $newPost = $this->buildObject($post);
 
         // On l'insére en BDD
         $this->save($newPost);
-        
     }
 
     /**
@@ -194,7 +212,6 @@ class PostManager extends Database
         // On crée la requête SQL
         $sql = "
                 REPLACE INTO post (
-                    id,
                     title,
                     chapo,
                     content,
@@ -209,7 +226,6 @@ class PostManager extends Database
                     user_id
                 )
                 VALUES (
-                    :id,
                     :title,
                     :chapo,
                     :content,
@@ -224,23 +240,23 @@ class PostManager extends Database
                     :user_id
                 )";
 
-        // Traitemennt de la requete
+        // Traitemennt de la requete 
         $parameters = [
             ':title' => $post->getTitle(),
             ':chapo' => $post->getChapo(),
             ':content' => $post->getContent(),
             ':number_reviews' => $post->getNumber_reviews(),
             ':created_on' => date('Y-m-d'),
-            ':last_update' => $post->getLast_update(),
-            ':published' =>$post->getPublished(),
-            ':published_date' => $post->getPublished_date(),
+            ':last_update' => date('Y-m-d', strtotime($post->getLast_update())),
+            ':published' => $post->getPublished(),
+            ':published_date' => date('Y-m-d', strtotime($post->getPublished_date())),
             ':img' => $post->getImg(),
             ':slug' => $post->getSlug(),
             ':category' => $post->getCategory(),
             ':user_id' => $post->getUser_id(),
-            ':id' => $post->getId()
         ];
-        
+
+
         $this->createQuery($sql, $parameters);
     }
 
@@ -282,36 +298,58 @@ class PostManager extends Database
         // Traitement de la requête
         $parameters = [':id' => $id];
         $this->createQuery($sql, $parameters);
-
     }
 
     /**
      * Permet de prévisualiser un post (sans enregistrement en BDD)
      *
-     * @param array $post
-     * @param array $files
+     * @param Parameter|PostModel $post
+     * @param Parameter $files
      * @return PostModel
      */
-    public function preview($post, $files)
+    public function preview($post, Parameter $files)
     {
-        // On gère les datas qui ne sont pas dans le formulaire mais initialisé à chaque création d'un post
-        $post['img'] = $files['files']['name'][0];
-        $post['slug'] = $post['title'];
-        $post['number_reviews'] = 0;
+        if ($post instanceof Parameter) {
+            // On gère les datas qui ne sont pas dans le formulaire mais initialisé à chaque création d'un post
+            $post->setParameter('img', $files->getParameter('files')['name'][0]);
+            $post->setParameter('slug', $post->getParameter('title'));
+            $post->setParameter('number_reviews', 0);
 
-        $userManager = new UserManager();
-        $post['user_id'] = $userManager->getUserConnected()->getId();
+            $userManager = new UserManager();
+            $post->setParameter('user_id', $userManager->getUserConnected()->getId());
 
-        // Si le post est publié immédiatement aprés sa création, on met à jour sa date de publication et son statut
-        if (isset($post['published']) && !empty($post['published'] && $post['published'] == 'on')) {
-            $post['published_date'] = date("Y-m-d");
-            $post['published'] = 1;
-        } else if (!isset($post['published'])) {
-            $post['published'] = 0;
+            // Si le post est publié immédiatement aprés sa création, on met à jour sa date de publication et son statut
+            if (null !== $post->getParameter('published') && !empty($post->getParameter('published')) && $post->getParameter('published') == 'on') {
+                $post->setParameter('published_date', date("Y-m-d"));
+                $post->setParameter('published', 1);
+            } else if (null == $post->getParameter('published')) {
+                $post->setParameter('published', 0);
+            }
+
+            // On construit l'objet Post
+            $newPost = $this->buildObject($post);
         }
-        
-        // On construit l'objet Post
-        $newPost = $this->buildObject($post);
+
+        if ($post instanceof PostModel) {
+            // On gère les datas qui ne sont pas dans le formulaire mais initialisé à chaque création d'un post
+            $post->setImg($files->getParameter('files')['name'][0]);
+            $post->setSlug($post->getTitle());
+            $post->setNumber_reviews(0);
+
+            $userManager = new UserManager();
+            $post->setUser_id($userManager->getUserConnected()->getId());
+
+            // Si le post est publié immédiatement aprés sa création, on met à jour sa date de publication et son statut
+            if (null !== $post->getPublished() && !empty($post->getPublished()) && $post->getPublished() == 'on') {
+                $post->setPublished_date(date("Y-m-d"));
+                $post->setPublished(1);
+            } else if (null == $post->getPublished()) {
+                $post->setPublished(0);
+            }
+
+            $newPost = $post;
+        }
+
 
         return $newPost;
     }
@@ -320,20 +358,20 @@ class PostManager extends Database
      * Mise à jour d'un post
      *
      * @param integer $id
-     * @param array $post
-     * @param array $files
+     * @param Parameter $post
+     * @param Parameter $files
      * @return void
      */
-    public function updatePost(int $id, $post, $files)
+    public function updatePost(int $id, Parameter $post, Parameter $files)
     {
         // On récupére le post
         $postToUpdate = $this->find($id);
 
-        $postToUpdate->setCategory($post['category']);
-        $postToUpdate->setTitle($post['titre']);
-        $postToUpdate->setChapo($post['chapo']);
-        $postToUpdate->setcontent($post['content']);
-        $postToUpdate->setSlug($post['titre']);
+        $postToUpdate->setCategory($post->getParameter('category'));
+        $postToUpdate->setTitle($post->getParameter('titre'));
+        $postToUpdate->setChapo($post->getParameter('chapo'));
+        $postToUpdate->setcontent($post->getParameter('content'));
+        $postToUpdate->setSlug($post->getParameter('titre'));
 
         // On incrémente les reviews
         $nbReviews = $postToUpdate->getNumber_reviews();
@@ -341,11 +379,11 @@ class PostManager extends Database
 
         $userManager = new UserManager();
         $postToUpdate->setUser_id($userManager->getUserConnected()->getId());
-    
-        if (isset($post['published']) && !empty($post['published'] && $post['published'] == 'on')) {
+
+        if (null !== $post->getParameter('published') && !empty($post->getParameter('published') && $post->getParameter('published') == 'on')) {
             $postToUpdate->setPublished_date(date("Y-m-d"));
             $postToUpdate->setPublished(1);
-        } else if (!isset($post['published'])) {
+        } else if (null == $post->getParameter('published')) {
             $postToUpdate->setPublished(0);
         }
 
@@ -373,9 +411,9 @@ class PostManager extends Database
         $posts = [];
 
         // On parcourt le tableau de résultat et on génére l'objet PostModel
-        foreach($result as $row) {
+        foreach ($result as $row) {
             $postId = $row['id'];
-            $posts [$postId] = $this->buildObject($row);
+            $posts[$postId] = $this->buildObject($row);
         }
 
         $result->closeCursor();
@@ -387,15 +425,15 @@ class PostManager extends Database
      * Retourne les 3 dernies posts publiés d'une catégorie en particulier (similar posts)  
      *
      * @param string $category
-     * @param integer $id
+     * @param string $slug
      * @return PostModel[]
      */
-    public function findByCategory(string $category, int $id)
+    public function findByCategory(string $category, string $slug)
     {
         // Construction de la requête
         $sql = '
                 SELECT * FROM post 
-                WHERE NOT id = :id
+                WHERE NOT slug = :slug
                 AND published_date < NOW() 
                 AND published = 1
                 AND category = :category
@@ -404,15 +442,15 @@ class PostManager extends Database
             ';
 
         // Traitement de la requête
-        $parameters = [':category' => $category, ':id' => $id];
+        $parameters = [':category' => $category, ':slug' => $slug];
         $result = $this->createQuery($sql, $parameters);
 
         $posts = [];
 
         // On parcourt le tableau de résultat et on génére l'objet PostModel
-        foreach($result as $row) {
+        foreach ($result as $row) {
             $postId = $row['id'];
-            $posts [$postId] = $this->buildObject($row);
+            $posts[$postId] = $this->buildObject($row);
         }
 
         $result->closeCursor();

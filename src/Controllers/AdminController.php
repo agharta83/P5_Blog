@@ -3,6 +3,7 @@
 namespace MyBlog\Controllers;
 
 use MyBlog\Services\Uploader;
+use MyBlog\Services\Parameter;
 
 /**
  * Controller pour l'administration
@@ -68,8 +69,9 @@ class AdminController extends CoreController
     }
 
     /**
-     * Permet d'afficher la liste de tous les posts avec sa pagination
+     * Permet d'afficher la liste de tous les posts avec pagination
      *
+     * @param array $params
      * @return void
      */
     public function list($params)
@@ -79,11 +81,11 @@ class AdminController extends CoreController
 
         try {
             // Récup la liste des posts en db
-            $pagination = $this->postManager->findAllPostsPaginated(6, $params['page']);
+            $pagination = $this->postManager->findAllPostsPaginated(6, (int) $params['page']);
         } catch (\Exception $e) {
             // Gére le cas ou l'admin à supprimer le dernier article d'une page, 
             // On renvoie sur la derniére page
-            $page = $params['page'] - 1;
+            $page = (int) $params['page'] - 1;
             $pagination = $this->postManager->findAllPostsPaginated(6, $page);
         }
 
@@ -110,47 +112,48 @@ class AdminController extends CoreController
      *
      * @return void
      */
-    public function createNewPost()
+    public function createNewPost($params)
     {
+        $currentPage = $params['page'];
 
         // Le formulaire de création du post a été soumis
-        if (!empty($_POST)) {
+        $post = $this->post;
 
-            if (isset($_POST['submit'])) {
-                // On check $_FILES et on upload l'image
-                $this->upload($_FILES);
+        if ( null !== $post->getParameter('submit') && !empty($post->getParameter('submit')) ) {
 
-                $this->postManager->addPost($_POST, $_FILES);
+            // On check $_FILES et on upload l'image
+            $this->upload($this->files);
 
-                // On redirige
-                $this->redirect('admin_blog_list');
-            } else if (isset($_POST['preview'])) {
-                // L'utilisateur veut prévisualiser le post
-                if (isset($_FILES['name']) && !empty($_FILES['name'])) {
-                    $this->upload($_FILES);
-                }
+            $this->postManager->addPost($post, $this->files);
 
-                $post = $this->postManager->preview($_POST, $_FILES);
-
-                // Récup des posts similaires
-                $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getId());
-
-                // On affiche le template
-                echo $this->templates->render('blog/read', ['post' => $post, 'similarPosts' => $similarPosts]);
+            // On redirige
+            $this->redirect('admin_blog_list', ['page' => $currentPage]);
+        } else if (null !== $post->getParameter('preview') && !empty($post->getParameter('preview'))) {
+            // L'utilisateur veut prévisualiser le post
+            if (null !== $this->files->getParameter('name') && !empty($this->files->getParameter('name'))) {
+                $this->upload($this->files);
             }
+
+            $post = $this->postManager->preview($post, $this->files);
+
+            // Récup des posts similaires
+            $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getSlug());
+
+            // On affiche le template
+            echo $this->templates->render('blog/read', ['post' => $post, 'similarPosts' => $similarPosts]);
         } else {
             // On affiche la page de création d'un nouveau post
             $headTitle = 'Dashboard / Nouveau post';
 
             echo $this->templates->render('admin/new_post', [
-                'title' => $headTitle
+                'title' => $headTitle,
+                'page' => $currentPage
             ]);
         }
     }
 
     /**
      * Permet d'afficher la page d'un post dans la partie administration
-     * TODO implémenter un preview
      *
      * @param array $params
      * @return void
@@ -195,32 +198,43 @@ class AdminController extends CoreController
      */
     public function update($params)
     {
-
         // Id du post à éditer
         $id = $params['id'];
-
-        // Page courante
-        $currentPage = $params['page'];
 
         // On récupére le post
         $post = $this->postManager->find($id);
 
-        if (!empty($_POST)) {
+        if (null !== $this->post->getParameter('update')) {
             // On check $_FILES
-            $this->upload($_FILES);
+            $this->upload($this->files);
 
-            $this->postManager->updatePost($id, $_POST, $_FILES);
+            $this->postManager->updatePost($id, $this->post, $this->files);
 
             // On redirige
             $this->redirect('admin_blog_list', ['page' => $currentPage]);
+        } elseif (null !== $this->post->getParameter('preview')) {
+            // L'utilisateur veut prévisualiser le post
+            if (null !== $this->files->getParameter('name') && !empty($this->files->getParameter('name'))) {
+                $this->upload($this->files);
+            }
+
+            $post = $this->postManager->preview($post, $this->files);
+
+            //var_dump($post); die();
+
+            // Récup des posts similaires
+            $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getSlug());
+
+            // On affiche le template
+            echo $this->templates->render('blog/read', ['post' => $post, 'similarPosts' => $similarPosts, 'page' => $currentPage]);
+    
         } else {
             // On redirige
             $headTitle = 'Dashboard / Edition de post';
 
             echo $this->templates->render('admin/update_post', [
                 'title' => $headTitle,
-                'post' => $post,
-                'page' => $currentPage
+                'post' => $post
             ]);
         }
     }
@@ -228,17 +242,17 @@ class AdminController extends CoreController
     /**
      * Permet d'upload l'image
      *
-     * @param array $files
+     * @param Parameter $files
      * @return void
      */
-    private function upload($files)
+    private function upload(Parameter $files)
     {
-        if (isset($files['name']) && !empty($files['name'])) {
+        if (null !== $files->getParameter('name') && !empty($files->getParameter('name'))) {
             $this->checkFiles($files);
 
             // On upload
             $uploader = new Uploader();
-            $uploadResult = $uploader->upload($files['files']);
+            $uploadResult = $uploader->upload($files->getParameter('files'));
 
 
             if ($uploadResult !== TRUE) {
@@ -252,10 +266,10 @@ class AdminController extends CoreController
     /**
      * Permet de vérifier si il y a un fichier à upload
      *
-     * @param array $files
+     * @param Parameter $files
      * @return Exception
      */
-    private function checkFiles($files)
+    private function checkFiles(Parameter $files)
     {
         // On check $_FILES
         try {
@@ -456,10 +470,10 @@ class AdminController extends CoreController
      * @return void
      */
     public function createUser($params)
-    {   
+    {
         $currentPage = $params['page'];
 
-        $this->userManager->createUser($_POST);
+        $this->userManager->createUser($this->post);
 
         // On redirige
         $this->redirect('users_list', ['page' => $currentPage]);
@@ -470,18 +484,18 @@ class AdminController extends CoreController
         // Page courante
         $currentPage = $params['page'];
 
-        if (!empty($_POST)) {
+        if (!empty($this->post)) {
             // On check $_FILES
-            $this->upload($_FILES);
+            $this->upload($this->files);
 
-            $id = $_POST['userId'];
+            $post = $this->post;
 
-            $this->userManager->updateUser($id, $_POST, $_FILES);
+            $id = $post->getParameter('userId');
 
-        } 
+            $this->userManager->updateUser($id, $post, $this->files);
+        }
 
         // On redirige
         $this->redirect('users_list', ['page' => $currentPage]);
-        
     }
 }

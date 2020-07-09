@@ -13,10 +13,10 @@ class CoreController extends \MyBlog\Controllers\CoreController
      *
      * @param \AltoRouter $router
      */
-    public function __construct(\AltoRouter $router)
+    public function __construct(\AltoRouter $router, $templates)
     {
         // Execution du constructeur parent
-        parent::__construct($router);
+        parent::__construct($router, $templates);
 
         // On verifie que l'utilisateur est connecté et si c'est un admin
         if (!$this->currentUser || !$this->currentUser->isAdmin()) {

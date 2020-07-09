@@ -138,6 +138,8 @@ class PostController extends CoreController {
         // Id du post à éditer
         $id = $params['id'];
 
+        $currentPage = $params['page'];
+
         // On récupére le post
         $post = $this->postManager->find($id);
 
@@ -159,13 +161,11 @@ class PostController extends CoreController {
 
             $post = $this->postManager->preview($post, $this->files);
 
-            //var_dump($post); die();
-
             // Récup des posts similaires
             $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getSlug());
 
             // On affiche le template
-            return $this->renderView('blog/read', ['post' => $post, 'similarPosts' => $similarPosts, 'page' => $currentPage]);
+            return $this->renderView('blog/read', ['post' => $post, 'similarPosts' => $similarPosts]);
     
         }
 

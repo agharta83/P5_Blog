@@ -2,16 +2,41 @@
 
 namespace MyBlog\Services;
 
+/**
+ * Classe permettant de purifier les données entrantes (input)
+ */
 class Validator
 {
     /**
-     * Echappement des quotes et définit l'encodage en UTF-8
+     * Nettoie les données
      *
-     * @param [type] $variable
+     * @param mixed $data
      * @return void
      */
-    public function escapeOutput($variable)
+    public static function sanitize($data)
     {
-        return htmlentities($variable, ENT_QUOTES, 'UTF-8');
+        if (isset($data) && !empty($data) && strlen($data) < 255) {
+            $data = trim($data);
+            $data = stripslashes($data);
+            $data = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+        }
+
+        return $data;
+    }
+
+    /**
+     * Vérifie si la valeur est un email valide
+     *
+     * @param string $value
+     * @return boolean
+     */
+    public static function is_email($value)
+    {
+        return filter_var($value, FILTER_VALIDATE_EMAIL) && !empty($value);
+    }
+
+    public static function decode($value)
+    {
+        return htmlspecialchars_decode($value, ENT_QUOTES);
     }
 }

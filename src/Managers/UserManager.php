@@ -6,6 +6,7 @@ use MyBlog\Models\UserModel;
 use MyBlog\Services\PaginatedQuery;
 use Pagerfanta\Pagerfanta;
 use MyBlog\Services\Parameter;
+use MyBlog\Services\Validator;
 
 /**
  * Permet de manager UserModel
@@ -29,28 +30,28 @@ class UserManager extends CoreManager
 
         if (is_object($row)) {
             $user->setId($row->id ?? null);
-            $user->setLogin($row->login ?? null);
-            $user->setPassword($row->password ?? null);
-            $user->setEmail($row->email);
+            $user->setLogin(Validator::sanitize($row->login) ?? null);
+            $user->setPassword(Validator::sanitize($row->password) ?? null);
+            $user->setEmail(Validator::is_email(Validator::sanitize($row->email)) ? Validator::sanitize($row->email) : null);
             $user->setStatut_user($row->statut_user ?? 1);
             $user->setUser_role($row->user_role ?? UserModel::USER);
             $user->setCreated_on($row->created_on ?? null);
-            $user->setFirstname($row->firstname ?? null);
-            $user->setLastname($row->lastname ?? null);
-            $user->setAvatar($row->avatar ?? null);
+            $user->setFirstname(Validator::sanitize($row->firstname) ?? null);
+            $user->setLastname(Validator::sanitize($row->lastname) ?? null);
+            $user->setAvatar(Validator::sanitize($row->avatar) ?? null);
         }
 
         if (is_array($row)) {
             $user->setId($row['id'] ?? null);
-            $user->setLogin($row['login'] ?? null);
-            $user->setPassword($row['password'] ?? null);
-            $user->setEmail($row['email']);
+            $user->setLogin(Validator::sanitize($row['login']) ?? null);
+            $user->setPassword(Validator::sanitize($row['password']) ?? null);
+            $user->setEmail(Validator::is_email(Validator::sanitize($row['email'])) ? Validator::sanitize($row['email']) : null);
             $user->setStatut_user($row['statut_user'] ?? 1);
             $user->setUser_role($row['user_role'] ?? UserModel::USER);
-            $user->setCreated_on($row['created_on'] ?? null);
-            $user->setFirstname($row['firstname'] ?? null);
-            $user->setLastname($row['lastname'] ?? null);
-            $user->setAvatar($row['avatar'] ?? null);
+            $user->setCreated_on($row['created_on'] ?? date('Y-m-d'));
+            $user->setFirstname(Validator::sanitize($row['firstname']) ?? null);
+            $user->setLastname(Validator::sanitize($row['lastname']) ?? null);
+            $user->setAvatar(Validator::sanitize($row['avatar']) ?? null);
         }
 
         return $user;

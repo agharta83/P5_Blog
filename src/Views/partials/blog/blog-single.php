@@ -1,3 +1,4 @@
+<?php use MyBlog\Services\Validator; ?>
 <!-- post -->
 <section class="section">
   <div class="container">
@@ -5,14 +6,14 @@
       <div class="col-lg-12">
         <h3 class="font-tertiary mb-5">
 
-          <?= $post->getTitle(); ?></h3>
+          <?= Validator::decode($post->getTitle()); ?></h3>
         <p class="font-secondary">Publié le <?= $post->getPublished_date(); ?> par
           <span class="text-primary">
-            <?= $post->getPostAuthor(); ?>
+            <?= Validator::decode($post->getPostAuthor()); ?>
           </span>
           <div class="content">
             <img src="<?= $basePath . $post->getImg(); ?>" alt="post-thumb" class="img-fluid rounded float-left mr-5 mb-4">
-            <p><?= $post->getContent(); ?></p>
+            <p><?= Validator::decode($post->getContent()); ?></p>
           </div>
       </div>
     </div>
@@ -39,12 +40,12 @@
                 <img src="<?= $basePath ?>/public/images/user-1.jpg" class="img-fluid align-self-start rounded-circle mr-3" alt="">
                 <div class="media-body">
                   <?php if ($isAdmin) : ?>
-                    <h5 class="mt-0 p-color-bold"><?= $comment->getCommentAuthor(); ?></h5>
+                    <h5 class="mt-0 p-color-bold"><?= Validator::decode($comment->getCommentAuthor()); ?></h5>
                   <?php else : ?>
-                    <h5 class="mt-0"><?= $comment->getCommentAuthor(); ?></h5>
+                    <h5 class="mt-0"><?= Validator::decode($comment->getCommentAuthor()); ?></h5>
                   <?php endif; ?>
                   <p><?= ucfirst($comment->getFormatedDate()); ?></p>
-                  <p><?= $comment->getContent(); ?></p>
+                  <p><?= Validator::decode($comment->getContent()); ?></p>
                   <a href="<?= $id1; ?>" class="btn btn-transparent btn-sm pl-0" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="<?= $id1; ?>">Répondre</a>
                   <div class="collapse" id="<?= $id2; ?>">
                     <form action="<?= $router->generate("add_comment"); ?>" method="post" class="row">
@@ -73,12 +74,12 @@
                       <img src="<?= $basePath ?>/public/images/user-2.jpg" class="img-fluid align-self-start rounded-circle mr-3" alt="">
                       <div class="media-body">
                         <?php if ($isAdmin) : ?>
-                          <h5 class="mt-0 p-color-bold"><?= $respond_to->getCommentAuthor(); ?></h5>
+                          <h5 class="mt-0 p-color-bold"><?= Validator::decode($respond_to->getCommentAuthor()); ?></h5>
                         <?php else : ?>
-                          <h5 class="mt-0"><?= $respond_to->getCommentAuthor(); ?></h5>
+                          <h5 class="mt-0"><?= Validator::decode($respond_to->getCommentAuthor()); ?></h5>
                         <?php endif; ?>
                         <p><?= ucfirst($respond_to->getFormatedDate()); ?></p>
-                        <p><?= $respond_to->getContent(); ?></p>
+                        <p><?= Validator::decode($respond_to->getContent()); ?></p>
                         <a href="<?= $id3; ?>" class="btn btn-transparent btn-sm pl-0" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="<?= $id3; ?>">Répondre</a>
                       </div>
                     </div>
@@ -138,9 +139,9 @@
             <article class="card shadow">
               <img class="rounded card-img-top" src="<?= $basePath ?>/public/images/blog/post-3.jpg" alt="post-thumb">
               <div class="card-body">
-                <h4 class="card-title"><a class="text-dark" href="blog-single.html"><?= $similarPost->getTitle(); ?></a>
+                <h4 class="card-title"><a class="text-dark" href="blog-single.html"><?= Validator::decode($similarPost->getTitle()); ?></a>
                 </h4>
-                <p class="cars-text"><?= $similarPost->getChapo(); ?></p>
+                <p class="cars-text"><?= Validator::decode($similarPost->getChapo()); ?></p>
                 <a href="<?= $router->generate('blog_read', ['page' => $currentPage, 'slug' => $similarPost->getSlug()]); ?>" class="btn btn-xs btn-primary">Lire</a>
               </div>
             </article>

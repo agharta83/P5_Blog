@@ -53,8 +53,7 @@ abstract class CoreController {
             'userManager' => $this->userManager,
             'postManager' => $this->postManager,
             'commentManager' => $this->commentManager,
-            'session' => $this->session,
-            'validator' => $this->validator
+            'session' => $this->session
         ]);
 
     }

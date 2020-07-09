@@ -158,9 +158,9 @@ class PostModel {
     {
         if ($this->published) {
             return 'Publié';
-        } else {
-            return 'Brouillon';
         }
+        
+        return 'Brouillon';
         
     }
 

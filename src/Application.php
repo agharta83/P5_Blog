@@ -10,6 +10,7 @@ class Application {
     public function __construct() {
         $this->router = new \AltoRouter();
         $this->router->setBasePath($_SERVER['BASE_URI']);
+        $this->templates = new \League\Plates\Engine( __DIR__ . '/Views' );
     }
 
     // Différentes URL de l'app dans Altorouter
@@ -53,6 +54,9 @@ class Application {
         $this->router->map('POST', '/dashboard/users/create/[:page]', ['Admin\UserController', 'create'], 'create_user');
         $this->router->map('POST', '/dashboard/users/update/[:page]', ['Admin\UserController', 'update'], 'update_user');
 
+        // 404 Not Found
+        $this->router->map('GET', '/notfound', ['MainController', 'notFound'], 'not_found');
+
     }
 
     // Execution du controller et de la méthode correspondante à l'URL demandée
@@ -62,8 +66,8 @@ class Application {
         $match = $this->router->match();
 
         if (!$match) {
-            // Pas de route // TODO Faire une belle page 404
-            die('Route inconnue');
+            // Pas de route
+            $this->redirect('not_found');
         } else {
             // Route OK, on récupére les infos
             // $match['target'][0] => Nom du controller
@@ -73,12 +77,17 @@ class Application {
             $methodName = $data[1];
 
             // Instance du controller
-            $controller = new $controllerName($this->router);
+            $controller = new $controllerName($this->router, $this->templates);
             // Execution de la methode
             // $match['params'] => $_GET
             $controller->$methodName($match['params']);
 
         }
+    }
+
+    public function redirect ($routeName, $infos = []) {
+        header('Location: ' . $this->router->generate($routeName, $infos));
+        exit();
     }
 
 }

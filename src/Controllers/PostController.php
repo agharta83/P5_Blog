@@ -59,7 +59,7 @@ class PostController extends CoreController
         $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getSlug());
 
         // On affiche le template
-        echo $this->renderView('blog/read', [
+        return $this->renderView('blog/read', [
             'post' => $post,
             'comments' => $comments,
             'nbComments' => $nbComments,

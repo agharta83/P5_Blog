@@ -78,4 +78,9 @@ class MainController extends CoreController
         }
     }
 
+    public function notFound()
+    {
+        return $this->renderView('main/notfound');
+    }
+
 }

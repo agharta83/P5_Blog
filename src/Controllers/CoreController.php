@@ -8,7 +8,6 @@ use MyBlog\Managers\UserManager;
 use MyBlog\Services\Request;
 use Myblog\Services\Parameter;
 use MyBlog\Services\Uploader;
-use MyBlog\Services\Validator;
 use MyBlog\Models\UserModel;
 
 /**
@@ -16,27 +15,22 @@ use MyBlog\Models\UserModel;
  * il permet de définir des instances et variables globales étendues aux classes enfants
  */
 abstract class CoreController {
-
-    /**
-     * @var \League\Plates\Engine
-     */
-    private $templates;
     
     /**
      * CoreController constructor
      *
      * @param \AltoRouter $router
      */
-    public function __construct(\Altorouter $router) {
+    public function __construct(\Altorouter $router, $templates) {
 
         // On enregistre le router dans le controller
         $this->router = $router;
 
         // Instance de Plates pour gérer les templates
-        $this->templates = new \League\Plates\Engine( __DIR__ . '/../Views' );
+        //$this->templates = new \League\Plates\Engine( __DIR__ . '/../Views' );
+        $this->templates = $templates;
 
         // Instance de la classe Request
-        
         $this->request = new Request();
         $this->get = $this->request->getRequest();
         $this->post = $this->request->postRequest();
@@ -47,9 +41,6 @@ abstract class CoreController {
         $this->postManager = new PostManager();
         $this->commentManager = new CommentManager();
         $this->userManager = new UserManager();
-
-        // On instancie les services
-        $this->validator = new Validator();
 
         // On enregistre les informations de l'utilisateur connecté
         $this->currentUser = $this->userManager->getUserConnected();

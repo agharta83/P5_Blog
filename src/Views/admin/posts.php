@@ -1,4 +1,4 @@
-<?php $this->layout('admin', ['title' => $title]); ?>
+<?php $this->layout('admin'); ?>
 
 <?php $this->insert('partials/admin/posts_list', [
     'posts' => $posts,

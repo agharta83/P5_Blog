@@ -1,11 +1,13 @@
 <?php
 
 use MyBlog\Application;
+use MyBlog\Services\Session;
 
 error_reporting(E_ALL);
 
 // Démarrage sessions pour stocker les infos de l'utilisateur
 session_start();
+
 
 // Autoload
 require(__DIR__.'/vendor/autoload.php');

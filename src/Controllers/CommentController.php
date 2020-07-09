@@ -5,74 +5,35 @@ namespace MyBlog\Controllers;
 class CommentController extends CoreController
 {
     /**
-     * Récupére la liste des commentaires paginées et redirige vers la liste des commentaires
+     * Ajoute un commentaire ainsi qu'un utilisateur et redirige sur le post commenté
      *
-     * @param array $params
      * @return void
      */
-    public function listComments($params)
+    public function addComment($params)
     {
-        $headTitle = 'Dashboard / Comments';
 
-        $pagination = $this->commentManager->findAllCommentsPaginated(5, $params['page']);
+        $post = $this->post;
 
-        $results = $pagination->getCurrentPageResults();
+        $currentPage = $params['page'];
 
-        $comments = [];
+        if (!empty($post)) {
+            // On récup l'id du post
+            $postId = $post->getParameter('post_id');
 
-        // On parcourt le tableau de résultat et on génére l'objet PostModel
-        foreach ($results as $row) {
-            $commentId = $row['id'];
-            $comments[$commentId] = $this->commentManager->buildObject($row);
+            // On va check si l'utilisateur existe 
+            // et on le créé en BDD si besoin
+            $user = $this->userManager->addUser($post);
+
+            // On enregistre l'user en session
+            $this->saveUserInSession($user);
+
+            // On insére le commentaire en BDD
+            $this->commentManager->addComment($post, $user);
+
+            // On récup le slug du post
+            $postSlug = $this->postManager->findById($postId)->getSlug();
+
+            $this->redirect('blog_read', ['slug' => $postSlug, 'page' => $currentPage]);
         }
-
-        return $this->renderView('admin/comments', [
-            'title' => $headTitle,
-            'comments' => $comments,
-            'pagination' => $pagination
-        ]);
-    }
-
-    /**
-     * Supprimer un commentaire et redirige vers la liste des commentaires
-     *
-     * @param array $params
-     * @return void
-     */
-    public function deleteComment($params)
-    {
-
-        // Id du commentaire à supprimer
-        $id = $params['id'];
-
-        // Page courante
-        $currentPage = $params['page'];
-
-        // On récup et supprime le commentaire
-        $this->commentManager->delete($id);
-
-        // On redirige
-        return $this->redirect('comments_list', ['page' => $currentPage]);
-    }
-
-        /**
-     * Valide un commentaire et redirige vers la liste des commentaires
-     *
-     * @param array $params
-     * @return void
-     */
-    public function validComment($params)
-    {
-        // Id du commentaire à supprimer
-        $id = $params['id'];
-
-        // Page courange
-        $currentPage = $params['page'];
-
-        // On récup et supprime le commentaire
-        $this->commentManager->valid($id);
-
-        // On redirige
-        return $this->redirect('comments_list', ['page' => $currentPage]);
     }
 }

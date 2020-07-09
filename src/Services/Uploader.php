@@ -18,7 +18,11 @@ class Uploader {
      *
      */
     public function __construct() {
-        $this->basePath = $_SERVER['DOCUMENT_ROOT'] . $_SERVER['BASE_URI'];
+
+        $documentRoot = isset($_SERVER['DOCUMENT_ROOT']) && !empty($_SERVER['DOCUMENT_ROOT']) ?? null;
+        $baseURI = isset($_SERVER['BASE_URI']) && !empty($_SERVER['BASE_URI']) ?? null;
+
+        $this->basePath = $documentRoot . $baseURI;
     }
 
     // Upload files list

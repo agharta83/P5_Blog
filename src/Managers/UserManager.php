@@ -6,7 +6,6 @@ use MyBlog\Models\UserModel;
 use MyBlog\Services\PaginatedQuery;
 use Pagerfanta\Pagerfanta;
 use MyBlog\Services\Parameter;
-use MyBlog\Services\Request;
 
 /**
  * Permet de manager UserModel
@@ -14,6 +13,8 @@ use MyBlog\Services\Request;
  */
 class UserManager extends CoreManager
 {
+
+    protected static $tableName = 'user';
 
     /**
      * Convertit chaque champ de la table en propriété de l'objet UserModel
@@ -24,19 +25,33 @@ class UserManager extends CoreManager
      */
     public function buildObject($row)
     {
-
         $user = new UserModel();
 
-        $user->setId($row->id ?? null);
-        $user->setLogin($row->login ?? null);
-        $user->setPassword($row->password ?? null);
-        $user->setEmail($row->email);
-        $user->setStatut_user($row->statut_user ?? 1);
-        $user->setUser_role($row->user_role ?? UserModel::USER);
-        $user->setCreated_on($row->created_on ?? null);
-        $user->setFirstname($row->firstname ?? null);
-        $user->setLastname($row->lastname ?? null);
-        $user->setAvatar($row->avatar ?? null);
+        if (is_object($row)) {
+            $user->setId($row->id ?? null);
+            $user->setLogin($row->login ?? null);
+            $user->setPassword($row->password ?? null);
+            $user->setEmail($row->email);
+            $user->setStatut_user($row->statut_user ?? 1);
+            $user->setUser_role($row->user_role ?? UserModel::USER);
+            $user->setCreated_on($row->created_on ?? null);
+            $user->setFirstname($row->firstname ?? null);
+            $user->setLastname($row->lastname ?? null);
+            $user->setAvatar($row->avatar ?? null);
+        }
+
+        if (is_array($row)) {
+            $user->setId($row['id'] ?? null);
+            $user->setLogin($row['login'] ?? null);
+            $user->setPassword($row['password'] ?? null);
+            $user->setEmail($row['email']);
+            $user->setStatut_user($row['statut_user'] ?? 1);
+            $user->setUser_role($row['user_role'] ?? UserModel::USER);
+            $user->setCreated_on($row['created_on'] ?? null);
+            $user->setFirstname($row['firstname'] ?? null);
+            $user->setLastname($row['lastname'] ?? null);
+            $user->setAvatar($row['avatar'] ?? null);
+        }
 
         return $user;
     }
@@ -47,16 +62,16 @@ class UserManager extends CoreManager
      * @param integer $id
      * @return UserModel
      */
-    public function getUser($id)
+    public function getUser($idUser)
     {
         // Construction de la requete
         $sql = '
             SELECT * FROM user 
-            WHERE id = :id
+            WHERE id = :idUser
         ';
 
         // Traitement de la requête
-        $parameters = [':id' => $id];
+        $parameters = [':idUser' => $idUser];
         $result = $this->createQuery($sql, $parameters);
 
         $user = $result->fetch(\PDO::FETCH_OBJ);
@@ -118,7 +133,7 @@ class UserManager extends CoreManager
         $parameters = [':email' => $email];
         $result = $this->createQuery($sql, $parameters);
 
-        $user = $result->fetch();
+        $user = $result->fetch(\PDO::FETCH_OBJ);
 
         if ($user) {
             $result->closeCursor();
@@ -139,20 +154,21 @@ class UserManager extends CoreManager
     public function addUser(Parameter $post)
     {
         // On récup les infos de l'utilisateur pour les enregistrer en bdd
-        $user = [];
-        $user['firstname'] = $post->getParameter('firstname');
-        $user['lastname'] = $post->getParameter('lastname');
-        $user['email'] = $post->getParameter('email');
+        $user = new UserModel();
+
+        $user->setFirstname($post->getParameter('firstname'));
+        $user->setLastname($post->getParameter('lastname'));
+        $user->setEmail($post->getParameter('email'));
 
         //On va vérifier si l'utilisateur est déjà enregistrer ou pas
-        $userObject = $this->checkUser($user['email']) ?? false;
+        $userObject = $this->checkUser($user->getEmail());
 
         // Il n'est pas enregistré, on l'insére en BDD
         if (!$userObject) {
             // Initialisation des datas
-            $user['created_on'] = date("Y-m-d H:i:s");
+            $user->setCreated_on(date("Y-m-d H:i:s"));
 
-            $userObject = $this->buildObject($user);
+            $newUser = $this->buildObject($user);
 
             // On crée la requête
             $sql = "
@@ -183,17 +199,18 @@ class UserManager extends CoreManager
 
             // Traitement de la requete
             $parameters = [
-                ':id' => $userObject->getId(),
-                ':login' => $userObject->getLogin(),
-                ':password' => $userObject->getPassword(),
-                ':email' => $userObject->getEmail(),
-                ':statut_user' => $userObject->getStatut_user(),
-                ':user_role' => $userObject->getUser_role(),
-                ':created_on' => $userObject->getCreated_on(),
-                ':firstname' => $userObject->getFirstname(),
-                ':lastname' => $userObject->getLastname(),
-                ':avatar' => $userObject->getAvatar()
+                ':id' => $newUser->getId(),
+                ':login' => $newUser->getLogin(),
+                ':password' => $newUser->getPassword(),
+                ':email' => $newUser->getEmail(),
+                ':statut_user' => $newUser->getStatut_user(),
+                ':user_role' => $newUser->getUser_role(),
+                ':created_on' => $newUser->getCreated_on(),
+                ':firstname' => $newUser->getFirstname(),
+                ':lastname' => $newUser->getLastname(),
+                ':avatar' => $newUser->getAvatar()
             ];
+            
             $idUser = $this->createQuery($sql, $parameters);
 
             $userObject = $this->getUser($idUser);
@@ -373,7 +390,7 @@ class UserManager extends CoreManager
      */
     public function updateUser($id, Parameter $post, Parameter $files)
     {
-        $user = $this->findUserById($id);
+        $user = $this->getUser($id);
 
         $user->setLogin($post->getParameter('login'));
         $user->setEmail($post->getParameter('email'));
@@ -441,31 +458,6 @@ class UserManager extends CoreManager
     }
 
     /**
-     * Retourne un utilisateur à partir de son Id
-     *
-     * @param integer $id
-     * @return UserModel
-     */
-    private function findUserById(int $id)
-    {
-        $sql = 'SELECT * FROM user WHERE id = :id';
-
-        // Traitement de la requête
-        $parameters = [':id' => $id];
-        $result = $this->createQuery($sql, $parameters);
-
-        $user = $result->fetch();
-
-        if ($user) {
-            $result->closeCursor();
-
-            return $this->buildObject($user);
-        }
-
-        return false;
-    }
-
-    /**
      * Réinitilisation du mot de passe
      *
      * @param string $password
@@ -509,8 +501,7 @@ class UserManager extends CoreManager
      */
     public function getUserConnected()
     {
-
-        if ($this->getSession()) {
+        if (!empty($this->getSession())) {
             if (null !== $this->getSession()->get('user')) {
                 return $this->getUser($this->getSession()->get('user')['id']);
             }

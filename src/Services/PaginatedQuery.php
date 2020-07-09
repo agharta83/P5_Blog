@@ -50,6 +50,6 @@ class PaginatedQuery extends Database implements AdapterInterface
         $stmt->bindParam(':length', $length, \PDO::PARAM_INT);
         $stmt->execute();
 
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

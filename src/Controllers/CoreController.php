@@ -9,6 +9,7 @@ use MyBlog\Services\Request;
 use Myblog\Services\Parameter;
 use MyBlog\Services\Uploader;
 use MyBlog\Services\Validator;
+use MyBlog\Models\UserModel;
 
 /**
  * Controller Mere servant à instancier le Router, les Managers et le templating
@@ -35,6 +36,7 @@ abstract class CoreController {
         $this->templates = new \League\Plates\Engine( __DIR__ . '/../Views' );
 
         // Instance de la classe Request
+        
         $this->request = new Request();
         $this->get = $this->request->getRequest();
         $this->post = $this->request->postRequest();
@@ -109,9 +111,12 @@ abstract class CoreController {
             if ($uploadResult !== TRUE) {
                 echo 'Impossible d\'enregistrer l\'image.';
             }
-        } else {
-            return null;
-        }
+
+            return $uploadResult;
+        } 
+        
+        return null;
+        
     }
 
     /**
@@ -131,6 +136,26 @@ abstract class CoreController {
             echo $e->getMessage();
             exit();
         }
+    }
+
+    /**
+     * Enregistre les infos de l'utilisateur en session
+     *
+     * @param UserModel $user
+     * @return Session
+     */
+    public function saveUserInSession(UserModel $user)
+    {
+
+        $this->session->set('user', [
+            'id' => $user->getId(),
+            'email' => $user->getEmail(),
+            'login' => $user->getLogin(),
+            'firstname' => $user->getFirstname(),
+            'lastname' => $user->getLastname(),
+            'avatar' => $user->getAvatar(),
+            'is_admin' => (bool) $user->isAdmin()
+        ]);
     }
     
 }

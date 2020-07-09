@@ -8,55 +8,36 @@ namespace MyBlog\Controllers;
 class PostController extends CoreController
 {
     /**
-     * Permet de créer un post
+     * Affiche la page "Blog" avec la liste des posts publiés
      *
      * @return void
      */
-    public function createNewPost($params)
+    public function list($params)
     {
-        $currentPage = $params['page'];
 
-        // Le formulaire de création du post a été soumis
-        $post = $this->post;
+        // Récup la liste des posts en db
+        $pagination = $this->postManager->findAllPostsPublishedAndPaginated(6, (int) $params['page']);
 
-        if ( null !== $post->getParameter('submit') && !empty($post->getParameter('submit')) ) {
+        $results = $pagination->getCurrentPageResults();
 
-            // On check $_FILES et on upload l'image
-            $this->upload($this->files);
+        $posts = [];
 
-            $this->postManager->addPost($post, $this->files);
-
-            // On redirige
-            return $this->redirect('admin_blog_list', ['page' => $currentPage]);
+        // On parcourt le tableau de résultat et on génére l'objet PostModel
+        foreach ($results as $row) {
+            $postId = $row['id'];
+            $posts[$postId] = $this->postManager->buildObject($row);
         }
-        
-        if (null !== $post->getParameter('preview') && !empty($post->getParameter('preview'))) {
-            // L'utilisateur veut prévisualiser le post
-            if (null !== $this->files->getParameter('name') && !empty($this->files->getParameter('name'))) {
-                $this->upload($this->files);
-            }
 
-            $post = $this->postManager->preview($post, $this->files);
-
-            // Récup des posts similaires
-            $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getSlug());
-
-            // On affiche le template
-            return $this->renderView('blog/read', ['post' => $post, 'similarPosts' => $similarPosts]);
-        }
-        
-        // On affiche la page de création d'un nouveau post
-        $headTitle = 'Dashboard / Nouveau post';
-
-        return $this->renderView('admin/new_post', [
-            'title' => $headTitle,
-            'page' => $currentPage
+        // On affiche le template
+        return $this->renderView('blog/list', [
+            'title' => 'Blog',
+            'posts' => $posts,
+            'pagination' => $pagination
         ]);
-        
     }
 
     /**
-     * Permet d'afficher la page d'un post dans la partie administration
+     * Affiche la page d'un article
      *
      * @param array $params
      * @return void
@@ -65,84 +46,25 @@ class PostController extends CoreController
     {
 
         // Slug du post à afficher
-        $slug = $params['slug'];
+        $slug = $params['slug'] ?? $params;
 
         // Récup du post
         $post = $this->postManager->findBySlug($slug);
 
+        // Recup des commentaires
+        $comments = $this->commentManager->findValidCommentsForPost($post->getId());
+        // Recup du nombre de commentaires
+        $nbComments = $this->commentManager->countNbCommentsForPost($post->getId());
+        // Récup des posts similaires
+        $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getSlug());
+
         // On affiche le template
-        return $this->renderView('blog/read', ['post' => $post]);
-    }
-
-    /**
-     * Supprime un post à partir de son Id
-     *
-     * @param array $params
-     * @return void
-     */
-    public function delete($params)
-    {
-        // Id du post à supprimer
-        $idPost = $params['id'];
-        // Page courante
-        $currentPage = $params['page'];
-
-        // On récup et supprime le post
-        $this->postManager->delete($idPost);
-
-        // On redirige
-        return $this->redirect('admin_blog_list', ['page' => $currentPage]);
-    }
-
-    /**
-     * Met à jour un post en BDD
-     *
-     * @param array $params
-     * @return void
-     */
-    public function update($params)
-    {
-        // Id du post à éditer
-        $id = $params['id'];
-
-        // On récupére le post
-        $post = $this->postManager->find($id);
-
-        if (null !== $this->post->getParameter('update')) {
-            // On check $_FILES
-            $this->upload($this->files);
-
-            $this->postManager->updatePost($id, $this->post, $this->files);
-
-            // On redirige
-            return $this->redirect('admin_blog_list', ['page' => 1]);
-        }
-        
-        if (null !== $this->post->getParameter('preview')) {
-            // L'utilisateur veut prévisualiser le post
-            if (null !== $this->files->getParameter('name') && !empty($this->files->getParameter('name'))) {
-                $this->upload($this->files);
-            }
-
-            $post = $this->postManager->preview($post, $this->files);
-
-            //var_dump($post); die();
-
-            // Récup des posts similaires
-            $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getSlug());
-
-            // On affiche le template
-            return $this->renderView('blog/read', ['post' => $post, 'similarPosts' => $similarPosts, 'page' => $currentPage]);
-    
-        }
-
-        // On redirige
-        $headTitle = 'Dashboard / Edition de post';
-
-        return $this->renderView('admin/update_post', [
-            'title' => $headTitle,
-            'post' => $post
+        echo $this->renderView('blog/read', [
+            'post' => $post,
+            'comments' => $comments,
+            'nbComments' => $nbComments,
+            'similarPosts' => $similarPosts,
+            'currentPage' => $params['page']
         ]);
-        
     }
 }

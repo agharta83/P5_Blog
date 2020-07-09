@@ -13,6 +13,8 @@ use MyBlog\Services\Parameter;
  */
 class PostManager extends CoreManager
 {
+    protected static $tableName = 'post';
+    
     /**
      * Convertit chaque champ de la table en propriété de l'objet PostModel
      *
@@ -54,8 +56,6 @@ class PostManager extends CoreManager
             $post->setCategory($row->getParameter('category'));
             $post->setUser_id($row->getParameter('user_id'));
         }
-
-
 
         return $post;
     }

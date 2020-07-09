@@ -4,154 +4,94 @@ namespace MyBlog\Controllers;
 
 class UserController extends CoreController
 {
-    /**
-     * Retourne la liste des utilisateurs paginées
+   /**
+     * Connexion à l'administration
      *
-     * @param [type] $params
-     * @return void
+     * @return Object|Array UserModel|Errors
      */
-    public function listUsers($params)
+    public function login()
     {
-        $headTitle = 'Dashboard / Utilisateurs';
 
-        $pagination = $this->userManager->findAllUsersPaginated(6, (int) $params['page']);
-
-        $results = $pagination->getCurrentPageResults();
-
-        $users = [];
-
-        // On parcourt le tableau de résultat et on génére l'objet PostModel
-        foreach ($results as $row) {
-            $userId = $row['id'];
-            $users[$userId] = $this->userManager->buildObject($row);
-        }
-
-        return $this->renderView('admin/users', [
-            'title' => $headTitle,
-            'users' => $users,
-            'pagination' => $pagination
-        ]);
-    }
-
-    /**
-     * Desactive un utilisateur
-     *
-     * @param array $params
-     * @return void
-     */
-    public function disableUser($params)
-    {
-        // Id de l'utilisateur à désactiver
-        $id = $params['id'];
-        // Page courante
-        $currentPage = $params['page'];
-
-        // On récup et désactive l'utilisateur
-        $this->userManager->disable($id);
-
-        // On redirige
-        return $this->redirect('users_list', ['page' => $currentPage]);
-    }
-
-    /**
-     * Activer l'utilisateur
-     *
-     * @param array $params
-     * @return void
-     */
-    public function enableUser($params)
-    {
-        // Id de l'utilisateur à activer
-        $id = $params['id'];
-        // Page courante
-        $currentPage = $params['page'];
-
-        // On récup et active l'utilisateur
-        $this->userManager->enable($id);
-
-        // On redirige
-        return $this->redirect('users_list', ['page' => $currentPage]);
-    }
-
-    /**
-     * Promotion d'un utilisateur en Administrateur
-     *
-     * @param [type] $params
-     * @return void
-     */
-    public function promoteUser($params)
-    {
-        // Id de l'utilisateur à promouvoir
-        $id = $params['id'];
-        // Page courante
-        $currentPage = $params['page'];
-
-        // On récup et promeut l'utilisateur
-        $this->userManager->promote($id);
-
-        // On redirige
-        return $this->redirect('users_list', ['page' => $currentPage]);
-    }
-
-    /**
-     * Retrograde l'utilisateur en role User
-     *
-     * @param array $params
-     * @return void
-     */
-    public function downgradeUser($params)
-    {
-        // Id de l'utilisateur à rétrograder
-        $id = $params['id'];
-        // Page courante
-        $currentPage = $params['page'];
-
-        // On récup et rétrograde l'utilisateur
-        $this->userManager->downgrade($id);
-
-        // On redirige
-        return $this->redirect('users_list', ['page' => $currentPage]);
-    }
-
-    /**
-     * Création d'un nouvel utilisateur
-     *
-     * @param [type] $params
-     * @return void
-     */
-    public function createUser($params)
-    {
-        $currentPage = $params['page'];
-
-        $this->userManager->createUser($this->post);
-
-        // On redirige
-        return $this->redirect('users_list', ['page' => $currentPage]);
-    }
-
-    /**
-     * Mise à jour d'un utilisateur
-     *
-     * @param array $params
-     * @return void
-     */
-    public function updateUser($params)
-    {
-        // Page courante
-        $currentPage = $params['page'];
+        $errors = [];
 
         if (!empty($this->post)) {
-            // On check $_FILES
-            $this->upload($this->files);
-
             $post = $this->post;
 
-            $idPost = $post->getParameter('userId');
+            // On identifie l'utilisateur grâce à son login
+            $login = $post->getParameter('login');
+            $user = $this->userManager->findByLogin($login);
 
-            $this->userManager->updateUser($idPost, $post, $this->files);
+            if (!$user) {
+                $errors[] = "Utilisateur inconnu";
+            } else {
+                // On teste le mot de passe
+                $hash = $user->getPassword();
+                $isValid = password_verify($post->getParameter('password'), $hash); // TODO A tester
+
+                if (!$isValid) {
+                    $errors[] = "Mot de passe incorrect";
+                } else {
+                    // On enregistre les infos de l'user en session
+                    $this->saveUserInSession($user);
+
+                    // On redirige l'utilisateur
+                    if (count($errors) === 0) $this->redirect('dashboard');
+                }
+            }
+
+            $headTitle = 'Audrey César | Portfolio Blog';
+
+            return $this->renderView('main/home', [
+                'title' => $headTitle,
+                'errors' => $errors,
+                'fields' => $post
+            ]);
         }
+    }
 
-        // On redirige
-        return $this->redirect('users_list', ['page' => $currentPage]);
+    /**
+     * Permet de se déconnecter et donc détruire la session
+     *
+     * @return void
+     */
+    public function logout()
+    {
+        $this->session->remove('user');
+
+        $this->session->set('user', []);
+
+        $this->session->stop();
+
+        $this->redirect('home');
+    }
+
+    // TODO Faire une vérif en ajax
+    /**
+     * Fait les vérifications et appelle la méthode du manager pour réinitialiser le mot de passe
+     *
+     * @return void
+     */
+    public function resetPassword()
+    {
+        $post = $this->post;
+
+        if (isset($post) && !empty($post)) {
+            $user = $this->userManager->findByLogin($post->getParameter('login'));
+
+            if (!$user) {
+                $errors[] = "Utilisateur inconnu";
+            } else {
+                // On regarde si les mots de passe sont identiques
+                if ($post->getParameter('password') === $post->getParameter('password2')) {
+                    // On enregistre le nouveau mot de passe
+                    $this->userManager->resetPassword($post->getParameter('password'), $post->getParameter('login'));
+                } else {
+                    $errors[] = "Les mots de passe ne sont pas identiques";
+                }
+
+                // On redirige l'utilisateur
+                if (count($errors) === 0) $this->redirect('dashboard');
+            }
+        }
     }
 }

@@ -285,14 +285,15 @@ class PostManager extends CoreManager
     }
 
     /**
-     * Supprime un post en BDD
+     * Supprime un post en BDD ainsi que les commentaires associés
+     * grâce à une contrainte en BDD 'ON ACTION DELETE CASCADE'
      *
      * @param integer $id
      * @return void
      */
     public function delete(int $id)
+    
     {
-
         // On construit la requête
         $sql = 'DELETE FROM post WHERE id = :id';
 
@@ -371,8 +372,9 @@ class PostManager extends CoreManager
         $postToUpdate->setCategory($post->getParameter('category'));
         $postToUpdate->setTitle($post->getParameter('titre'));
         $postToUpdate->setChapo($post->getParameter('chapo'));
-        $postToUpdate->setcontent($post->getParameter('content'));
+        $postToUpdate->setContent($post->getParameter('content'));
         $postToUpdate->setSlug($post->getParameter('titre'));
+        $postToUpdate->setLast_update(date('Y-m-d'));
 
         // On incrémente les reviews
         $nbReviews = $postToUpdate->getNumber_reviews();
@@ -387,8 +389,6 @@ class PostManager extends CoreManager
         } else if (null == $post->getParameter('published')) {
             $postToUpdate->setPublished(0);
         }
-
-        $postToUpdate->setLast_update((date("Y-m-d")));
 
         // On enregistre
         $this->save($postToUpdate);
@@ -458,4 +458,5 @@ class PostManager extends CoreManager
 
         return $posts;
     }
+
 }

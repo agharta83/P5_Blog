@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="" />
   <meta name="author" content="Audrey César" />
-  <title><?= $title; ?></title>
+  <title>Dashboard</title>
 
   <!-- build:css css/app.css -->
   <link rel="stylesheet" href="<?=$basePath?>/public/css/vendor.css">

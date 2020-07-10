@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Shuffle js filter and masonry
-  if (window.location.pathname == '/opc/P5_Blog/blog') {
+  if (window.location.href.indexOf("P5_Blog/blog") > -1) {
     console.log('ici');
     var myShuffle = new Shuffle(document.querySelector('.shuffle-wrapper'), {
       itemSelector: '.shuffle-item',
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Comment list filter valid or not
-  if (window.location.pathname == '/opc/P5_Blog/dashboard/comments') {
+  if (window.location.href.indexOf("dashboard/comments") > -1) {
     $('input[name="NotValid"]').on('change', function (evt) {
       var input = evt.currentTarget;
       if (input.checked) {
@@ -126,8 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  if (window.location.href.indexOf("posts/new") || window.location.href.indexOf("update") > -2) {
-    console.log('test tiny');
+  if (window.location.href.indexOf("posts/new") > -1 || window.location.href.indexOf("update") > -1) {
     tinymce.init({
       selector: '#new_post_form_chapo',
       height: '300',
@@ -179,10 +178,5 @@ document.addEventListener('DOMContentLoaded', () => {
   $('#link_reset_password').click(function(e) {
     $('#login').modal('toggle');
   });
-
-
-
-
-
-  //someFunction();
+  
 });

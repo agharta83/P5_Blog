@@ -28,7 +28,7 @@ class UserManager extends CoreManager
     {
         $user = new UserModel();
 
-        if (is_object($row)) {
+        if (is_object($row) && $row instanceof UserModel == false) {
             $user->setId($row->id ?? null);
             $user->setLogin(Validator::sanitize($row->login) ?? null);
             $user->setPassword(Validator::sanitize($row->password) ?? null);
@@ -39,6 +39,19 @@ class UserManager extends CoreManager
             $user->setFirstname(Validator::sanitize($row->firstname) ?? null);
             $user->setLastname(Validator::sanitize($row->lastname) ?? null);
             $user->setAvatar(Validator::sanitize($row->avatar) ?? null);
+        }
+
+        if ($row instanceof UserModel) {
+            $user->setId($row->getId() ?? null);
+            $user->setLogin(Validator::sanitize($row->getLogin()) ?? null);
+            $user->setPassword(Validator::sanitize($row->getPassword()) ?? null);
+            $user->setEmail(Validator::is_email(Validator::sanitize($row->getEmail())) ? Validator::sanitize($row->getEmail()) : null);
+            $user->setStatut_user($row->getStatut_user() ?? 1);
+            $user->setUser_role($row->getUser_role() ?? UserModel::USER);
+            $user->setCreated_on($row->getCreated_on() ?? null);
+            $user->setFirstname(Validator::sanitize($row->getFirstname()) ?? null);
+            $user->setLastname(Validator::sanitize($row->getLastname()) ?? null);
+            $user->setAvatar(Validator::sanitize($row->getAvatar()) ?? null);
         }
 
         if (is_array($row)) {
@@ -316,11 +329,15 @@ class UserManager extends CoreManager
     {
 
         // Initialisation
+        $password = $this->generatePassword(8);
         $post->setParameter('created_on', date('Y-m-d H:i:s'));
-        $post->setParameter('password', password_hash($this->generatePassword(8), PASSWORD_DEFAULT));
-        // TODO Gérer l'envoi pas mail du mot de passe
+        $post->setParameter('password', password_hash($password, PASSWORD_DEFAULT));
 
         $user = $this->buildObject($post);
+
+        if ($user->getUser_role() == UserModel::ADMIN) {
+            $this->sendPassword($user, $password);
+        }
 
         $sql = '
            INSERT INTO user (
@@ -361,7 +378,9 @@ class UserManager extends CoreManager
             ':avatar' => $user->getAvatar()
         ];
 
-        $this->createQuery($sql, $parameters);
+        $user->setId($this->createQuery($sql, $parameters));
+
+        return $user;
     }
 
     /**
@@ -509,5 +528,25 @@ class UserManager extends CoreManager
         }
 
         return false;
+    }
+
+    private function sendPassword($user, $password) {
+        $data = require __DIR__ . '/config-mail.php';
+
+        $transport = (new \Swift_SmtpTransport($data['SMTP'], 465, 'ssl'))
+            ->setUsername($data['email'])
+            ->setPassword($data['password']);
+
+        $mailer = new \Swift_Mailer($transport);
+
+        $message = (new \Swift_Message('Message du Blog : Mot de passe'))
+            ->setFrom($user->getEmail())
+            ->setTo($data['email'])
+            ->setBody(
+                "<p>Voici votre mot de passe pour accéder à l'administration du blog.</p>
+                <p>Mot de passe :" . $password . "</p>"
+            );
+
+        $mailer->send($message);
     }
 }

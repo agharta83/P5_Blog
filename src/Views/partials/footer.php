@@ -2,15 +2,15 @@
   <div class="section">
     <div class="container">
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4 text-center">
           <h5 class="text-light">Email</h5>
           <p class="text-white paragraph-lg font-secondary">audrey.cesar83@gmail.com</p>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 text-center">
           <h5 class="text-light">Telephone</h5>
           <p class="text-white paragraph-lg font-secondary">06 95 98 51 99</p>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 text-center">
           <h5 class="text-light">Adresse</h5>
           <p class="text-white paragraph-lg font-secondary">Toulon (83), France</p>
         </div>

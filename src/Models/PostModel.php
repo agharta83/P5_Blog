@@ -102,6 +102,17 @@ class PostModel {
      */
     private $user_id;
 
+    function cut_string($string, $length)
+    {
+        if (strlen($string) > $length) {
+            $string = substr($string, 0, $length);
+            $last_space = strrpos($string, " ");
+            $string = substr($string, 0, $last_space)."...";
+
+            return $string;
+        }
+    }
+
     /**
      * Formated slug for URL
      *

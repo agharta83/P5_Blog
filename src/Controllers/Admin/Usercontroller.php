@@ -2,6 +2,8 @@
 
 namespace MyBlog\Controllers\Admin;
 
+use Myblog\Models\UserModel;
+
 class UserController extends CoreController
 {
         /**
@@ -121,7 +123,7 @@ class UserController extends CoreController
     {
         $currentPage = $params['page'];
 
-        $this->userManager->createUser($this->post);
+        $user = $this->userManager->createUser($this->post);
 
         // On redirige
         return $this->redirect('users_list', ['page' => $currentPage]);

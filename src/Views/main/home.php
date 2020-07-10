@@ -32,7 +32,7 @@ if (!empty($errors)) {
   <!-- /education -->
 
   <!-- portfolio -->
-  <?php $this->insert('partials/home/portfolio'); ?>
+  <?php //$this->insert('partials/home/portfolio'); ?>
   <!-- /portfolio -->
 
   <!-- blogs -->

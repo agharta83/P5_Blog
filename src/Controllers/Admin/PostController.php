@@ -138,8 +138,6 @@ class PostController extends CoreController {
         // Id du post à éditer
         $id = $params['id'];
 
-        $currentPage = $params['page'];
-
         // On récupére le post
         $post = $this->postManager->find($id);
 

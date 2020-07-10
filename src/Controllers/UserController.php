@@ -26,7 +26,7 @@ class UserController extends CoreController
             } else {
                 // On teste le mot de passe
                 $hash = $user->getPassword();
-                $isValid = password_verify($post->getParameter('password'), $hash); // TODO A tester
+                $isValid = password_verify($post->getParameter('password'), $hash);
 
                 if (!$isValid) {
                     $errors[] = "Mot de passe incorrect";

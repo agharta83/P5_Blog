@@ -48,7 +48,7 @@
                   <p><?= Validator::decode($comment->getContent()); ?></p>
                   <a href="<?= $id1; ?>" class="btn btn-transparent btn-sm pl-0" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="<?= $id1; ?>">Répondre</a>
                   <div class="collapse" id="<?= $id2; ?>">
-                    <form action="<?= $router->generate("add_comment"); ?>" method="post" class="row">
+                    <form action="<?= $router->generate("add_comment", ['page' => $currentPage]); ?>" method="post" class="row">
                       <div class="col-md-6">
                         <input type="hidden" value="<?= $post->getId(); ?>" id="post_id" name="post_id">
                         <input type="hidden" value="<?= $comment->getId(); ?>" id="respond_to1" name="respond_to">

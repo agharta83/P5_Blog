@@ -1,3 +1,4 @@
+<?php use MyBlog\Services\Validator; ?>
 <section class="blog-section section bg-primary position-relative testimonial-bg-shapes">
     <div class="container">
       <div class="row">
@@ -7,11 +8,11 @@
         <?php foreach($posts as $post) : ?>
         <div class="col-lg-4 col-sm-6 mb-4 mb-lg-0">
           <article class="card shadow">
-            <img class="rounded card-img-top" src="<?=$basePath?>/public/images/uploads/" . <?= $post->getImg(); ?> alt="post-thumb">
+            <img class="rounded card-img-top" src="<?=$basePath?>/public/images/uploads/" . <?= Validator::decode($post->getImg()); ?> alt="post-thumb">
             <div class="card-body">
-              <h4 class="card-title"><a class="text-dark" href="blog-single.html"><?= $post->getTitle(); ?></a>
+              <h4 class="card-title"><a class="text-dark" href="<?= $router->generate('blog_read', ['slug' => $post->getSlug()]); ?>"><?= Validator::decode($post->getTitle()); ?></a>
               </h4>
-              <p class="cars-text"><?= $post->getChapo(); ?></p>
+              <p class="cars-text"><?= Validator::decode($post->getChapo()); ?></p>
               <a href="<?= $router->generate('blog_read', ['slug' => $post->getSlug()]); ?>" class="btn btn-xs btn-primary">Lire</a>
             </div>
           </article>

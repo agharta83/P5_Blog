@@ -12,14 +12,6 @@
               <a href="<?= $router->generate('new_post', ['page' => $pagination->getCurrentPage()]); ?>" class="text-dark">Nouveau post</a>
             </button>
           </div>
-          <div class="col-sm-4 pt-3">
-            <div class="search-box">
-              <div class="input-group">
-                <span class="input-group-addon"><i class="fas fa-search pl-3"></i></span>
-                <input type="text" class="form-control ml-2" placeholder="Search&hellip;">
-              </div>
-            </div>
-          </div>
         </div>
       </div>
       <table class="table table-hover">

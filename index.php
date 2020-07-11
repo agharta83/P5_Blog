@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 session_start();
 
 // Autoload
-require(__DIR__.'/vendor/autoload.php');
+require __DIR__.'/vendor/autoload.php';
 
 // FrontController
 $app = new Application();

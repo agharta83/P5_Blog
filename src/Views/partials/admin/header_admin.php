@@ -2,7 +2,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark">
             <a class="navbar-brand font-tertiary h3" href=""><img class="logo" src="<?=$basePath?>/public/images/logo.svg"
           alt="Myself"></a>
-          <h3 class="text-white font-tertiary"><?= $title; ?></h3>
+          <h3 class="text-white font-tertiary">Dashboard</h3>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
         aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -16,9 +16,6 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="<?= $router->generate('admin_blog_list', ['page' => '1']); ?>">Posts</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="">Projets</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="<?= $router->generate('comments_list', ['page' => '1']); ?>">Commentaires</a>

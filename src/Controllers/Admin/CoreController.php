@@ -1,12 +1,29 @@
 <?php
 
-namespace MyBlog\Controllers;
+namespace MyBlog\Controllers\Admin;
 
 /**
  * Classe permettant de piloter la partie administration
  */
-class AdminController extends CoreController
+class CoreController extends \MyBlog\Controllers\CoreController
 {
+
+    /**
+     * Admincontroller Constructor
+     *
+     * @param \AltoRouter $router
+     */
+    public function __construct(\AltoRouter $router, $templates)
+    {
+        // Execution du constructeur parent
+        parent::__construct($router, $templates);
+
+        // On verifie que l'utilisateur est connecté et si c'est un admin
+        if (!$this->currentUser || !$this->currentUser->isAdmin()) {
+            // On le redirige
+            $this->redirect('home');
+        }
+    }
 
     /**
      * Permet d'accéder à la page d'accueil de l'administration et récupére les infos à afficher :

@@ -9,6 +9,7 @@ class Session
 {
     private $session;
 
+
     /**
      * Constructor
      *
@@ -16,18 +17,8 @@ class Session
      */
     public function __construct($session)
     {
-        $this->session = $session;
 
-    }
-
-    /**
-     * Démarre une session
-     *
-     * @return void
-     */
-    public function init()
-    {
-        session_start();
+        $this->session = $session ?? null;
 
     }
 
@@ -62,7 +53,7 @@ class Session
     }
 
     /**
-     * Vérifie qu'une donnée est présent en session
+     * Vérifie qu'une donnée est présente en session
      *
      * @param string|int $name
      * @return bool
@@ -84,11 +75,12 @@ class Session
             unset($_SESSION[$name]);
 
             return !$this->check($name);
-        } else {
-            return false;
         }
-        
+            
+        return false;
+
     }
+
     /**
      * Destruction de la session
      */

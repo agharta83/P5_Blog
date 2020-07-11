@@ -6,6 +6,7 @@ use MyBlog\Models\PostModel;
 use MyBlog\Services\PaginatedQuery;
 use Pagerfanta\Pagerfanta;
 use MyBlog\Services\Parameter;
+use MyBlog\Services\Validator;
 
 /**
  * Permet de manager PostModel 
@@ -13,6 +14,8 @@ use MyBlog\Services\Parameter;
  */
 class PostManager extends CoreManager
 {
+    protected static $tableName = 'post';
+    
     /**
      * Convertit chaque champ de la table en propriété de l'objet PostModel
      *
@@ -25,37 +28,35 @@ class PostManager extends CoreManager
 
         if (is_array($row)) {
             $post->setId($row['id'] ?? null);
-            $post->setTitle($row['title']);
-            $post->setChapo($row['chapo']);
-            $post->setContent($row['content']);
-            $post->setCreated_on($row['created_on'] ?? null);
+            $post->setTitle(Validator::sanitize($row['title']));
+            $post->setChapo(Validator::sanitize($row['chapo']));
+            $post->setContent(Validator::sanitize($row['content']));
+            $post->setCreated_on($row['created_on'] ?? date('Y-m-d'));
             $post->setLast_update($row['last_update'] ?? null);
-            $post->setImg($row['img'] ?? null);
+            $post->setImg(Validator::sanitize($row['img']) ?? null);
             $post->setNumber_reviews($row['number_reviews'] ?? 0);
             $post->setPublished_date($row['published_date'] ?? null);
             $post->setPublished($row['published']);
-            $post->setSlug($row['slug']);
+            $post->setSlug(Validator::sanitize($row['slug']));
             $post->setCategory($row['category']);
             $post->setUser_id($row['user_id']);
         }
 
         if ($row instanceof Parameter) {
             $post->setId($row->getParameter('id') ?? null);
-            $post->setTitle($row->getParameter('title'));
-            $post->setChapo($row->getParameter('chapo'));
-            $post->setContent($row->getParameter('content'));
-            $post->setCreated_on($row->getParameter('created_on') ?? null);
+            $post->setTitle(Validator::sanitize($row->getParameter('title')));
+            $post->setChapo(Validator::sanitize($row->getParameter('chapo')));
+            $post->setContent(Validator::sanitize($row->getParameter('content')));
+            $post->setCreated_on($row->getParameter('created_on') ?? date('Y-m-d'));
             $post->setLast_update($row->getParameter('last_update') ?? null);
-            $post->setImg($row->getParameter('img') ?? null);
+            $post->setImg(Validator::sanitize($row->getParameter('img')) ?? null);
             $post->setNumber_reviews($row->getParameter('number_reviews') ?? 0);
             $post->setPublished_date($row->getParameter('published_date') ?? null);
             $post->setPublished($row->getParameter('published'));
-            $post->setSlug($row->getParameter('slug'));
+            $post->setSlug(Validator::sanitize($row->getParameter('slug')));
             $post->setCategory($row->getParameter('category'));
             $post->setUser_id($row->getParameter('user_id'));
         }
-
-
 
         return $post;
     }
@@ -284,14 +285,15 @@ class PostManager extends CoreManager
     }
 
     /**
-     * Supprime un post en BDD
+     * Supprime un post en BDD ainsi que les commentaires associés
+     * grâce à une contrainte en BDD 'ON ACTION DELETE CASCADE'
      *
      * @param integer $id
      * @return void
      */
     public function delete(int $id)
+    
     {
-
         // On construit la requête
         $sql = 'DELETE FROM post WHERE id = :id';
 
@@ -370,8 +372,9 @@ class PostManager extends CoreManager
         $postToUpdate->setCategory($post->getParameter('category'));
         $postToUpdate->setTitle($post->getParameter('titre'));
         $postToUpdate->setChapo($post->getParameter('chapo'));
-        $postToUpdate->setcontent($post->getParameter('content'));
+        $postToUpdate->setContent($post->getParameter('content'));
         $postToUpdate->setSlug($post->getParameter('titre'));
+        $postToUpdate->setLast_update(date('Y-m-d'));
 
         // On incrémente les reviews
         $nbReviews = $postToUpdate->getNumber_reviews();
@@ -386,8 +389,6 @@ class PostManager extends CoreManager
         } else if (null == $post->getParameter('published')) {
             $postToUpdate->setPublished(0);
         }
-
-        $postToUpdate->setLast_update((date("Y-m-d")));
 
         // On enregistre
         $this->save($postToUpdate);
@@ -457,4 +458,5 @@ class PostManager extends CoreManager
 
         return $posts;
     }
+
 }

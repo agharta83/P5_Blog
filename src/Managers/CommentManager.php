@@ -6,6 +6,7 @@ use MyBlog\Models\CommentModel;
 use MyBlog\Services\PaginatedQuery;
 use Pagerfanta\Pagerfanta;
 use MyBlog\Services\Parameter;
+use MyBlog\Services\Validator;
 
 class CommentManager extends CoreManager
 {
@@ -19,15 +20,28 @@ class CommentManager extends CoreManager
     {
         $comment = new CommentModel();
 
-        $comment->setId($row['id'] ?? null);
-        $comment->setCreated_on($row['created_on']);
-        $comment->setIs_valid($row['is_valid']);
-        $comment->setContent($row['content']);
-        $comment->setRespond_to($row['respond_to'] ?? null);
-        $comment->setPost_id($row['post_id']);
-        $comment->setUser_id($row['user_id']);
+        if (is_array($row)) {
+            $comment->setId($row['id'] ?? null);
+            $comment->setCreated_on($row['created_on'] ?? date('Y-m-d'));
+            $comment->setIs_valid($row['is_valid']);
+            $comment->setContent(Validator::sanitize($row['content']));
+            $comment->setRespond_to($row['respond_to'] ?? null);
+            $comment->setPost_id($row['post_id']);
+            $comment->setUser_id($row['user_id']);
+        }
+
+        if ($row instanceof Parameter) {
+            $comment->setId($row->getParameter('id') ?? null);
+            $comment->setCreated_on($row->getParameter('created_on') ?? date('Y-m-d'));
+            $comment->setIs_valid($row->getParameter('is_valid'));
+            $comment->setContent(Validator::sanitize($row->getParameter('content')));
+            $comment->setRespond_to($row->getParameter('respond_to') ?? null);
+            $comment->setPost_id($row->getParameter('post_id'));
+            $comment->setUser_id($row->getParameter('user_id'));
+        }
 
         return $comment;
+
     }
 
     /**

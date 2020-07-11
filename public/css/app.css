@@ -12342,5 +12342,8 @@ li.page-item.active .page-link {
   padding: 5px 10px !important;
   font-size: 1rem; }
 
+.notfound {
+  height: 90vh !important; }
+
 
 /*# sourceMappingURL=app.css.map*/

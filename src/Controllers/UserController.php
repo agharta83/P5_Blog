@@ -33,9 +33,8 @@ class UserController extends CoreController
                 } else {
                     // On enregistre les infos de l'user en session
                     $this->saveUserInSession($user);
-
                     // On redirige l'utilisateur
-                    if (count($errors) === 0) $this->redirect('dashboard');
+                if (count($errors) === 0) $this->redirect('dashboard');
                 }
             }
 

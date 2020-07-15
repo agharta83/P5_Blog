@@ -151,88 +151,100 @@ var __makeRelativeRequire = function(require, mappings, pref) {
 require.register("js/initialize.js", function(exports, require, module) {
 "use strict";
 
-var _someFile = _interopRequireDefault(require("./someFile"));
-
 var _shufflejs = _interopRequireDefault(require("shufflejs"));
 
 var _scrollmagic = _interopRequireDefault(require("scrollmagic"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-document.addEventListener('DOMContentLoaded', function () {
-  console.log('initialized'); // Sticky Menu
+var app = {
+  init: function init() {
+    // On récupére le basePath
+    app.basePath = $('body').data('path'); // Validation du formulaire de connexion
 
-  $(window).scroll(function () {
+    $('#connexion').on('submit', app.login); // Scroll sur la page pour la barre de navigation
+
+    $(window).on('scroll', app.windowScroll); // Filter blog list
+
+    $(window).on('load', app.shuffleBlogList); // Filter comments list
+
+    $(window).on('load', app.shuffleCommentsList); // Sticky elements
+
+    $(window).on('scroll', app.stickyElements); // Count Animation
+
+    $(window).on('load', app.countAnimation); // TinyMCE
+
+    $(window).on('load', app.showEditor); // Modal Reset password
+
+    $('#link_reset_password').on('click', app.modalResetPassword); // Modal login
+
+    $(window).on('load', app.showLoginModal); // Show Modal Reset Password with errors
+
+    $(window).on('load', app.showModalResetPassword);
+  },
+  // Sticky Menu
+  windowScroll: function windowScroll() {
     if ($('.navigation').offset().top > 100) {
       $('.navigation').addClass('nav-bg');
     } else {
-      $('.navigation').removeClass('nav-bg');
+      $('.navigation').removeClass('nav_bg');
     }
-  }); // Background-images
+  },
+  // Shuffle blog list
+  shuffleBlogList: function shuffleBlogList() {
+    if (window.location.href.indexOf("P5_Blog/blog") > -1) {
+      var myShuffle = new _shufflejs["default"](document.querySelector('.shuffle-wrapper'), {
+        itemSelector: '.shuffle-item',
+        buffer: 1
+      });
+      $('input[name="shuffle-filter"]').on('change', function (evt) {
+        var input = evt.currentTarget;
 
-  $('[data-background]').each(function () {
-    $(this).css({
-      'background-image': 'url(' + $(this).data('background') + ')'
+        if (input.checked) {
+          myShuffle.filter(input.value);
+        }
+      });
+    }
+  },
+  // Shuffle comments list
+  shuffleCommentsList: function shuffleCommentsList() {
+    if (window.location.href.indexOf("dashboard/comments") > -1) {
+      $('input[name="NotValid"]').on('change', function (evt) {
+        var input = evt.currentTarget;
+
+        if (input.checked) {
+          var rows = $('tr[data-groups]');
+          rows.each(function (index, row) {
+            if (row.getAttribute("data-groups") == "1") {
+              $(this).hide();
+            }
+          });
+        }
+      });
+      $('input[name="all"]').on('change', function (evt) {
+        var input = evt.currentTarget;
+
+        if (input.checked) {
+          var rows = $('tr[data-groups]');
+          rows.each(function (index, row) {
+            $(this).show();
+          });
+        }
+      });
+    }
+  },
+  // Sticky elements (pinning)
+  stickyElements: function stickyElements() {
+    var controller = new _scrollmagic["default"].Controller();
+    var pins_elem = $('.pin-elem');
+    $.each(pins_elem, function (indexInArray, valueOfElement) {
+      new _scrollmagic["default"].Scene({
+        offset: 100
+      }).setPin(this).addTo(controller);
     });
-  }); // background color
-
-  $('[data-color]').each(function () {
-    $(this).css({
-      'background-color': $(this).data('color')
-    });
-  }); // Shuffle js filter and masonry
-
-  if (window.location.href.indexOf("P5_Blog/blog") > -1) {
-    console.log('ici');
-    var myShuffle = new _shufflejs["default"](document.querySelector('.shuffle-wrapper'), {
-      itemSelector: '.shuffle-item',
-      buffer: 1
-    });
-    $('input[name="shuffle-filter"]').on('change', function (evt) {
-      var input = evt.currentTarget;
-
-      if (input.checked) {
-        myShuffle.filter(input.value);
-      }
-    });
-  } // Comment list filter valid or not
-
-
-  if (window.location.href.indexOf("dashboard/comments") > -1) {
-    $('input[name="NotValid"]').on('change', function (evt) {
-      var input = evt.currentTarget;
-
-      if (input.checked) {
-        var rows = $('tr[data-groups]');
-        rows.each(function (index, row) {
-          if (row.getAttribute("data-groups") == "1") {
-            $(this).hide();
-          }
-        });
-      }
-    });
-    $('input[name="all"]').on('change', function (evt) {
-      var input = evt.currentTarget;
-
-      if (input.checked) {
-        var rows = $('tr[data-groups]');
-        rows.each(function (index, row) {
-          $(this).show();
-        });
-      }
-    });
-  } // Sticky elements (pinning)
-
-
-  var controller = new _scrollmagic["default"].Controller();
-  var pins_elem = $('.pin-elem');
-  $.each(pins_elem, function (indexInArray, valueOfElement) {
-    new _scrollmagic["default"].Scene({
-      offset: 100
-    }).setPin(this).addTo(controller);
-  }); // Admin home counter func
-
-  function count($this) {
+  },
+  // Admin dashboard count animations
+  count: function count($this) {
     var current = parseInt($this.html(), 10);
     current = current + 1;
     $this.html(++current);
@@ -241,60 +253,54 @@ document.addEventListener('DOMContentLoaded', function () {
       $this.html($this.data('count'));
     } else {
       setTimeout(function () {
-        count($this);
+        app.count($this);
       }, 50);
     }
-  }
-
-  ;
-
-  if (window.location.pathname == '/opc/P5_Blog/dashboard') {
-    $(".stat-count").each(function () {
-      $(this).data('count', parseInt($(this).html(), 10));
-      $(this).html('0');
-      count($(this));
-    });
-  }
-
-  ; // Animate input search length
-
-  if (window.location.pathname == '/opc/P5_Blog/dashboard/posts') {
-    var searchInput = $(".search-box input");
-    var inputGroup = $(".search-box .input-group");
-    var boxWidth = inputGroup.width();
-    searchInput.focus(function () {
-      inputGroup.animate({
-        width: "300"
+  },
+  // Count animation
+  countAnimation: function countAnimation() {
+    if (window.location.pathname == app.basePath + '/dashboard') {
+      $(".stat-count").each(function () {
+        $(this).data('count', parseInt($(this).html(), 10));
+        $(this).html('0');
+        app.count($(this));
       });
-    }).blur(function () {
-      inputGroup.animate({
-        width: boxWidth
+    }
+  },
+  // TinyMCE
+  showEditor: function showEditor() {
+    if (window.location.href.indexOf("posts/new") > -1 || window.location.href.indexOf("update") > -1) {
+      /*
+      tinymce.init({
+        selector: '#new_post_form_chapo',
+        height: '300',
+        plugins: 'a11ychecker advcode casechange formatpainter linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker',
+        toolbar: 'a11ycheck addcomment showcomments casechange checklist code formatpainter pageembed permanentpen table',
+        toolbar_mode: 'floating',
+        tinycomments_mode: 'embedded',
+        tinycomments_author: 'Author name',
       });
-    });
-  }
-
-  ;
-
-  if (window.location.href.indexOf("posts/new") > -1 || window.location.href.indexOf("update") > -1) {
-    tinymce.init({
-      selector: '#new_post_form_chapo',
-      height: '300',
-      plugins: 'a11ychecker advcode casechange formatpainter linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker',
-      toolbar: 'a11ycheck addcomment showcomments casechange checklist code formatpainter pageembed permanentpen table',
-      toolbar_mode: 'floating',
-      tinycomments_mode: 'embedded',
-      tinycomments_author: 'Author name'
-    });
-    tinymce.init({
-      selector: '#new_post_form_content',
-      height: '500',
-      plugins: 'a11ychecker advcode casechange formatpainter linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker',
-      toolbar: 'a11ycheck addcomment showcomments casechange checklist code formatpainter pageembed permanentpen table',
-      toolbar_mode: 'floating',
-      tinycomments_mode: 'embedded',
-      tinycomments_author: 'Author name'
-    }); // Read url IMG on form input and preview img
-
+          tinymce.init({
+        selector: '#new_post_form_content',
+        height: '500',
+        plugins: 'a11ychecker advcode casechange formatpainter linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker',
+        toolbar: 'a11ycheck addcomment showcomments casechange checklist code formatpainter pageembed permanentpen table',
+        toolbar_mode: 'floating',
+        tinycomments_mode: 'embedded',
+        tinycomments_author: 'Author name',
+      });
+      */
+      $('#new_post_form_chapo').trumbowyg({
+        svgPath: app.basePath + '/public/images/icons.svg'
+      });
+      $('#new_post_form_content').trumbowyg({
+        svgPath: app.basePath + '/public/images/icons.svg'
+      });
+      app.previewImg;
+    }
+  },
+  // Read url IMG on form and preview img
+  previewImg: function previewImg() {
     $('input[type="file"]').change(function (e) {
       var preview = document.querySelector('.wrapper-preview');
       preview.innerHTML = '';
@@ -315,29 +321,25 @@ document.addEventListener('DOMContentLoaded', function () {
       var label = document.querySelector('.custom-file-label');
       label.innerText = file.name;
     });
-  }
-
-  ;
-  $('#link_reset_password').click(function (e) {
+  },
+  // Modal reset password
+  modalResetPassword: function modalResetPassword() {
     $('#login').modal('toggle');
-  });
-});
-});
-
-require.register("js/someFile.js", function(exports, require, module) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-
-function someFunction() {
-  console.log('some function');
-}
-
-var _default = someFunction;
-exports["default"] = _default;
+  },
+  // Affiche la modale de login
+  showLoginModal: function showLoginModal() {
+    if (window.location.pathname == app.basePath + '/login') {
+      $("#modalLogin").trigger('click');
+    }
+  },
+  // Affiche la modale de réinitialisation du password avec les erreurs
+  showModalResetPassword: function showModalResetPassword() {
+    if (window.location.pathname == app.basePath + '/resetPassword') {
+      $("#link_reset_password").trigger('click');
+    }
+  }
+};
+$(app.init);
 });
 
 require.register("___globals___", function(exports, require, module) {
@@ -347,6 +349,7 @@ require.register("___globals___", function(exports, require, module) {
 window.jQuery = require("jquery");
 window["$"] = require("jquery");
 window.bootstrap = require("bootstrap");
+window.trumbowyg = require("trumbowyg");
 
 
 });})();require('___globals___');

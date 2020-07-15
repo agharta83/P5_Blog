@@ -15,7 +15,7 @@
   <!-- endbuild -->
 </head>
 
-<body>
+<body data-path="<?= $basePath; ?>">
 
 <!--[if IE]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -26,7 +26,6 @@
 
   
   <!-- build:js js/app.js -->
-  <script src="https://cdn.tiny.cloud/1/9b58ljpbf0xbtg9vyp4r7s5vdz1damht99erjkg99exvloer/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
   <script src="<?=$basePath?>/public/js/vendor.js"></script>
   <script src="<?=$basePath?>/public/js/app.js"></script>
   <!-- endbuild -->

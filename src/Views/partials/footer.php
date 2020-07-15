@@ -23,7 +23,7 @@
       <script>
         var CurrentYear = new Date().getFullYear()
         document.write(CurrentYear)
-      </script> - Audrey César - <a href="#login" class="trigger-btn" data-toggle="modal">Administration</a></p>
+      </script> - Audrey César - <a href="#login" id="modalLogin" class="trigger-btn" data-toggle="modal">Administration</a></p>
   </div>
 </footer>
 
@@ -31,31 +31,34 @@
 <div id="login" class="modal fade">
   <div class="modal-dialog modal-dialog-centered modal-login">
     <div class="modal-content">
-      <form name="login" action="<?= $router->generate('login'); ?>" method="post" enctype="multipart/form-data">
+      <form name="login" id="connexion" action="<?= $router->generate('login'); ?>" method="post" enctype="multipart/form-data">
         <div class="modal-header">
           <h4 class="modal-title">Connexion à l'administration</h4>
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         </div>
         <?php
-        if (!empty($errors)) {
-          foreach ($errors as $error) : ?>
-            <div class="alert alert-danger">
-              <?= $error; ?>
-            </div>
-          <?php endforeach; ?>
+        if (!empty($errors)) { ?>
+          <div class="errors">
+            <?php
+            foreach ($errors as $error) : ?>
+              <div class="alert alert-danger">
+                <?= $error; ?>
+              </div>
+            <?php endforeach; ?>
+          </div>
         <?php
         }
         ?>
         <div class="modal-body">
           <div class="form-group">
             <label>Nom d'utilisateur</label>
-            <input name="login" type="text" class="form-control" required="required" value="<?= $fields->login ?? ''; ?>">
+            <input name="login" id="pseudo" type="text" class="form-control" required="required" value="<?= $fields->login ?? ''; ?>">
           </div>
           <div class="form-group">
             <div class="clearfix">
               <label>Mot de passe</label>
             </div>
-            <input name="password" type="password" class="form-control" required="required">
+            <input name="password" id="password" type="password" class="form-control" required="required">
           </div>
         </div>
         <div class="modal-footer justify-content-between">
@@ -77,12 +80,15 @@
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         </div>
         <?php
-        if (!empty($errors)) {
-          foreach ($errors as $error) : ?>
-            <div class="alert alert-danger">
-              <?= $error; ?>
-            </div>
-          <?php endforeach; ?>
+        if (!empty($errors)) { ?>
+          <div class="errors">
+            <?php
+            foreach ($errors as $error) : ?>
+              <div class="alert alert-danger">
+                <?= $error; ?>
+              </div>
+            <?php endforeach; ?>
+          </div>
         <?php
         }
         ?>

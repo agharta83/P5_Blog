@@ -41,9 +41,11 @@ exports.npm = {
   globals: {
     jQuery: 'jquery',
     $: 'jquery',
-    bootstrap: 'bootstrap'
+    bootstrap: 'bootstrap',
+    trumbowyg: 'trumbowyg'
   },
   styles: {
     bootstrap: ['dist/css/bootstrap.css'],
+    trumbowyg: ['dist/ui/trumbowyg.min.css'],
   },
 };

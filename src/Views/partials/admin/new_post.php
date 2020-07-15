@@ -67,15 +67,15 @@ use MyBlog\Models\PostModel;
             <div class="form-group row">
               <label class="col-form-label col-sm-3 form-control-label" for="new_post_form_chapo">Chapo *</label>
               <div class="col-sm-9">
-                <input type="text" id="new_post_form_chapo" name="chapo" placeholder="Chapo" class="form-control">
+                <div type="text" id="new_post_form_chapo" name="chapo" placeholder="Chapo" class="form-control"></div>
               </div>
             </div>
 
             <div class="form-group row">
               <label class="col-form-label col-sm-3 form-control-label required" for="new_post_form_content">Contenu *</label>
               <div class="col-sm-9">
-                <textarea type="text" id="new_post_form_content" name="content" required="required" placeholder="Contenu" class="form-control">
-                </textarea>
+                <div type="text" id="new_post_form_content" name="content" required="required" placeholder="Contenu" class="form-control">
+                </div>
               </div>
             </div>
 

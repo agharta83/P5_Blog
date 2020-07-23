@@ -18,6 +18,9 @@ var app = {
     // Filter comments list
     $(window).on('load', app.shuffleCommentsList);
 
+    // Filter users list
+    $(window).on('load', app.shuffleUsersList);
+
     // Sticky elements
     $(window).on('scroll', app.stickyElements);
 
@@ -53,7 +56,7 @@ var app = {
         itemSelector: '.shuffle-item',
         buffer: 1
       });
-  
+
       $('input[name="shuffle-filter"]').on('change', function (evt) {
         var input = evt.currentTarget;
         if (input.checked) {
@@ -70,24 +73,54 @@ var app = {
         var input = evt.currentTarget;
         if (input.checked) {
           var rows = $('tr[data-groups]');
-  
+
           rows.each(function (index, row) {
-  
+
             if (row.getAttribute("data-groups") == "1") {
               $(this).hide();
             }
           });
         }
       });
-  
+
       $('input[name="all"]').on('change', function (evt) {
         var input = evt.currentTarget;
         if (input.checked) {
           var rows = $('tr[data-groups]');
-  
+
           rows.each(function (index, row) {
             $(this).show();
-  
+
+          });
+        }
+      });
+    }
+  },
+
+  shuffleUsersList : function() {
+    if (window.location.href.indexOf("dashboard/users") > -1) {
+      $('input[name="isAdmin"]').on('change', function (evt) {
+        var input = evt.currentTarget;
+        if (input.checked) {
+          var rows = $('tr[data-groups]');
+
+          rows.each(function (index, row) {
+
+            if (row.getAttribute("data-groups") == '0') {
+              $(this).hide();
+            }
+          });
+        }
+      });
+
+      $('input[name="all"]').on('change', function (evt) {
+        var input = evt.currentTarget;
+        if (input.checked) {
+          var rows = $('tr[data-groups]');
+
+          rows.each(function (index, row) {
+            $(this).show();
+
           });
         }
       });
@@ -99,7 +132,7 @@ var app = {
     var controller = new ScrollMagic.Controller();
 
     var pins_elem = $('.pin-elem');
-  
+
     $.each(pins_elem, function (indexInArray, valueOfElement) {
       new ScrollMagic.Scene({
           offset: 100
@@ -133,7 +166,7 @@ var app = {
         app.count($(this));
       });
     }
-    
+
   },
 
   // TinyMCE
@@ -149,7 +182,7 @@ var app = {
         tinycomments_mode: 'embedded',
         tinycomments_author: 'Author name',
       });
-  
+
       tinymce.init({
         selector: '#new_post_form_content',
         height: '500',

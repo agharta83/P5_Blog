@@ -143,7 +143,6 @@ abstract class CoreController {
             'login' => $user->getLogin(),
             'firstname' => $user->getFirstname(),
             'lastname' => $user->getLastname(),
-            'avatar' => $user->getAvatar(),
             'is_admin' => (bool) $user->isAdmin()
         ]);
     }

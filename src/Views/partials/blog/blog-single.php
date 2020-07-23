@@ -107,7 +107,8 @@
             ?>
           </div>
         <?php endif; ?>
-        <h4 class="font-weight-bold mb-3 border-bottom pb-3">Laisser un commentaire</h4>
+        <h4 class="font-weight-bold">Laisser un commentaire</h4>
+        <p class="border-bottom mb-3 pb-3"><i>* Les commentaires sont soumis à validation par l'administrateur</i></p>
         <form action="<?= $router->generate("add_comment", ['page' => $currentPage]); ?>" method="post" class="row">
           <div class="col-md-6">
             <input type="hidden" value="<?= $post->getId(); ?>" id="post_id" name="post_id">

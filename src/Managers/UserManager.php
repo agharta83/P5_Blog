@@ -15,8 +15,6 @@ use MyBlog\Services\Validator;
 class UserManager extends CoreManager
 {
 
-    protected static $tableName = 'user';
-
     /**
      * Convertit chaque champ de la table en propriété de l'objet UserModel
      * et définit des valeurs par défault à certaines propriétés
@@ -38,7 +36,6 @@ class UserManager extends CoreManager
             $user->setCreated_on($row->created_on ?? null);
             $user->setFirstname(Validator::sanitize($row->firstname) ?? null);
             $user->setLastname(Validator::sanitize($row->lastname) ?? null);
-            $user->setAvatar(Validator::sanitize($row->avatar) ?? null);
         }
 
         if ($row instanceof UserModel) {
@@ -51,7 +48,6 @@ class UserManager extends CoreManager
             $user->setCreated_on($row->getCreated_on() ?? null);
             $user->setFirstname(Validator::sanitize($row->getFirstname()) ?? null);
             $user->setLastname(Validator::sanitize($row->getLastname()) ?? null);
-            $user->setAvatar(Validator::sanitize($row->getAvatar()) ?? null);
         }
 
         if (is_array($row)) {
@@ -64,7 +60,6 @@ class UserManager extends CoreManager
             $user->setCreated_on($row['created_on'] ?? date('Y-m-d'));
             $user->setFirstname(Validator::sanitize($row['firstname']) ?? null);
             $user->setLastname(Validator::sanitize($row['lastname']) ?? null);
-            $user->setAvatar(Validator::sanitize($row['avatar']) ?? null);
         }
 
         return $user;
@@ -80,7 +75,7 @@ class UserManager extends CoreManager
     {
         // Construction de la requete
         $sql = '
-            SELECT * FROM user 
+            SELECT * FROM user
             WHERE id = :idUser
         ';
 
@@ -195,8 +190,7 @@ class UserManager extends CoreManager
                     user_role,
                     created_on,
                     firstname,
-                    lastname,
-                    avatar
+                    lastname
                 )
                 VALUES (
                     :id,
@@ -207,8 +201,7 @@ class UserManager extends CoreManager
                     :user_role,
                     :created_on,
                     :firstname,
-                    :lastname,
-                    :avatar
+                    :lastname
             )";
 
             // Traitement de la requete
@@ -221,10 +214,9 @@ class UserManager extends CoreManager
                 ':user_role' => $newUser->getUser_role(),
                 ':created_on' => $newUser->getCreated_on(),
                 ':firstname' => $newUser->getFirstname(),
-                ':lastname' => $newUser->getLastname(),
-                ':avatar' => $newUser->getAvatar()
+                ':lastname' => $newUser->getLastname()
             ];
-            
+
             $idUser = $this->createQuery($sql, $parameters);
 
             $userObject = $this->getUser($idUser);
@@ -349,8 +341,7 @@ class UserManager extends CoreManager
                user_role,
                created_on,
                firstname,
-               lastname,
-               avatar
+               lastname
            ) VALUES (
                :id,
                :login,
@@ -360,8 +351,7 @@ class UserManager extends CoreManager
                :user_role,
                :created_on,
                :firstname,
-               :lastname,
-               :avatar
+               :lastname
            )
        ';
 
@@ -374,8 +364,7 @@ class UserManager extends CoreManager
             ':user_role' => $user->getUser_role(),
             ':created_on' => $user->getCreated_on(),
             ':firstname' => $user->getFirstname(),
-            ':lastname' => $user->getLastname(),
-            ':avatar' => $user->getAvatar()
+            ':lastname' => $user->getLastname()
         ];
 
         $user->setId($this->createQuery($sql, $parameters));
@@ -417,9 +406,6 @@ class UserManager extends CoreManager
         $user->setPassword(password_hash($post->getParameter('password'), PASSWORD_DEFAULT));
         $user->setFirstname($post->getParameter('firstname'));
         $user->setLastname($post->getParameter('lastname'));
-        if (isset($files) && !empty($files)) {
-            $user->setAvatar($files->getParameter('files')['name'][0]);
-        }
 
         // On enregistre
         $this->save($user);
@@ -444,8 +430,7 @@ class UserManager extends CoreManager
                     user_role,
                     created_on,
                     firstname,
-                    lastname,
-                    avatar
+                    lastname
                 )
                 VALUES (
                     :id,
@@ -456,8 +441,7 @@ class UserManager extends CoreManager
                     :user_role,
                     :created_on,
                     :firstname,
-                    :lastname,
-                    :avatar
+                    :lastname
                 )";
 
         // Traitemennt de la requete
@@ -470,7 +454,6 @@ class UserManager extends CoreManager
             ':created_on' => $user->getCreated_on(),
             ':firstname' => $user->getFirstname(),
             ':lastname' => $user->getLastname(),
-            ':avatar' => $user->getAvatar(),
             ':id' => $user->getId()
         ];
 

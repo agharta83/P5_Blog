@@ -168,7 +168,9 @@ var app = {
 
     $(window).on('load', app.shuffleBlogList); // Filter comments list
 
-    $(window).on('load', app.shuffleCommentsList); // Sticky elements
+    $(window).on('load', app.shuffleCommentsList); // Filter users list
+
+    $(window).on('load', app.shuffleUsersList); // Sticky elements
 
     $(window).on('scroll', app.stickyElements); // Count Animation
 
@@ -233,6 +235,32 @@ var app = {
       });
     }
   },
+  shuffleUsersList: function shuffleUsersList() {
+    if (window.location.href.indexOf("dashboard/users") > -1) {
+      $('input[name="isAdmin"]').on('change', function (evt) {
+        var input = evt.currentTarget;
+
+        if (input.checked) {
+          var rows = $('tr[data-groups]');
+          rows.each(function (index, row) {
+            if (row.getAttribute("data-groups") == '0') {
+              $(this).hide();
+            }
+          });
+        }
+      });
+      $('input[name="all"]').on('change', function (evt) {
+        var input = evt.currentTarget;
+
+        if (input.checked) {
+          var rows = $('tr[data-groups]');
+          rows.each(function (index, row) {
+            $(this).show();
+          });
+        }
+      });
+    }
+  },
   // Sticky elements (pinning)
   stickyElements: function stickyElements() {
     var controller = new _scrollmagic["default"].Controller();
@@ -280,7 +308,7 @@ var app = {
         tinycomments_mode: 'embedded',
         tinycomments_author: 'Author name',
       });
-          tinymce.init({
+       tinymce.init({
         selector: '#new_post_form_content',
         height: '500',
         plugins: 'a11ychecker advcode casechange formatpainter linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker',

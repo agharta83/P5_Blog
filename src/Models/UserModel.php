@@ -14,7 +14,6 @@ class UserModel {
     private $created_on;
     private $firstname;
     private $lastname;
-    private $avatar;
 
     /**
      * L'utilisateur est Admin ou pas
@@ -215,23 +214,4 @@ class UserModel {
         return $this;
     }
 
-    /**
-     * Get the value of avatar
-     */ 
-    public function getAvatar()
-    {
-        return $this->avatar;
-    }
-
-    /**
-     * Set the value of avatar
-     *
-     * @return  self
-     */ 
-    public function setAvatar($avatar)
-    {
-        $this->avatar = $avatar;
-
-        return $this;
-    }
 }

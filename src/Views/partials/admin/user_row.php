@@ -3,7 +3,7 @@ $content = '#content' . $user->getId();
 $content1 = 'content' . $user->getId();
 ?>
 
-<tr data-toggle="collapse" data-target="<?= $content; ?>" class="accordion-toggle">
+<tr data-toggle="collapse" data-target="<?= $content; ?>" class="accordion-toggle" data-groups="<?= $user->isAdmin() ? 1 : 0; ?>">
     <td><?= $user->getLogin(); ?></td>
     <td><?= $user->getEmail(); ?></td>
     <td><?= $user->getStatut(); ?></td>
@@ -49,7 +49,7 @@ $content1 = 'content' . $user->getId();
 
                 <div class="row align-items-center">
                     <div class="col-6">
-                        <input type="file" class="form-control-file ml-2" id="exampleFormControlFile1">
+                        <input type="file" class="form-control-file ml-2">
                     </div>
                     <div class="col-6">
                         <input type="submit" class="btn btn-primary text-white btn_update" value="Modifier">

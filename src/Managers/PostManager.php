@@ -9,13 +9,12 @@ use MyBlog\Services\Parameter;
 use MyBlog\Services\Validator;
 
 /**
- * Permet de manager PostModel 
+ * Permet de manager PostModel
  * en relation avec le controller
  */
 class PostManager extends CoreManager
 {
-    protected static $tableName = 'post';
-    
+
     /**
      * Convertit chaque champ de la table en propriété de l'objet PostModel
      *
@@ -63,7 +62,7 @@ class PostManager extends CoreManager
 
     /**
      * Retourne la liste de tous les posts publiés avec la pagination
-     * 
+     *
      * @param integer $perPage
      * @param integer $currentPage
      * @return Pagerfanta
@@ -108,8 +107,8 @@ class PostManager extends CoreManager
     {
         // Construction de la requete
         $sql = '
-                SELECT * FROM post 
-                WHERE published = 1 
+                SELECT * FROM post
+                WHERE published = 1
                 AND slug = :slug
             ';
 
@@ -134,8 +133,8 @@ class PostManager extends CoreManager
     {
         // Construction de la requete
         $sql = '
-                SELECT * FROM post 
-                WHERE published = 1 
+                SELECT * FROM post
+                WHERE published = 1
                 AND id = :id
             ';
 
@@ -171,7 +170,7 @@ class PostManager extends CoreManager
     }
 
     /**
-     * Permet d'hydrater l'objet PostModel et l'insere en BDD en appelant la méthode save() 
+     * Permet d'hydrater l'objet PostModel et l'insere en BDD en appelant la méthode save()
      *
      * @param Parameter $post
      * @param Parameter $files
@@ -241,7 +240,7 @@ class PostManager extends CoreManager
                     :user_id
                 )";
 
-        // Traitemennt de la requete 
+        // Traitemennt de la requete
         $parameters = [
             ':title' => $post->getTitle(),
             ':chapo' => $post->getChapo(),
@@ -292,7 +291,7 @@ class PostManager extends CoreManager
      * @return void
      */
     public function delete(int $id)
-    
+
     {
         // On construit la requête
         $sql = 'DELETE FROM post WHERE id = :id';
@@ -423,7 +422,7 @@ class PostManager extends CoreManager
     }
 
     /**
-     * Retourne les 3 dernies posts publiés d'une catégorie en particulier (similar posts)  
+     * Retourne les 3 dernies posts publiés d'une catégorie en particulier (similar posts)
      *
      * @param string $category
      * @param string $slug
@@ -433,12 +432,12 @@ class PostManager extends CoreManager
     {
         // Construction de la requête
         $sql = '
-                SELECT * FROM post 
+                SELECT * FROM post
                 WHERE NOT slug = :slug
-                AND published_date < NOW() 
+                AND published_date < NOW()
                 AND published = 1
                 AND category = :category
-                ORDER BY published_date 
+                ORDER BY published_date
                 DESC LIMIT 3
             ';
 

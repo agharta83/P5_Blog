@@ -22,7 +22,7 @@ use Myblog\Models\UserModel; ?>
                                 <input type="radio" name="all" value="all" checked="checked" />Tout
                             </label>
                             <label class="btn btn-sm btn-primary">
-                                <input type="radio" name="isAdmin" value="0" />ADMIN
+                                <input type="radio" name="isAdmin" value="1" />ADMIN
                             </label>
                         </div>
                     </div>
@@ -61,17 +61,17 @@ use Myblog\Models\UserModel; ?>
                 <div class="hint-text">Affichage de <b><?= $pagination->getCurrentPageOffsetEnd(); ?></b> utilisateurs sur <b><?= $pagination->getNbResults(); ?></b></div>
                 <ul class="pagination">
                     <?php if ($pagination->hasPreviousPage()) : ?>
-                        <li class="page-item"><a href="<?= $router->generate('comments_list', ['page' => $prevPage]); ?>" class="page-link">Précédent</a></li>
+                        <li class="page-item"><a href="<?= $router->generate('users_list', ['page' => $prevPage]); ?>" class="page-link">Précédent</a></li>
                     <?php endif; ?>
 
                     <?php for ($i = 1; $i <= $nbPages; $i++) : ?>
                         <?php
                         $active = $pagination->getCurrentPage() == $i ? 'active' : null;
                         ?>
-                        <li class="page-item <?= $active; ?>"><a href="<?= $router->generate('comments_list', ['page' => $i]); ?>" class="page-link"><?= $i; ?></a></li>
+                        <li class="page-item <?= $active; ?>"><a href="<?= $router->generate('users_list', ['page' => $i]); ?>" class="page-link"><?= $i; ?></a></li>
                     <?php endfor; ?>
                     <?php if ($pagination->hasNextPage()) : ?>
-                        <li class="page-item"><a href="<?= $router->generate('comments_list', ['page' => $nextPage]); ?>" class="page-link">Suivant</a></li>
+                        <li class="page-item"><a href="<?= $router->generate('users_list', ['page' => $nextPage]); ?>" class="page-link">Suivant</a></li>
                     <?php endif; ?>
                 </ul>
             </div>

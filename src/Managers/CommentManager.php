@@ -54,7 +54,7 @@ class CommentManager extends CoreManager
     {
         // Construction de la requête
         $sql = '
-                SELECT * FROM comment 
+                SELECT * FROM comment
                 WHERE is_valid = 1
                 AND post_id = :postId
                 AND respond_to IS NULL
@@ -91,7 +91,7 @@ class CommentManager extends CoreManager
     {
         // Construction de la requête
         $sql = '
-            SELECT COUNT(*) FROM comment 
+            SELECT COUNT(*) FROM comment
             WHERE is_valid = 1
             AND post_id = :postId
         ';
@@ -114,7 +114,7 @@ class CommentManager extends CoreManager
     {
         // Construction de la requête
         $sql = '
-                SELECT * FROM comment 
+                SELECT * FROM comment
                 WHERE is_valid = 1
                 AND respond_to = :commentId
             ';
@@ -160,7 +160,7 @@ class CommentManager extends CoreManager
     {
         // Initialisation
         $post->setParameter('created_on', date('Y-m-d H:i:s'));
-        $post->setParameter('is_valid', 0);
+        $user->isAdmin() ? $post->setParameter('is_valid', 1) : $post->setParameter('is_valid', 0);
         $post->setParameter('user_id', $user->getId());
 
         $comment = $this->buildObject($post);

@@ -10,7 +10,15 @@ class CoreManager extends Database {
     public function getSession()
     {
         $request = new Request();
-         return $request->sessionRequest();
+
+        return $request->sessionRequest();
+    }
+
+    public function getFiles()
+    {
+      $request = new Request();
+
+      return $request->filesRequest();
     }
 
 }

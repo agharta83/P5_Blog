@@ -15,7 +15,7 @@ use MyBlog\Models\UserModel;
  * il permet de définir des instances et variables globales étendues aux classes enfants
  */
 abstract class CoreController {
-    
+
     /**
      * CoreController constructor
      *
@@ -48,12 +48,14 @@ abstract class CoreController {
         // Données globales accessibles dans les vues
         $this->templates->addData([
             'basePath' => $_SERVER['BASE_URI'],
+            'imgPath' => $_SERVER['BASE_URI'] . '/public/images/uploads/',
             'router' => $this->router,
             'user' => $this->currentUser,
             'userManager' => $this->userManager,
             'postManager' => $this->postManager,
             'commentManager' => $this->commentManager,
-            'session' => $this->session
+            'session' => $this->session,
+            'files' => $this->files
         ]);
 
     }
@@ -85,17 +87,17 @@ abstract class CoreController {
     /**
      * Permet d'upload l'image
      *
-     * @param Parameter $files
+     * @param array $files
      * @return void
      */
-    protected function upload(Parameter $files)
+    protected function upload(array $files)
     {
-        if (null !== $files->getParameter('name') && !empty($files->getParameter('name'))) {
+        if (null !== $files['name'][0] && !empty($files['name'][0])) {
             $this->checkFiles($files);
 
             // On upload
             $uploader = new Uploader();
-            $uploadResult = $uploader->upload($files->getParameter('files'));
+            $uploadResult = $uploader->upload($files);
 
 
             if ($uploadResult !== TRUE) {
@@ -103,19 +105,19 @@ abstract class CoreController {
             }
 
             return $uploadResult;
-        } 
-        
+        }
+
         return null;
-        
+
     }
 
     /**
      * Permet de vérifier si il y a un fichier à upload
      *
-     * @param Parameter $files
+     * @param array $files
      * @return Exception
      */
-    private function checkFiles(Parameter $files)
+    private function checkFiles(array $files)
     {
         // On check $_FILES
         try {
@@ -146,5 +148,5 @@ abstract class CoreController {
             'is_admin' => (bool) $user->isAdmin()
         ]);
     }
-    
+
 }

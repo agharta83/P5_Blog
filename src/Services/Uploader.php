@@ -18,11 +18,7 @@ class Uploader {
      *
      */
     public function __construct() {
-
-        $documentRoot = isset($_SERVER['DOCUMENT_ROOT']) && !empty($_SERVER['DOCUMENT_ROOT']) ?? null;
-        $baseURI = isset($_SERVER['BASE_URI']) && !empty($_SERVER['BASE_URI']) ?? null;
-
-        $this->basePath = $documentRoot . $baseURI;
+        $this->basePath = $_SERVER['DOCUMENT_ROOT'] . $_SERVER['BASE_URI'];
     }
 
     // Upload files list
@@ -87,7 +83,6 @@ class Uploader {
 
                 // Upload directory.
                 $this->createDirectory($uploadDirPath);
-
                 // Move file to the new location.
                 if (!move_uploaded_file($tmpName, $uploadPath)) {
                     return sprintf('The file "%s" could not be moved to the specified location.'

@@ -65,16 +65,16 @@ use MyBlog\Models\PostModel;
             </div>
 
             <div class="form-group row">
-              <label class="col-form-label col-sm-3 form-control-label" for="new_post_form_chapo">Chapo *</label>
+              <label class="col-form-label col-sm-3 form-control-label" for="chapo">Chapo *</label>
               <div class="col-sm-9">
-                <div type="text" id="new_post_form_chapo" name="chapo" placeholder="Chapo" class="form-control"></div>
+                <div type="text" id="chapo" name="chapo" placeholder="Chapo" class="form-control"></div>
               </div>
             </div>
 
             <div class="form-group row">
-              <label class="col-form-label col-sm-3 form-control-label required" for="new_post_form_content">Contenu *</label>
+              <label class="col-form-label col-sm-3 form-control-label required" for="content">Contenu *</label>
               <div class="col-sm-9">
-                <div type="text" id="new_post_form_content" name="content" required="required" placeholder="Contenu" class="form-control">
+                <div type="text" id="content" name="content" required="required" placeholder="Contenu" class="form-control">
                 </div>
               </div>
             </div>
@@ -90,7 +90,7 @@ use MyBlog\Models\PostModel;
               </div>
 
               <div class="col-sm-5 wrapper-preview text-center">
-                
+
               </div>
 
             </div>
@@ -105,7 +105,7 @@ use MyBlog\Models\PostModel;
             <div class="row mt-5">
               <div class="col-sm-12 d-flex justify-content-around">
                 <a href="<?= $router->generate('admin_blog_list', ['page' => 1]); ?>" class="btn btn-secondary">Retour</a>
-                <h3><button name="preview" type="submit" value="preview" class="view" title="Voir" data-toggle="tooltip"><i class="far fa-eye"></i></a></h3>
+                <h3><button name="preview" type="submit" value="preview" class="view" title="Voir" data-toggle="tooltip"><i class="far fa-eye"></i></button></h3>
                 <button type="submit" name="submit" class="btn-primary btn" value="Enregistrer">Enregistrer</button>
               </div>
             </div>

@@ -98,7 +98,7 @@ class PostManager extends CoreManager
     }
 
     /**
-     * Retourne un post à partit de son slug
+     * Retourne un post publié à partit de son slug
      *
      * @param string $slug
      * @return PostModel
@@ -121,6 +121,27 @@ class PostManager extends CoreManager
         $result->closeCursor();
 
         return $this->buildObject($post);
+    }
+
+  /**
+   * Retourne un post à partir de son slug
+   * @param $slug
+   * @return PostModel
+   */
+    public function findBySlugForPreview($slug)
+    {
+      // Construction de la requete
+      $sql = 'SELECT * FROM post WHERE slug = :slug';
+
+      // Traitement de la requête
+      $parameters = [':slug' => $slug];
+      $result = $this->createQuery($sql, $parameters);
+
+      $post = $result->fetch();
+
+      $result->closeCursor();
+
+      return $this->buildObject($post);
     }
 
     /**
@@ -211,34 +232,21 @@ class PostManager extends CoreManager
     {
         // On crée la requête SQL
         $sql = "
-                REPLACE INTO post (
-                    title,
-                    chapo,
-                    content,
-                    number_reviews,
-                    created_on,
-                    last_update,
-                    published,
-                    published_date,
-                    img,
-                    slug,
-                    category,
-                    user_id
-                )
-                VALUES (
-                    :title,
-                    :chapo,
-                    :content,
-                    :number_reviews,
-                    :created_on,
-                    :last_update,
-                    :published,
-                    :published_date,
-                    :img,
-                    :slug,
-                    :category,
-                    :user_id
-                )";
+                UPDATE post SET
+                    title = :title,
+                    chapo = :chapo,
+                    content = :content,
+                    number_reviews = :number_reviews,
+                    created_on = :created_on,
+                    last_update = :last_update,
+                    published = :published,
+                    published_date = :published_date,
+                    img = :img,
+                    slug = :slug,
+                    category = :category,
+                    user_id = :user_id
+                WHERE id = :id
+              ";
 
         // Traitemennt de la requete
         $parameters = [
@@ -247,13 +255,14 @@ class PostManager extends CoreManager
             ':content' => $post->getContent(),
             ':number_reviews' => $post->getNumber_reviews(),
             ':created_on' => date('Y-m-d'),
-            ':last_update' => date('Y-m-d', strtotime($post->getLast_update())),
+            ':last_update' => $post->getLast_update() ? date('Y-m-d', strtotime($post->getLast_update())) : null,
             ':published' => $post->getPublished(),
-            ':published_date' => date('Y-m-d', strtotime($post->getPublished_date())),
+            ':published_date' => $post->getPublished_date() ? date('Y-m-d', strtotime($post->getPublished_date())) : null,
             ':img' => $post->getImg(),
             ':slug' => $post->getSlug(),
             ':category' => $post->getCategory(),
             ':user_id' => $post->getUser_id(),
+            ':id' => $post->getId()
         ];
 
 

@@ -8,7 +8,7 @@
     <td><?= $post->getPublished(); ?></td>
     <td><?= $post->getNumber_reviews(); ?></td>
     <td>
-		<a href="<?= $router->generate('read_post', ['slug' => $post->getSlug()]); ?>" class="view" title="Voir" data-toggle="tooltip"><i class="far fa-eye"></i></a>
+		<a href="<?= $router->generate('preview_post', ['slug' => $post->getSlug()]); ?>" class="view" title="Voir" data-toggle="tooltip"><i class="far fa-eye"></i></a>
         <a href="<?= $router->generate('update_post', ['id' => $post->getId(), 'page' => $pagination->getCurrentPage()]); ?>" class="edit" title="Editer" data-toggle="tooltip"><i class="far fa-edit"></i></a>
         <a href="<?= $router->generate('delete_post', ['id' => $post->getId(), 'page' => $pagination->getCurrentPage()]); ?>" class="delete" title="Supprimer" data-toggle="tooltip"><i class="far fa-trash-alt"></i></a>
     </td>

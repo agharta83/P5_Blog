@@ -17,7 +17,7 @@ class PostController extends CoreController {
             // Récup la liste des posts en db
             $pagination = $this->postManager->findAllPostsPaginated(6, (int) $params['page']);
         } catch (\Exception $e) {
-            // Gére le cas ou l'admin à supprimer le dernier article d'une page, 
+            // Gére le cas ou l'admin à supprimer le dernier article d'une page,
             // On renvoie sur la derniére page
             $page = (int) $params['page'] - 1;
             $pagination = $this->postManager->findAllPostsPaginated(6, $page);
@@ -62,7 +62,7 @@ class PostController extends CoreController {
             // On redirige
             return $this->redirect('admin_blog_list', ['page' => $currentPage]);
         }
-        
+
         if (null !== $post->getParameter('preview') && !empty($post->getParameter('preview'))) {
             // L'utilisateur veut prévisualiser le post
             if (null !== $this->files->getParameter('name') && !empty($this->files->getParameter('name'))) {
@@ -77,7 +77,7 @@ class PostController extends CoreController {
             // On affiche le template
             return $this->renderView('blog/read', ['post' => $post, 'similarPosts' => $similarPosts]);
         }
-        
+
         // On affiche la page de création d'un nouveau post
         $headTitle = 'Dashboard / Nouveau post';
 
@@ -85,7 +85,7 @@ class PostController extends CoreController {
             'title' => $headTitle,
             'page' => $currentPage
         ]);
-        
+
     }
 
     /**
@@ -105,6 +105,23 @@ class PostController extends CoreController {
 
         // On affiche le template
         return $this->renderView('blog/read', ['post' => $post]);
+    }
+
+  /**
+   * Affiche un aperçu du post, qu'il soit publié ou non
+   *
+   * @param $params
+   */
+    public function preview($params)
+    {
+      // Slug du post à afficher
+      $slug = $params['slug'];
+
+      // Récup du post
+      $post = $this->postManager->findBySlugForPreview($slug);
+
+      // On affiche le template
+      return $this->renderView('admin/preview', ['post' => $post]);
     }
 
     /**
@@ -143,14 +160,14 @@ class PostController extends CoreController {
 
         if (null !== $this->post->getParameter('update')) {
             // On check $_FILES
-            $this->upload($this->files);
+            $this->upload($this->files->getParameter('files'));
 
             $this->postManager->updatePost($id, $this->post, $this->files);
 
             // On redirige
             return $this->redirect('admin_blog_list', ['page' => 1]);
         }
-        
+
         if (null !== $this->post->getParameter('preview')) {
             // L'utilisateur veut prévisualiser le post
             if (null !== $this->files->getParameter('name') && !empty($this->files->getParameter('name'))) {
@@ -164,7 +181,7 @@ class PostController extends CoreController {
 
             // On affiche le template
             return $this->renderView('blog/read', ['post' => $post, 'similarPosts' => $similarPosts]);
-    
+
         }
 
         // On redirige
@@ -174,7 +191,7 @@ class PostController extends CoreController {
             'title' => $headTitle,
             'post' => $post
         ]);
-        
+
     }
 
 

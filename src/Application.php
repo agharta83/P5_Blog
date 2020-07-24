@@ -15,7 +15,7 @@ class Application {
 
     // Différentes URL de l'app dans Altorouter
     public function initRoutes() {
-        
+
         /** Public  */
         // MainController
         $this->router->map('GET', '/', ['MainController', 'home'], 'home');
@@ -39,6 +39,7 @@ class Application {
         $this->router->map('GET', '/dashboard/posts/[:page]', ['Admin\PostController', 'list'], 'admin_blog_list');
         $this->router->map('GET|POST', '/dashboard/posts/new/[:page]', ['Admin\PostController', 'createNewPost'], 'new_post');
         $this->router->map('GET', '/dashboard/posts/read/[:slug]', ['Admin\PostController', 'read'], 'read_post');
+        $this->router->map('GET', '/dashboard/posts/preview/[:slug]', ['Admin\PostController', 'preview'], 'preview_post');
         $this->router->map('GET', '/dashboard/posts/[i:id]/delete/[:page]', ['Admin\PostController', 'delete'], 'delete_post');
         $this->router->map('GET|POST', '/dashboard/posts/update/[i:id]', ['Admin\PostController', 'update'], 'update_post');
         // Gestion des commentaires
@@ -71,7 +72,7 @@ class Application {
         } else {
             // Route OK, on récupére les infos
             // $match['target'][0] => Nom du controller
-            // $match['target'][1] => Nom de la méthode 
+            // $match['target'][1] => Nom de la méthode
             $data = $match['target'];
             $controllerName = '\MyBlog\Controllers\\' . $data[0];
             $methodName = $data[1];

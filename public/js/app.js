@@ -174,7 +174,7 @@ var app = {
 
     $(window).on('scroll', app.stickyElements); // Count Animation
 
-    $(window).on('load', app.countAnimation); // TinyMCE
+    $(window).on('load', app.countAnimation); // Trumbowyg
 
     $(window).on('load', app.showEditor); // Modal Reset password
 
@@ -182,7 +182,9 @@ var app = {
 
     $(window).on('load', app.showLoginModal); // Show Modal Reset Password with errors
 
-    $(window).on('load', app.showModalResetPassword);
+    $(window).on('load', app.showModalResetPassword); // Image preview
+
+    $(window).on('load', app.previewImg);
   },
   // Sticky Menu
   windowScroll: function windowScroll() {
@@ -295,36 +297,17 @@ var app = {
       });
     }
   },
-  // TinyMCE
+  // Editeur Trumbowyng
   showEditor: function showEditor() {
     if (window.location.href.indexOf("posts/new") > -1 || window.location.href.indexOf("update") > -1) {
-      /*
-      tinymce.init({
-        selector: '#new_post_form_chapo',
-        height: '300',
-        plugins: 'a11ychecker advcode casechange formatpainter linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker',
-        toolbar: 'a11ycheck addcomment showcomments casechange checklist code formatpainter pageembed permanentpen table',
-        toolbar_mode: 'floating',
-        tinycomments_mode: 'embedded',
-        tinycomments_author: 'Author name',
+      $('#chapo').trumbowyg({
+        svgPath: app.basePath + '/public/images/icons.svg',
+        autogrow: true
       });
-       tinymce.init({
-        selector: '#new_post_form_content',
-        height: '500',
-        plugins: 'a11ychecker advcode casechange formatpainter linkchecker autolink lists checklist media mediaembed pageembed permanentpen powerpaste table advtable tinycomments tinymcespellchecker',
-        toolbar: 'a11ycheck addcomment showcomments casechange checklist code formatpainter pageembed permanentpen table',
-        toolbar_mode: 'floating',
-        tinycomments_mode: 'embedded',
-        tinycomments_author: 'Author name',
+      $('#content').trumbowyg({
+        svgPath: app.basePath + '/public/images/icons.svg',
+        autogrow: true
       });
-      */
-      $('#new_post_form_chapo').trumbowyg({
-        svgPath: app.basePath + '/public/images/icons.svg'
-      });
-      $('#new_post_form_content').trumbowyg({
-        svgPath: app.basePath + '/public/images/icons.svg'
-      });
-      app.previewImg;
     }
   },
   // Read url IMG on form and preview img

@@ -1,6 +1,7 @@
 <?php
 
 use MyBlog\Models\PostModel;
+use MyBlog\Services\Validator;
 
 ?>
 
@@ -65,22 +66,21 @@ use MyBlog\Models\PostModel;
                         <div class="form-group row">
                             <label class="col-form-label col-sm-3 form-control-label align-self-center required" for="new_post_form_titre">Titre de l'article *</label>
                             <div class="col-sm-9">
-                                <input type="text" id="new_post_form_titre" name="titre" required placeholder="Titre" class="form-control" value="<?= $post->getTitle(); ?>">
+                                <input type="text" id="new_post_form_titre" name="titre" required placeholder="Titre" class="form-control" value="<?= Validator::decode($post->getTitle()); ?>">
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-form-label col-sm-3 form-control-label" for="new_post_form_chapo">Chapo *</label>
+                            <label class="col-form-label col-sm-3 form-control-label" for="chapo">Chapo *</label>
                             <div class="col-sm-9">
-                                <input type="text" id="new_post_form_chapo" name="chapo" placeholder="Chapo" class="form-control" value="<?= $post->getChapo(); ?>">
+                              <div type="text" id="chapo" name="chapo" placeholder="Chapo" class="form-control"><?= Validator::decode($post->getChapo()); ?></div>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-form-label col-sm-3 form-control-label required" for="new_post_form_content">Contenu *</label>
+                            <label class="col-form-label col-sm-3 form-control-label required" for="content">Contenu *</label>
                             <div class="col-sm-9">
-                                <input type="text" id="new_post_form_content" name="content" required="required" placeholder="Contenu" class="form-control" value="<?= $post->getContent(); ?>">
-                                </textarea>
+                              <div type="text" id="content" name="content" required="required" placeholder="Contenu" class="form-control"><?= Validator::decode($post->getContent()); ?></div>
                             </div>
                         </div>
 

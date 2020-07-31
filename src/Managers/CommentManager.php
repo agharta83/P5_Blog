@@ -6,7 +6,6 @@ use MyBlog\Models\CommentModel;
 use MyBlog\Services\PaginatedQuery;
 use Pagerfanta\Pagerfanta;
 use MyBlog\Services\Parameter;
-use MyBlog\Services\Validator;
 
 class CommentManager extends CoreManager
 {
@@ -24,7 +23,7 @@ class CommentManager extends CoreManager
             $comment->setId($row['id'] ?? null);
             $comment->setCreated_on($row['created_on'] ?? date('Y-m-d'));
             $comment->setIs_valid($row['is_valid']);
-            $comment->setContent(Validator::sanitize($row['content']));
+            $comment->setContent($row['content']);
             $comment->setRespond_to($row['respond_to'] ?? null);
             $comment->setPost_id($row['post_id']);
             $comment->setUser_id($row['user_id']);
@@ -34,7 +33,7 @@ class CommentManager extends CoreManager
             $comment->setId($row->getParameter('id') ?? null);
             $comment->setCreated_on($row->getParameter('created_on') ?? date('Y-m-d'));
             $comment->setIs_valid($row->getParameter('is_valid'));
-            $comment->setContent(Validator::sanitize($row->getParameter('content')));
+            $comment->setContent($row->getParameter('content'));
             $comment->setRespond_to($row->getParameter('respond_to') ?? null);
             $comment->setPost_id($row->getParameter('post_id'));
             $comment->setUser_id($row->getParameter('user_id'));

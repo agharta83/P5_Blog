@@ -141,8 +141,8 @@ class PostModel {
      * @return boolean
      */
     public function isPublished() {
-        
-        return $this->published;
+
+        return $this->published == 1 ? true : false;
     }
 
     /**
@@ -164,20 +164,20 @@ class PostModel {
 
      /**
      * Retourne la valeur de published pour l'afficher correctement
-     */ 
+     */
     public function getPublishedName()
     {
         if ($this->published) {
             return 'Publié';
         }
-        
+
         return 'Brouillon';
-        
+
     }
 
     /**
      * Get the value of id
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -185,19 +185,19 @@ class PostModel {
 
     /**
      * Set the value of id
-     * 
+     *
      * @return self
-     */ 
+     */
     public function setId($id)
     {
         $this->id = $id;
-        
+
         return $this;
     }
 
     /**
      * Get the value of title
-     */ 
+     */
     public function getTitle()
     {
         return $this->title;
@@ -207,7 +207,7 @@ class PostModel {
      * Set the value of title
      *
      * @return  self
-     */ 
+     */
     public function setTitle($title)
     {
         $this->title = $title;
@@ -217,7 +217,7 @@ class PostModel {
 
     /**
      * Get the value of chapo
-     */ 
+     */
     public function getChapo()
     {
         return $this->chapo;
@@ -227,7 +227,7 @@ class PostModel {
      * Set the value of chapo
      *
      * @return  self
-     */ 
+     */
     public function setChapo($chapo)
     {
         $this->chapo = $chapo;
@@ -237,7 +237,7 @@ class PostModel {
 
     /**
      * Get the value of content
-     */ 
+     */
     public function getContent()
     {
         return $this->content;
@@ -247,7 +247,7 @@ class PostModel {
      * Set the value of content
      *
      * @return  self
-     */ 
+     */
     public function setContent($content)
     {
         $this->content = $content;
@@ -257,7 +257,7 @@ class PostModel {
 
     /**
      * Get the value of created_on
-     */ 
+     */
     public function getCreated_on()
     {
         return date('d-m-Y', strtotime($this->created_on));
@@ -267,7 +267,7 @@ class PostModel {
      * Set the value of created_on
      *
      * @return  self
-     */ 
+     */
     public function setCreated_on($created_on)
     {
         $this->created_on = $created_on;
@@ -279,7 +279,7 @@ class PostModel {
 
     /**
      * Get the value of last_update
-     */ 
+     */
     public function getLast_update()
     {
         if (isset($this->last_update) && !empty($this->last_update)) {
@@ -287,14 +287,14 @@ class PostModel {
         }
 
         return null;
-        
+
     }
 
     /**
      * Set the value of last_update
      *
      * @return  self
-     */ 
+     */
     public function setLast_update($last_update)
     {
         $this->last_update = $last_update;
@@ -304,7 +304,7 @@ class PostModel {
 
     /**
      * Get the value of img
-     */ 
+     */
     public function getImg()
     {
         return $this->img;
@@ -314,7 +314,7 @@ class PostModel {
      * Set the value of img
      *
      * @return  self
-     */ 
+     */
     public function setImg($img)
     {
         $this->img = $img;
@@ -324,7 +324,7 @@ class PostModel {
 
     /**
      * Get the value of number_reviews
-     */ 
+     */
     public function getNumber_reviews()
     {
         return $this->number_reviews;
@@ -334,7 +334,7 @@ class PostModel {
      * Set the value of number_reviews
      *
      * @return  self
-     */ 
+     */
     public function setNumber_reviews($number_reviews)
     {
         $this->number_reviews = $number_reviews;
@@ -344,13 +344,13 @@ class PostModel {
 
     /**
      * Get the value of published_date
-     */ 
+     */
     public function getPublished_date()
     {
         if (isset($this->published_date) && !empty($this->published_date)) {
             return date('d-m-Y', strtotime($this->published_date));
         }
-        
+
         return null;
     }
 
@@ -358,7 +358,7 @@ class PostModel {
      * Set the value of published_date
      *
      * @return  self
-     */ 
+     */
     public function setPublished_date($published_date)
     {
         $this->published_date = $published_date;
@@ -368,18 +368,18 @@ class PostModel {
 
     /**
      * Get the value of published
-     */ 
+     */
     public function getPublished()
     {
         return $this->published;
-        
+
     }
 
     /**
      * Set the value of published
      *
      * @return  self
-     */ 
+     */
     public function setPublished($published)
     {
         $this->published = $published;
@@ -389,7 +389,7 @@ class PostModel {
 
     /**
      * Get the value of slug
-     */ 
+     */
     public function getSlug()
     {
         return $this->slug;
@@ -399,7 +399,7 @@ class PostModel {
      * Set the value of slug
      *
      * @return  self
-     */ 
+     */
     public function setSlug($slug)
     {
         $this->slug = $this->slugify($slug, '_');
@@ -409,7 +409,7 @@ class PostModel {
 
     /**
      * Get the value of category
-     */ 
+     */
     public function getCategory()
     {
         return $this->category;
@@ -419,7 +419,7 @@ class PostModel {
      * Set the value of category
      *
      * @return  self
-     */ 
+     */
     public function setCategory($category)
     {
         $this->category = $category;
@@ -429,7 +429,7 @@ class PostModel {
 
     /**
      * Get the value of user_id
-     */ 
+     */
     public function getUser_id()
     {
         return $this->user_id;
@@ -439,7 +439,7 @@ class PostModel {
      * Set the value of user_id
      *
      * @return  self
-     */ 
+     */
     public function setUser_id($user_id)
     {
         $this->user_id = $user_id;

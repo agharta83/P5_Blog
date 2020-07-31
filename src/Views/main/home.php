@@ -8,7 +8,7 @@ if (!empty($errors)) {
   ]);
 } else {
   $this->layout('layout', ['title' => $title]);
-} 
+}
  ?>
 
   <!-- hero area -->

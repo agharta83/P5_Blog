@@ -67,4 +67,27 @@ class PostController extends CoreController
             'currentPage' => $params['page']
         ]);
     }
+
+    public function readSingle($params) {
+      // Slug du post à afficher
+      $slug = $params['slug'] ?? $params;
+
+      // Récup du post
+      $post = $this->postManager->findBySlug($slug);
+
+      // Recup des commentaires
+      $comments = $this->commentManager->findValidCommentsForPost($post->getId());
+      // Recup du nombre de commentaires
+      $nbComments = $this->commentManager->countNbCommentsForPost($post->getId());
+      // Récup des posts similaires
+      $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getSlug());
+
+      // On affiche le template
+      return $this->renderView('blog/single', [
+        'post' => $post,
+        'comments' => $comments,
+        'nbComments' => $nbComments,
+        'similarPosts' => $similarPosts
+      ]);
+    }
 }

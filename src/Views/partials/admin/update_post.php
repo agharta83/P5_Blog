@@ -1,8 +1,5 @@
 <?php
-
 use MyBlog\Models\PostModel;
-use MyBlog\Services\Validator;
-
 ?>
 
 <section class="hero-area hero-admin-new-post bg-primary" id="parallax">
@@ -66,21 +63,21 @@ use MyBlog\Services\Validator;
                         <div class="form-group row">
                             <label class="col-form-label col-sm-3 form-control-label align-self-center required" for="new_post_form_titre">Titre de l'article *</label>
                             <div class="col-sm-9">
-                                <input type="text" id="new_post_form_titre" name="titre" required placeholder="Titre" class="form-control" value="<?= Validator::decode($post->getTitle()); ?>">
+                                <input type="text" id="new_post_form_titre" name="titre" required placeholder="Titre" class="form-control" value="<?= $post->getTitle(); ?>">
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <label class="col-form-label col-sm-3 form-control-label" for="chapo">Chapo *</label>
                             <div class="col-sm-9">
-                              <div type="text" id="chapo" name="chapo" placeholder="Chapo" class="form-control"><?= Validator::decode($post->getChapo()); ?></div>
+                              <div type="text" id="chapo" name="chapo" placeholder="Chapo" class="form-control"><?= $post->getChapo(); ?></div>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <label class="col-form-label col-sm-3 form-control-label required" for="content">Contenu *</label>
                             <div class="col-sm-9">
-                              <div type="text" id="content" name="content" required="required" placeholder="Contenu" class="form-control"><?= Validator::decode($post->getContent()); ?></div>
+                              <div type="text" id="content" name="content" required="required" placeholder="Contenu" class="form-control"><?= $post->getContent(); ?></div>
                             </div>
                         </div>
 
@@ -104,14 +101,14 @@ use MyBlog\Services\Validator;
 
                         <div class="custom-control custom-switch custom-switch-lg">
                             <?php $published = $post->isPublished() ? 'checked' : null; ?>
-                            <input type="checkbox" class="custom-control-input" id="published" name="published" value="off" <?= $published; ?>>
+                            <input type="checkbox" class="custom-control-input" id="published" name="published" <?= $published; ?>>
                             <label class="custom-control-label" for="published">Publié ?</label>
                         </div>
 
                         <div class="row mt-5">
                             <div class="col-sm-12 d-flex justify-content-around">
                                 <a href="<?= $router->generate('admin_blog_list', ['page' => 1]); ?>" class="btn btn-secondary">Retour</a>
-                                <h3><button name="preview" type="submit" value="preview" class="view" title="Voir" data-toggle="tooltip"><i class="far fa-eye"></i></a></h3>
+                                <h3><button name="preview" type="submit" value="preview" class="view" title="Voir" data-toggle="tooltip"><i class="far fa-eye"></i></h3>
                                 <button type="submit" id="update" name="update" class="btn-primary btn">Enregistrer</button>
                             </div>
                         </div>

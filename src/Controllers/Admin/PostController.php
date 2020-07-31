@@ -55,7 +55,7 @@ class PostController extends CoreController {
         if ( null !== $post->getParameter('submit') && !empty($post->getParameter('submit')) ) {
 
             // On check $_FILES et on upload l'image
-            $this->upload($this->files);
+            $this->upload($this->files->getParameter('files'));
 
             $this->postManager->addPost($post, $this->files);
 
@@ -66,7 +66,7 @@ class PostController extends CoreController {
         if (null !== $post->getParameter('preview') && !empty($post->getParameter('preview'))) {
             // L'utilisateur veut prévisualiser le post
             if (null !== $this->files->getParameter('name') && !empty($this->files->getParameter('name'))) {
-                $this->upload($this->files);
+                $this->upload($this->files->getParameter('files'));
             }
 
             $post = $this->postManager->preview($post, $this->files);
@@ -176,11 +176,8 @@ class PostController extends CoreController {
 
             $post = $this->postManager->preview($post, $this->files);
 
-            // Récup des posts similaires
-            $similarPosts = $this->postManager->findByCategory($post->getCategory(), $post->getSlug());
-
             // On affiche le template
-            return $this->renderView('blog/read', ['post' => $post, 'similarPosts' => $similarPosts]);
+            return $this->redirect('preview_post', ['slug' => $post->getSlug()]);
 
         }
 

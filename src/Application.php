@@ -24,7 +24,9 @@ class Application {
         // Blog
         $this->router->map('GET', '/blog/[:page]', ['PostController', 'list'], 'blog_list');
         $this->router->map('GET', '/blog/[:page]/[:slug]', ['PostController', 'read'], 'blog_read');
+        $this->router->map('GET', '/single/[:slug]', ['PostController', 'readSingle'], 'read');
         $this->router->map('POST', '/comment/add/[:page]', ['CommentController', 'addComment'], 'add_comment');
+        $this->router->map('POST', '/comment/add', ['CommentController', 'addCommentToSingle'], 'add_comment_single');
         // Connexion
         $this->router->map('GET|POST', '/login', ['UserController', 'login'], 'login');
         $this->router->map('GET', '/logout', ['UserController', 'logout'], 'logout');

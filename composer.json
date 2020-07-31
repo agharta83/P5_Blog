@@ -18,7 +18,8 @@
         "altorouter/altorouter": "^2.0",
         "league/plates": "^3.3",
         "pagerfanta/pagerfanta": "^2.3",
-        "swiftmailer/swiftmailer": "^6.2"
+        "swiftmailer/swiftmailer": "^6.2",
+        "ezyang/htmlpurifier": "^4.13"
 
     }
 }

@@ -6,7 +6,6 @@ use MyBlog\Models\PostModel;
 use MyBlog\Services\PaginatedQuery;
 use Pagerfanta\Pagerfanta;
 use MyBlog\Services\Parameter;
-use MyBlog\Services\Validator;
 
 /**
  * Permet de manager PostModel
@@ -27,32 +26,32 @@ class PostManager extends CoreManager
 
         if (is_array($row)) {
             $post->setId($row['id'] ?? null);
-            $post->setTitle(Validator::sanitize($row['title']));
-            $post->setChapo(Validator::sanitize($row['chapo']));
-            $post->setContent(Validator::sanitize($row['content']));
+            $post->setTitle($row['title']);
+            $post->setChapo($row['chapo']);
+            $post->setContent($row['content']);
             $post->setCreated_on($row['created_on'] ?? date('Y-m-d'));
             $post->setLast_update($row['last_update'] ?? null);
-            $post->setImg(Validator::sanitize($row['img']) ?? null);
+            $post->setImg($row['img'] ?? null);
             $post->setNumber_reviews($row['number_reviews'] ?? 0);
             $post->setPublished_date($row['published_date'] ?? null);
             $post->setPublished($row['published']);
-            $post->setSlug(Validator::sanitize($row['slug']));
+            $post->setSlug($row['slug']);
             $post->setCategory($row['category']);
             $post->setUser_id($row['user_id']);
         }
 
         if ($row instanceof Parameter) {
             $post->setId($row->getParameter('id') ?? null);
-            $post->setTitle(Validator::sanitize($row->getParameter('title')));
-            $post->setChapo(Validator::sanitize($row->getParameter('chapo')));
-            $post->setContent(Validator::sanitize($row->getParameter('content')));
+            $post->setTitle($row->getParameter('title'));
+            $post->setChapo($row->getParameter('chapo'));
+            $post->setContent($row->getParameter('content'));
             $post->setCreated_on($row->getParameter('created_on') ?? date('Y-m-d'));
             $post->setLast_update($row->getParameter('last_update') ?? null);
-            $post->setImg(Validator::sanitize($row->getParameter('img')) ?? null);
+            $post->setImg($row->getParameter('img') ?? null);
             $post->setNumber_reviews($row->getParameter('number_reviews') ?? 0);
             $post->setPublished_date($row->getParameter('published_date') ?? null);
             $post->setPublished($row->getParameter('published'));
-            $post->setSlug(Validator::sanitize($row->getParameter('slug')));
+            $post->setSlug($row->getParameter('slug'));
             $post->setCategory($row->getParameter('category'));
             $post->setUser_id($row->getParameter('user_id'));
         }
@@ -219,11 +218,11 @@ class PostManager extends CoreManager
         $newPost = $this->buildObject($post);
 
         // On l'insére en BDD
-        $this->save($newPost);
+        $this->add($newPost);
     }
 
     /**
-     * Ajoute un nouveau post un BDD ou le modifie si il existe déjà
+     * Mets à jour un post en BDD
      *
      * @param PostModel $post
      * @return void
@@ -254,7 +253,7 @@ class PostManager extends CoreManager
             ':chapo' => $post->getChapo(),
             ':content' => $post->getContent(),
             ':number_reviews' => $post->getNumber_reviews(),
-            ':created_on' => date('Y-m-d'),
+            ':created_on' => $post->getCreated_on() ? date('Y-m-d', strtotime($post->getCreated_on())) : null,
             ':last_update' => $post->getLast_update() ? date('Y-m-d', strtotime($post->getLast_update())) : null,
             ':published' => $post->getPublished(),
             ':published_date' => $post->getPublished_date() ? date('Y-m-d', strtotime($post->getPublished_date())) : null,
@@ -268,6 +267,65 @@ class PostManager extends CoreManager
 
         $this->createQuery($sql, $parameters);
     }
+
+  /**
+   * Ajoute un nouveau post un BDD
+   *
+   * @param PostModel $post
+   * @return void
+   */
+  private function add(PostModel $post)
+  {
+    // On crée la requête SQL
+    $sql = "
+                INSERT INTO post (
+                    title,
+                    chapo,
+                    content,
+                    number_reviews,
+                    created_on,
+                    last_update,
+                    published,
+                    published_date,
+                    img,
+                    slug,
+                    category,
+                    user_id
+                )
+                VALUES (
+                    :title,
+                    :chapo,
+                    :content,
+                    :number_reviews,
+                    :created_on,
+                    :last_update,
+                    :published,
+                    :published_date,
+                    :img,
+                    :slug,
+                    :category,
+                    :user_id
+                )";
+
+    // Traitemennt de la requete
+    $parameters = [
+      ':title' => $post->getTitle(),
+      ':chapo' => $post->getChapo(),
+      ':content' => $post->getContent(),
+      ':number_reviews' => $post->getNumber_reviews(),
+      ':created_on' => date('Y-m-d'),
+      ':last_update' => $post->getLast_update() ? date('Y-m-d', strtotime($post->getLast_update())) : null,
+      ':published' => $post->getPublished(),
+      ':published_date' => $post->getPublished_date() ? date('Y-m-d', strtotime($post->getPublished_date())) : null,
+      ':img' => $post->getImg(),
+      ':slug' => $post->getSlug(),
+      ':category' => $post->getCategory(),
+      ':user_id' => $post->getUser_id()
+    ];
+
+
+    $this->createQuery($sql, $parameters);
+  }
 
     /**
      * Retourne un post à partir de son Id
@@ -320,8 +378,8 @@ class PostManager extends CoreManager
     public function preview($post, Parameter $files)
     {
         if ($post instanceof Parameter) {
-            // On gère les datas qui ne sont pas dans le formulaire mais initialisé à chaque création d'un post
-            $post->setParameter('img', $files->getParameter('files')['name'][0]);
+            // On gère les datas qui ne sont pas dans le formulaire
+            $post->setParameter('img', $files->getParameter('files')['name'][0]) ?? $post->getImg();
             $post->setParameter('slug', $post->getParameter('title'));
             $post->setParameter('number_reviews', 0);
 
@@ -383,6 +441,7 @@ class PostManager extends CoreManager
         $postToUpdate->setContent($post->getParameter('content'));
         $postToUpdate->setSlug($post->getParameter('titre'));
         $postToUpdate->setLast_update(date('Y-m-d'));
+        $postToUpdate->getCreated_on();
 
         // On incrémente les reviews
         $nbReviews = $postToUpdate->getNumber_reviews();

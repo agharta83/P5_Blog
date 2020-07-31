@@ -80,7 +80,11 @@ abstract class Database {
 
         if ($parameters) {
             $stmt = $this->checkConnexion()->prepare($sql);
-            
+
+            foreach ($parameters as $key => $val) {
+              $stmt->bindParam($key, $val);
+            }
+
             $stmt->execute($parameters);
 
             if (strstr($sql, 'INSERT')) {
@@ -88,11 +92,11 @@ abstract class Database {
                 return $this->checkConnexion()->lastInsertId();
 
             }
-            
+
             return $stmt;
-            
-        } 
-        
+
+        }
+
         $stmt = $this->checkConnexion()->query($sql);
 
         return $stmt;

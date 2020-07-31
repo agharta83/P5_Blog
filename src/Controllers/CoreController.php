@@ -5,6 +5,7 @@ namespace MyBlog\Controllers;
 use MyBlog\Managers\CommentManager;
 use MyBlog\Managers\PostManager;
 use MyBlog\Managers\UserManager;
+use MyBlog\Services\Purifier;
 use MyBlog\Services\Request;
 use Myblog\Services\Parameter;
 use MyBlog\Services\Uploader;
@@ -37,6 +38,9 @@ abstract class CoreController {
         $this->files = $this->request->filesRequest();
         $this->session = $this->request->sessionRequest();
 
+        //Instance de la classe Purifier
+        $this->purifier = new Purifier();
+
         // On instancie les Managers
         $this->postManager = new PostManager();
         $this->commentManager = new CommentManager();
@@ -55,7 +59,8 @@ abstract class CoreController {
             'postManager' => $this->postManager,
             'commentManager' => $this->commentManager,
             'session' => $this->session,
-            'files' => $this->files
+            'files' => $this->files,
+            'purifier' => $this->purifier
         ]);
 
     }

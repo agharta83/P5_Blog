@@ -6,17 +6,17 @@
         <h3 class="font-tertiary mb-5">
 
           <?= $purifier->sanitizeHTML($post->getTitle()); ?></h3>
-        <p class="font-secondary">Publié le <?= $post->getPublished_date(); ?> par
-          <span class="text-primary">
+<p class="font-secondary">Publié le <?= $post->getPublished_date(); ?> par
+  <span class="text-primary">
             <?= $post->getPostAuthor(); ?>
           </span>
-          <div class="content">
-            <img src="<?= $imgPath . $post->getImg(); ?>" alt="post-thumb" class="img-fluid rounded float-left mr-5 mb-4">
-        <p><?= $purifier->sanitizeHTML($post->getContent()); ?></p>
-      </div>
-    </div>
-  </div>
-  </div>
+  <div class="content">
+    <img src="<?= $imgPath . $post->getImg(); ?>" alt="post-thumb" class="img-fluid rounded float-left mr-5 mb-4">
+<p><?= $post->getContent(); ?></p>
+</div>
+</div>
+</div>
+</div>
 </section>
 <!-- /post -->
 
@@ -39,15 +39,15 @@
                 <img src="<?= $basePath ?>/public/images/user-1.jpg" class="img-fluid align-self-start rounded-circle mr-3" alt="">
                 <div class="media-body">
                   <?php if ($isAdmin) : ?>
-                    <h5 class="mt-0 p-color-bold"><?= $comment->getCommentAuthor(); ?></h5>
+                    <h5 class="mt-0 p-color-bold"><?= $purifier->sanitizeHTML($comment->getCommentAuthor()); ?></h5>
                   <?php else : ?>
-                    <h5 class="mt-0"><?= $comment->getCommentAuthor(); ?></h5>
+                    <h5 class="mt-0"><?= $purifier->sanitizeHTML($comment->getCommentAuthor()); ?></h5>
                   <?php endif; ?>
                   <p><?= ucfirst($comment->getFormatedDate()); ?></p>
-                  <p><?= $comment->getContent(); ?></p>
+                  <p><?= $purifier->sanitizeHTML($comment->getContent()); ?></p>
                   <a href="<?= $id1; ?>" class="btn btn-transparent btn-sm pl-0" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="<?= $id1; ?>">Répondre</a>
                   <div class="collapse" id="<?= $id2; ?>">
-                    <form action="<?= $router->generate("add_comment", ['page' => $currentPage]); ?>" method="post" class="row">
+                    <form action="<?= $router->generate("add_comment"); ?>" method="post" class="row">
                       <div class="col-md-6">
                         <input type="hidden" value="<?= $post->getId(); ?>" id="post_id" name="post_id">
                         <input type="hidden" value="<?= $comment->getId(); ?>" id="respond_to1" name="respond_to">
@@ -73,17 +73,17 @@
                       <img src="<?= $basePath ?>/public/images/user-2.jpg" class="img-fluid align-self-start rounded-circle mr-3" alt="">
                       <div class="media-body">
                         <?php if ($isAdmin) : ?>
-                          <h5 class="mt-0 p-color-bold"><?= $respond_to->getCommentAuthor(); ?></h5>
+                          <h5 class="mt-0 p-color-bold"><?= $purifier->sanitizeHTML($respond_to->getCommentAuthor()); ?></h5>
                         <?php else : ?>
-                          <h5 class="mt-0"><?= $respond_to->getCommentAuthor(); ?></h5>
+                          <h5 class="mt-0"><?= $purifier->sanitizeHTML($respond_to->getCommentAuthor()); ?></h5>
                         <?php endif; ?>
                         <p><?= ucfirst($respond_to->getFormatedDate()); ?></p>
-                        <p><?= $respond_to->getContent(); ?></p>
+                        <p><?= $purifier->sanitizeHTML($respond_to->getContent()); ?></p>
                         <a href="<?= $id3; ?>" class="btn btn-transparent btn-sm pl-0" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="<?= $id3; ?>">Répondre</a>
                       </div>
                     </div>
                     <div class="collapse" id="<?= $id4; ?>">
-                      <form action="<?= $router->generate("add_comment", ['page' => $currentPage]); ?>" method="post" class="row">
+                      <form action="<?= $router->generate("add_comment"); ?>" method="post" class="row">
                         <div class="col-md-6">
                           <input type="hidden" value="<?= $post->getId(); ?>" id="post_id" name="post_id">
                           <input type="hidden" value="<?= $comment->getId(); ?>" id="respond_to2" name="respond_to">
@@ -108,7 +108,7 @@
         <?php endif; ?>
         <h4 class="font-weight-bold">Laisser un commentaire</h4>
         <p class="border-bottom mb-3 pb-3"><i>* Les commentaires sont soumis à validation par l'administrateur</i></p>
-        <form action="<?= $router->generate("add_comment", ['page' => $currentPage]); ?>" method="post" class="row">
+        <form action="<?= $router->generate("add_comment_single"); ?>" method="post" class="row">
           <div class="col-md-6">
             <input type="hidden" value="<?= $post->getId(); ?>" id="post_id" name="post_id">
             <input type="text" class="form-control mb-3" placeholder="Prénom" name="firstname" id="firstname" value="<?= $session->get('user')['firstname'] ?? ''; ?>">
@@ -137,12 +137,12 @@
         <?php foreach ($similarPosts as $similarPost) : ?>
           <div class="col-lg-4 col-sm-6 mb-4 mb-lg-0">
             <article class="card shadow">
-              <img class="rounded card-img-top" src="<?= $basePath ?>/public/images/blog/post-3.jpg" alt="post-thumb">
+              <img class="rounded card-img-top" src="<?= $imgPath . $similarPost->getImg(); ?>" alt="post-thumb">
               <div class="card-body">
-                <h4 class="card-title"><a class="text-dark" href="blog-single.html"><?= $similarPost->getTitle(); ?></a>
+                <h4 class="card-title"><a class="text-dark"><?= $purifier->sanitizeHTML($similarPost->getTitle()); ?></a>
                 </h4>
-                <p class="cars-text"><?= $similarPost->getChapo(); ?></p>
-                <a href="<?= $router->generate('blog_read', ['page' => $currentPage, 'slug' => $similarPost->getSlug()]); ?>" class="btn btn-xs btn-primary">Lire</a>
+                <p class="cars-text"><?= $purifier->sanitizeHTML($similarPost->getChapo()); ?></p>
+                <a href="<?= $router->generate('read', ['slug' => $similarPost->getSlug()]); ?>" class="btn btn-xs btn-primary">Lire</a>
               </div>
             </article>
           </div>

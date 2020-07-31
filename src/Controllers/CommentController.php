@@ -20,7 +20,7 @@ class CommentController extends CoreController
             // On récup l'id du post
             $postId = $post->getParameter('post_id');
 
-            // On va check si l'utilisateur existe 
+            // On va check si l'utilisateur existe
             // et on le créé en BDD si besoin
             $user = $this->userManager->addUser($post);
 
@@ -35,5 +35,29 @@ class CommentController extends CoreController
 
             $this->redirect('blog_read', ['slug' => $postSlug, 'page' => $currentPage]);
         }
+    }
+
+    public function addCommentToSingle() {
+      $post = $this->post;
+
+      if (!empty($post)) {
+        // On récup l'id du post
+        $postId = $post->getParameter('post_id');
+
+        // On va check si l'utilisateur existe
+        // et on le créé en BDD si besoin
+        $user = $this->userManager->addUser($post);
+
+        // On enregistre l'user en session
+        $this->saveUserInSession($user);
+
+        // On insére le commentaire en BDD
+        $this->commentManager->addComment($post, $user);
+
+        // On récup le slug du post
+        $postSlug = $this->postManager->findById($postId)->getSlug();
+
+        $this->redirect('read', ['slug' => $postSlug]);
+      }
     }
 }

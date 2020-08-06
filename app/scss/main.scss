@@ -14,23 +14,26 @@ VERSION:	1.0.0
 
 @import 'vendors/vendors';
 
-@import 'abstracts/variables';
-@import 'abstracts/mixins';
+@import 'variables';
 
-@import 'base/fonts';
-@import 'base/typography';
+@import 'mixins';
 
-@import 'components/buttons';
-@import 'components/cards';
-@import 'components/accordion';
+@import 'typography';
 
-@import 'layout/navigation';
-@import 'layout/hero-area';
+@import 'buttons';
 
-@import 'pages/homepage';
-@import 'pages/blog';
-@import 'pages/about';
-@import 'pages/portfolio';
+@import 'common';
 
-@import 'theme/common';
-@import 'theme/admin';
+@import "admin";
+
+@import 'templates/navigation';
+
+@import 'templates/hero-area';
+
+@import 'templates/homepage';
+
+@import 'templates/blog';
+
+@import 'templates/about';
+
+@import 'templates/portfolio';

@@ -2,14 +2,14 @@
 
 <section class="hero-area hero-admin bg-primary" id="parallax">
 
-    <div class="container table-container bg-white">
+    <div class="container table-container table-comments bg-white">
         <div class="table-wrapper shadow p-3 mx-2">
             <div class="table-title pb-1 mb-1">
                 <div class="row justify-content-between">
                     <div class="col-sm-5">
                         <h3 class="text-left tertiary-font"><b>Commentaires</b></h3>
                     </div>
-                    <div class="col-5 mx-auto">
+                    <div class="col-12 col-md-5 mx-auto">
                         <div class="btn-group btn-group-toggle justify-content-center d-flex" data-toggle="buttons">
                             <label class="btn btn-sm btn-primary active">
                                 <input type="radio" name="all" value="all" checked="checked" />Tout
@@ -22,7 +22,7 @@
                 </div>
             </div>
 
-            <table class="table table-hover">
+            <table class="table table-hover table-wrapper">
                 <thead class="uppercase">
                     <tr>
                         <th>Post</th>
@@ -56,7 +56,7 @@
 
                     <?php for ($i = 1; $i <= $nbPages; $i++) : ?>
                         <?php
-                            $active = $pagination->getCurrentPage() == $i ? 'active' : null;   
+                            $active = $pagination->getCurrentPage() == $i ? 'active' : null;
                         ?>
                         <li class="page-item <?= $active; ?>"><a href="<?= $router->generate('comments_list', ['page' => $i]); ?>" class="page-link"><?= $i; ?></a></li>
                     <?php endfor; ?>

@@ -10,6 +10,15 @@
   position: relative;
   z-index: 1;
   transition: .2s ease;
+  @include mobile-xs {
+    display: flex;
+    width: 100px;
+    padding: 10px;
+    justify-content: center;
+    margin: auto;
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
 
   &:focus {
     outline: 0;
@@ -60,38 +69,4 @@
   &:hover {
     color: $primary-color;
   }
-}
-
-.btn-secondary {
-  background-color: $tertiary-color;
-  color: $white;
-
-  &:active {
-    background: lighten($color: $tertiary-color, $amount: 10) !important;
-  }
-
-  &:hover {
-    background: lighten($color: $tertiary-color, $amount: 10);
-  }
-
-  &.focus,
-  &.active {
-    background: lighten($color: $tertiary-color, $amount: 10) !important;
-    box-shadow: none !important;
-  }
-}
-
-.badge-secondary {
-  background-color: $fourth-color;
-  color: $white;
-}
-
-.badge-primary {
-  background-color: $secondary-color!important;
-  color: $white;
-}
-
-.badge-tertiary {
-  background-color: $tertiary-color!important;
-  color: $white;
 }

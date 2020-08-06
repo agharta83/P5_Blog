@@ -6,7 +6,7 @@ use MyBlog\Models\PostModel; ?>
   <div class="container">
     <!-- btn tabs shuffle -->
     <div class="row mb-5">
-      <div class="col-8 mx-auto">
+      <div class="col-12 col-md-8 mx-auto">
         <div class="btn-group btn-group-toggle justify-content-center d-flex" data-toggle="buttons">
           <label class="btn btn-sm btn-primary active">
             <input type="radio" name="shuffle-filter" value="all" checked="checked" />Tout
@@ -18,7 +18,7 @@ use MyBlog\Models\PostModel; ?>
             <input type="radio" name="shuffle-filter" value="<?= PostModel::BACK; ?>" />Back
           </label>
           <label class="btn btn-sm btn-primary">
-            <input type="radio" name="shuffle-filter" value="<?= PostModel::GESTION_DE_PROJET; ?>" />Gestion de projet
+            <input type="radio" name="shuffle-filter" value="<?= PostModel::GESTION_DE_PROJET; ?>" />Gestion
           </label>
         </div>
       </div>

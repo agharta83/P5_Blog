@@ -1,0 +1,110 @@
+.hero-area {
+  padding: 300px 0 200px;
+  position: relative;
+  @include tablet {
+    padding: 250px 0 150px;
+    overflow: hidden;
+  }
+  @include mobile-xs {
+    padding: 100px 0;
+    overflow: hidden;
+  }
+  h1{
+    position: relative;
+    z-index: 2;
+    @include mobile-xs {
+      font-size: 30px;
+    }
+  }
+}
+
+.PR-zindex {
+  position: relative;
+  z-index: 5;
+}
+
+.img-hero {
+  @include mobile-xs {
+    width: 40%;
+  }
+  width: 200px;
+  position: relative;
+  z-index: 5;
+  border-radius: 50%;
+}
+
+.wave-img {
+  @include mobile-xs {
+    width: 80%;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+.layer {
+  position: absolute;
+  z-index: 1;
+}
+
+#l1 {
+  bottom: 0;
+  left: 0;
+}
+
+#l2 {
+  top: 190px;
+  left: -250px;
+  @include mobile-xs {
+    display: none;
+  }
+}
+
+#l3 {
+  top: 200px;
+  left: 40%;
+  @include mobile-xs {
+    display: none;
+  }
+}
+
+#l4 {
+  top: 200px;
+  right: 40%;
+}
+
+#l5 {
+  top: 100px;
+  right: -150px;
+  @include mobile-xs {
+    display: none;
+  }
+}
+
+#l6 {
+  bottom: -20px;
+  left: 10%;
+  @include mobile-xs {
+    display: none;
+  }
+}
+
+#l7 {
+  bottom: 100px;
+  left: 20%;
+}
+
+#l8 {
+  bottom: 160px;
+  right: 45%;
+}
+
+#l9 {
+  bottom: 100px;
+  right: -10px;
+}
+
+.layer-bg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}

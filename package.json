@@ -13,6 +13,7 @@
     "bootstrap": "^4",
     "jquery": "^3",
     "popper.js": "^1",
+    "sass-brunch": "^3.0.0",
     "scrollmagic": "^2.0.7",
     "shufflejs": "^5.2.3",
     "trumbowyg": "^2.21.0"

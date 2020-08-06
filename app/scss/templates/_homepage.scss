@@ -53,10 +53,6 @@
   z-index: -1;
 }
 
-.liste {
-  list-style-type: disc;
-}
-
 /* /education */
 
 /* service */
@@ -148,7 +144,6 @@
   .container {
     position: relative;
     z-index: 1;
-    height: 400px;
   }
 
   .bg-map {
@@ -162,6 +157,8 @@
     position: absolute;
     left: 100px;
     top: -50px;
+    width: 5%;
+    height: 20%;
   }
 
   .bg-shape-2 {
@@ -216,28 +213,3 @@
 }
 
 /* /footer */
-
-.blog-section {
-  height: 800px;
-}
-
-.redux-logo {
-  width: 6rem;
-}
-
-.react-router-logo {
-  width: 5rem;
-  height: 3rem;
-}
-
-.babel-logo {
-  width: 5rem;
-}
-
-.es6-logo {
-  width: 4.5rem;
-}
-
-.webpack-logo {
-  width: 5rem;
-}

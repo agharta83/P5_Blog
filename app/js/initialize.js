@@ -132,17 +132,20 @@ var app = {
 
   // Sticky elements (pinning)
   stickyElements : function() {
-    var controller = new ScrollMagic.Controller();
+    if (window.innerWidth > 720) {
+      var controller = new ScrollMagic.Controller();
 
-    var pins_elem = $('.pin-elem');
+      var pins_elem = $('.pin-elem');
 
-    $.each(pins_elem, function (indexInArray, valueOfElement) {
-      new ScrollMagic.Scene({
+      $.each(pins_elem, function (indexInArray, valueOfElement) {
+        new ScrollMagic.Scene({
           offset: 100
         })
-        .setPin(this)
-        .addTo(controller);
-    });
+          .setPin(this)
+          .addTo(controller);
+      });
+    }
+
   },
 
   // Admin dashboard count animations

@@ -7,6 +7,10 @@
     z-index: 5;
     max-height: 75vh;
     transform: translateY(50%);
+  @include mobile-xs {
+    margin-top: 20px;
+    transform: translateY(0%);
+  }
 }
 
 .table-container {
@@ -20,6 +24,12 @@
     display: flex;
     flex-direction: column;
     border-radius: 15%;
+}
+
+.milestone-details {
+  @include mobile-xs {
+    font-size: 12px;
+  }
 }
 
 .background-linear1 {
@@ -40,6 +50,21 @@
 
 .table-wrapper {
     background: #fff;
+  @include mobile-xs {
+    overflow: auto;
+  }
+}
+
+.table-comments {
+  @include mobile-xs {
+    margin-top: 100px;
+  }
+}
+
+.table-users {
+  @include mobile-xs {
+    margin-top: 100px;
+  }
 }
 
 .search-box {
@@ -64,7 +89,7 @@
 }
 .search-box input {
     height: 34px;
-    padding-left: 28px;		
+    padding-left: 28px;
     box-shadow: none !important;
     border-width: 0 0 1px 0;
 }
@@ -181,17 +206,17 @@ li.page-item.active .page-link {
 .custom-switch.custom-switch-lg {
     padding-bottom: 1rem;
     padding-left: 2.25rem;
-  
+
     & .custom-control-label {
         padding-left: .75rem;
         padding-top: 0.50rem;
-  
+
         &::before {
             border-radius: 1rem;
             height: 1.5rem;
             width: 2.5rem;
         }
-  
+
         &::after {
             border-radius: .65rem;
             height: calc(1.5rem - 4px);
@@ -202,7 +227,7 @@ li.page-item.active .page-link {
     .custom-control-input:checked + .custom-control-label::before {
         background-color: $primary-color;
     }
-      
+
     .custom-control-input:checked ~ .custom-control-label::after{
         transform: translateX(1rem);
     }

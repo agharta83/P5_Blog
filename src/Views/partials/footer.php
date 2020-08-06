@@ -19,7 +19,7 @@
   </div>
 
   <div class="border-top text-center border-dark py-5">
-    <p class="mb-0 text-light">Copyright ©
+    <p class="mb-0 text-light text-footer">Copyright ©
       <script>
         var CurrentYear = new Date().getFullYear()
         document.write(CurrentYear)

@@ -31,7 +31,14 @@
   color: $white;
 }
 
-.logo {
-  width: 100px;
-  height: 25px;
+.navbar-brand {
+  display: contents;
+}
+
+#logo {
+  @include mobile-xs {
+    width: 25%;
+  }
+  width: 50px;
+
 }

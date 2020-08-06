@@ -23,6 +23,9 @@
     left: 0;
     top: 0;
     height: 100%;
+    @include mobile-xs {
+      display: none;
+    }
   }
   .bg-shape-2{
     position: absolute;
@@ -34,12 +37,18 @@
     left: 30%;
     top: 50px;
     transform: rotate(180deg);
+    @include mobile-xs {
+      display: none;
+    }
   }
 
   .bg-shape-4{
     position: absolute;
     left: 100px;
     bottom: 100px;
+    @include mobile-xs {
+      display: none;
+    }
   }
 
   .bg-shape-5{
@@ -52,5 +61,8 @@
     position: absolute;
     bottom: 100px;
     right: -100px;
+    @include mobile-xs {
+      display: none;
+    }
   }
 }

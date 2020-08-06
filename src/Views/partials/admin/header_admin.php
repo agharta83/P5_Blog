@@ -1,8 +1,8 @@
 <header class="navigation fixed-top">
         <nav class="navbar navbar-expand-lg navbar-dark">
-            <a class="navbar-brand font-tertiary h3" href=""><img class="logo" src="<?=$basePath?>/public/images/logo.svg"
+            <a class="navbar-brand font-tertiary h3" href=""><img id="logo" src="<?=$basePath?>/public/images/logo.svg"
           alt="Myself"></a>
-          <h3 class="text-white font-tertiary">Dashboard</h3>
+          <h5 class="text-white font-tertiary">Dashboard</h5>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
         aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

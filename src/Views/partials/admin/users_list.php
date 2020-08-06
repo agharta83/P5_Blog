@@ -4,7 +4,7 @@ use Myblog\Models\UserModel; ?>
 
 <section class="hero-area hero-admin bg-primary" id="parallax">
 
-    <div class="container table-container bg-white">
+    <div class="container table-container table-users bg-white">
         <div class="table-wrapper shadow p-3 mx-2">
             <div class="table-title pb-1 mb-1">
                 <div class="row justify-content-between">
@@ -29,7 +29,7 @@ use Myblog\Models\UserModel; ?>
                 </div>
             </div>
 
-            <table class="table table-hover">
+            <table class="table table-hover table-wrapper">
                 <thead class="uppercase">
                     <tr>
                         <th>Login</th>

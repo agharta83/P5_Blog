@@ -14,7 +14,7 @@
           </div>
         </div>
       </div>
-      <table class="table table-hover">
+      <table class="table table-hover table-fixed">
         <thead class="uppercase">
           <tr>
             <th>Titre</th>
@@ -67,5 +67,6 @@
   <div class="layer-bg layer-bg-admin w-100">
     <img class="img-fluid w-100" src="<?= $basePath ?>/public/images/illustrations/leaf-bg.png" alt="bg-shape">
   </div>
+
 
 </section>

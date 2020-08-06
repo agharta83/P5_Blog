@@ -19,7 +19,7 @@
                     <i class="fas fa-project-diagram pr-3"></i>Gestion de projet</a></h6>
               </div>
               <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordion" class="collapse show">
-                <div class="card-body px-5 pt-5 pb-2">
+                <div class="card-body p-md-5 p-2">
                   <ul class="font-weight-light m-0">
                     <li>Choix d'une solution technique adaptée parmi les solutions existantes</li><br>
                     <li>Prototypage et maquettage (wireframing)</li><br>
@@ -49,7 +49,7 @@
                     <i class="fas fa-code pr-3"></i>Développement web</a></h6>
               </div>
               <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordion" class="collapse">
-                <div class="card-body p-5">
+                <div class="card-body p-md-5 p-2">
                   <ul class="font-weight-light m-0">
                     <li>Intégration sémantique des maquettes en respectant les standards du web, avec test d'affichage
                       sur tous supports (navigateurs, écrans) et test de performance avec les médias queries et
@@ -93,7 +93,7 @@
                     <i class="fab fa-wordpress pr-3"></i>Développement WordPress</a></h6>
               </div>
               <div id="collapseThree" aria-labelledby="headingThree" data-parent="#accordion" class="collapse">
-                <div class="card-body p-5">
+                <div class="card-body p-md-5 p-2">
                   <ul class="font-weight-light m-0">
                     <li>Création de thème sur mesure ou adaptation d'un thème existant.</li><br>
                     <li>Personnalisation du back office de WordPress</li><br>
@@ -115,7 +115,7 @@
                     <i class="fab fa-react pr-3"></i>Spécialisation React</a></h6>
               </div>
               <div id="collapseFour" aria-labelledby="headingFour" data-parent="#accordion" class="collapse">
-                <div class="card-body p-5">
+                <div class="card-bodyp-md-5 p-2">
                   <ul class="font-weight-light m-0">
                     <li>Création de projet web dynamiques grâce à l'utilisation de React.js (librairie développée par
                       l'équipe de Facebook).</li><br>
@@ -148,7 +148,7 @@
                     <i class="fab fa-symfony pr-3"></i>Spécialisation Symfony</a></h6>
               </div>
               <div id="collapseFive" aria-labelledby="headingFive" data-parent="#accordion" class="collapse">
-                <div class="card-body p-5">
+                <div class="card-body p-md-5 p-2">
                   <ul class="font-weight-light m-0">
                     <li>Création de projets web dynamiques grâce au framework Symfony.</li><br>
                     <li>Mise en oeuvre de test unitaires et fonctionnels et utilisation des outils les plus connue

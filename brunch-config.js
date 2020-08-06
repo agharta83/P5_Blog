@@ -5,7 +5,7 @@ exports.files = {
         'js/vendor.js': /^node_modules/
     },
   },
-  stylesheets: { 
+  stylesheets: {
     joinTo: {
        'css/app.css': /^app/,
        'css/vendor.css': /^node_modules/
@@ -24,6 +24,7 @@ exports.watcher = {
 
 exports.plugins = {
   pleeease: {
+    sourcemaps: true,
     sass: true,
     autoprefixer: {
       browsers: ['> 1%'],

@@ -265,13 +265,15 @@ var app = {
   },
   // Sticky elements (pinning)
   stickyElements: function stickyElements() {
-    var controller = new _scrollmagic["default"].Controller();
-    var pins_elem = $('.pin-elem');
-    $.each(pins_elem, function (indexInArray, valueOfElement) {
-      new _scrollmagic["default"].Scene({
-        offset: 100
-      }).setPin(this).addTo(controller);
-    });
+    if (window.innerWidth > 720) {
+      var controller = new _scrollmagic["default"].Controller();
+      var pins_elem = $('.pin-elem');
+      $.each(pins_elem, function (indexInArray, valueOfElement) {
+        new _scrollmagic["default"].Scene({
+          offset: 100
+        }).setPin(this).addTo(controller);
+      });
+    }
   },
   // Admin dashboard count animations
   count: function count($this) {

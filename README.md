@@ -17,7 +17,7 @@ Contient tous les assets (polices, images, icones).
 - Cloner le repository 
 - En ligne de commande dans le dossier désiré, saisir la commande
 `git clone [NOM_DU_REPO] [NOM_DU_DOSSIER]`
-- Installer la BDD exemple
+- Installer la BDD exemple contenu dans le dossier doc/
 - Configurer les dossiers de config en éditant et renomant les fichiers config.default.ini (pour la database) en config.ini et config-mail.default.php (pour les mails) en config-mail.php
 - Installation des dépendances front (attention, assurez vous d'avoir nodejs et NPM installé avec les commandes `node -v` et `npm -v`, sinon se rendre sur le site officiel et les installer)
     - `npm install` => installer les dépendances
@@ -31,4 +31,4 @@ Contient tous les assets (polices, images, icones).
 - Password : 2121
 
 ###Accès au blog en production
-
+http://blog-opc.audrey-cesar.com/

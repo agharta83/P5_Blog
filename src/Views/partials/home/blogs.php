@@ -7,7 +7,7 @@
         <?php foreach($posts as $post) : ?>
         <div class="col-lg-4 col-sm-6 mb-4 mb-lg-0">
           <article class="card shadow">
-            <img class="rounded card-img-top" src="<?= $imgPath . $post->getImg(); ?>" alt="post-thumb">
+            <img class="rounded card-img-top w-80" src="<?= $imgPath . $post->getImg(); ?>" alt="post-thumb">
             <div class="card-body">
               <h4 class="card-title"><a class="text-dark" href="<?= $router->generate('read', ['slug' => $post->getSlug()]); ?>"><?= $purifier->sanitizeHTML($post->getTitle()); ?></a>
               </h4>

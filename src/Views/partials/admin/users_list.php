@@ -16,16 +16,6 @@ use Myblog\Models\UserModel; ?>
                             <a href="#new_user" class="text-dark trigger-btn" data-toggle="modal">Ajouter</a>
                         </button>
                     </div>
-                    <div class="col-5 mx-auto">
-                        <div class="btn-group btn-group-toggle justify-content-center d-flex" data-toggle="buttons">
-                            <label class="btn btn-sm btn-primary active">
-                                <input type="radio" name="all" value="all" checked="checked" />Tout
-                            </label>
-                            <label class="btn btn-sm btn-primary">
-                                <input type="radio" name="isAdmin" value="1" />ADMIN
-                            </label>
-                        </div>
-                    </div>
                 </div>
             </div>
 

@@ -1,7 +1,7 @@
-<div class="col-lg-4 col-sm-6 mb-4 shuffle-item" data-groups="[&quot;<?= $post->getCategory();?>&quot;]">
-          <article class="card shadow-post">
-            <img class="rounded card-img-top" src="<?= $imgPath . $post->getImg(); ?>" alt="post-thumb">
-            <div class="card-body">
+<div class="col-lg-4 col-sm-6 mb-4">
+          <article class="card shadow-post card-blog">
+            <img class="rounded card-img-top w-80" src="<?= $imgPath . $post->getImg(); ?>" alt="post-thumb">
+            <div class="card-body card-body-blog">
               <h4 class="card-title"><a class="text-dark" href="<?= $router->generate('blog_read', ['slug' => $post->getSlug()]); ?>"><?= $purifier->sanitizeHTML($post->getTitle()); ?></a>
               </h4>
               <p class="cars-text"><?= $purifier->sanitizeHTML($post->getChapo()); ?></p>

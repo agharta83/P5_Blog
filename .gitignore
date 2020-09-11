@@ -29,7 +29,7 @@ package-lock.json
 Thumbs.db
 
 # personal
-/app/images/moi.jpg
+app/images/moi.jpg
 src/Managers/config.ini
 src/Managers/config-mail.php
 /vendor/

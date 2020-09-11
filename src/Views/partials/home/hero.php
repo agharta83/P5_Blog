@@ -3,11 +3,11 @@
       <div class="row">
         <div class="col-lg-11 mx-auto">
           <h1 class="text-white font-tertiary">Audrey César,<br> Développeuse web</h1>
-          <p class="text-white font-tertiary paragraph-lg pt-5">
+          <p class="text-white font-tertiary paragraph-lg pt-5 PR-zindex">
             <i class="fas fa-quote-left pr-4 PR-zindex"></i>Je réalise votre projet de A à Z ! <i
               class="fas fa-quote-right pl-4"></i></p>
           <div class="">
-            <a href="<?= $basePath . '/public/pdf/CV.pdf'; ?>" class="btn btn-secondary">Mon CV</a>
+            <a href="<?= $basePath . '/public/pdf/CV.pdf'; ?>" target="_blank" class="btn btn-secondary">Mon CV</a>
           </div>
         </div>
         <div class="col-lg-12 text-right text-end wave-img">

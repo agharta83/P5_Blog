@@ -16,7 +16,7 @@ use MyBlog\Models\PostModel;
                     </h3>
                 </div>
 
-                <div class="card-body">
+                <div class="card-body card-body-admin">
 
                     <p class="text-muted card-text">
                         <small>* Les champs dotés d'une astérisque sont obligatoires.</small>

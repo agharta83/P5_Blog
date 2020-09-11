@@ -4,29 +4,9 @@ use MyBlog\Models\PostModel; ?>
 
 <section class="section">
   <div class="container">
-    <!-- btn tabs shuffle -->
-    <div class="row mb-5">
-      <div class="col-12 col-md-8 mx-auto">
-        <div class="btn-group btn-group-toggle justify-content-center d-flex" data-toggle="buttons">
-          <label class="btn btn-sm btn-primary active">
-            <input type="radio" name="shuffle-filter" value="all" checked="checked" />Tout
-          </label>
-          <label class="btn btn-sm btn-primary">
-            <input type="radio" name="shuffle-filter" value="<?= PostModel::FRONT; ?>" />Front
-          </label>
-          <label class="btn btn-sm btn-primary">
-            <input type="radio" name="shuffle-filter" value="<?= PostModel::BACK; ?>" />Back
-          </label>
-          <label class="btn btn-sm btn-primary">
-            <input type="radio" name="shuffle-filter" value="<?= PostModel::GESTION_DE_PROJET; ?>" />Gestion
-          </label>
-        </div>
-      </div>
-    </div>
-    <!-- /btn tabs shuffle -->
 
     <!-- blog posts-->
-    <div class="row shuffle-wrapper">
+    <div class="row">
 
       <?php foreach ($posts as $post) : ?>
         <?php $this->insert('partials/blog/list-post', ['post' => $post, 'pagination' => $pagination]); ?>
@@ -41,7 +21,7 @@ use MyBlog\Models\PostModel; ?>
   $nextPage = $pagination->hasNextPage() ? (string) $pagination->getNextPage() : null;
   $nbPages = $pagination->getNbPages() ?? null;
   ?>
-  <div class="clearfix">
+  <div class="mt-4">
     <div class="hint-text">Affichage de <b><?= $pagination->getCurrentPageOffsetEnd(); ?></b> posts sur <b><?= $pagination->getNbResults(); ?></b></div>
     <ul class="pagination">
       <?php if ($pagination->hasPreviousPage()) : ?>

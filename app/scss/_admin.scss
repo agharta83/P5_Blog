@@ -194,13 +194,17 @@ li.page-item.active .page-link {
 }
 
 .hero-admin-new-post {
-    padding : 200px 0 200px;
+    padding : 200px 0 200px!important;
 }
 
 .card-post {
     position: relative;
     z-index: 5;
     margin: auto;
+}
+
+.card-body-admin {
+  height: 100%!important;
 }
 
 .custom-switch.custom-switch-lg {

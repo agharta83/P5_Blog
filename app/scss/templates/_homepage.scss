@@ -186,6 +186,41 @@
   }
 }
 
+.card-img, .card-img-top {
+  height: 150px!important;
+}
+
+.card-body {
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-body-skills {
+  height: 100%!important;
+}
+
+.redux-logo {
+  width: 5%;
+}
+
+.react-router-logo {
+  width: 5%;
+}
+
+.babel-logo {
+  width: 5%;
+}
+
+.es6-logo {
+  width: 5%;
+}
+
+.webpack-logo {
+  width: 5%;
+}
+
 /* /testimonial */
 
 /* footer */

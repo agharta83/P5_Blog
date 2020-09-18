@@ -19,7 +19,7 @@ class CoreController extends \MyBlog\Controllers\CoreController
         parent::__construct($router, $templates);
 
         // On verifie que l'utilisateur est connecté et si c'est un admin
-        if (!$this->currentUser || !$this->currentUser->isAdmin()) {
+        if (!$this->currentUser || $this->currentUser->isAdmin() == false) {
             // On le redirige
             $this->redirect('home');
         }
@@ -31,8 +31,6 @@ class CoreController extends \MyBlog\Controllers\CoreController
      * - le nb de commentaires validés
      * - le nb de commentaires à valider
      * - le nb d'utilisateur
-     * TODO le nb post en attente de publication
-     * TODO Notif : Comments en attente de validation, post le plus lus, post le plus commenté
      *
      * @return void
      */

@@ -71,8 +71,8 @@ class PostManager extends CoreManager
 
         $query = new PaginatedQuery(
             $this->checkConnexion(),
-            'SELECT * FROM post WHERE published = 1',
-            'SELECT COUNT(id) FROM post WHERE published = 1'
+            'SELECT * FROM post WHERE published = 1 ORDER BY published_date DESC',
+            'SELECT COUNT(id) FROM post WHERE published = 1 ORDER BY published_date DESC'
         );
 
         return (new Pagerfanta($query))->setMaxPerPage($perPage)->setCurrentPage($currentPage);

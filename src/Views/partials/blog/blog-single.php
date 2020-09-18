@@ -44,7 +44,7 @@
                     <h5 class="mt-0"><?= $purifier->sanitizeHTML($comment->getCommentAuthor()); ?></h5>
                   <?php endif; ?>
                   <p><?= ucfirst($comment->getFormatedDate()); ?></p>
-                  <p><?= $purifier->sanitizezHTML($comment->getContent()); ?></p>
+                  <p><?= $purifier->sanitizeHTML($comment->getContent()); ?></p>
                   <a href="<?= $id1; ?>" class="btn btn-transparent btn-sm pl-0" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="<?= $id1; ?>">Répondre</a>
                   <div class="collapse" id="<?= $id2; ?>">
                     <form action="<?= $router->generate("add_comment", ['page' => $currentPage]); ?>" method="post" class="row">
